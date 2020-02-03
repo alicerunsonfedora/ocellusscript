@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "efficacy"
+version = "0.1.0"
+description = "Efficacy is a lexer, compiler, and interpreter for OcellusScript."
+authors = ["Marquis Kurt <software@marquiskurt.net>"]
+license = "MPL-2.0"
+
+[tool.poetry.dependencies]
+python = ">=2.7"
+
+[tool.poetry.dev-dependencies]
+pylint = [{ version="^2.4.4", python=">=3.7" }]
+enum = [{ version = "^0.4.7", python="^2.7" }]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

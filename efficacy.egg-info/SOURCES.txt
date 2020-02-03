@@ -1,0 +1,7 @@
+setup.py
+efficacy/__init__.py
+efficacy/lexer.py
+efficacy.egg-info/PKG-INFO
+efficacy.egg-info/SOURCES.txt
+efficacy.egg-info/dependency_links.txt
+efficacy.egg-info/top_level.txt
