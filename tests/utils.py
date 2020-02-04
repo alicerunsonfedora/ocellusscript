@@ -1,22 +1,28 @@
 """This submodule contains the component necessary to make a
 printed test."""
 
+import sys
 from efficacy import __VERSION
 
-def test(call):
+def test(name):
     """A decorator used to classify a test case.
 
     Args:
         call: The function to be labeled as a test.
     """
-    def testfunc():
-        if call and callable(call):
-            try:
-                call()
-                print("✅  Test passed!")
-            except Exception as err:
-                print("⛔️  Test failed with exception " + str(err))
-    return testfunc
+    if not name:
+        name = "sample"
+    def func(call):
+        def testfunc():
+            if call and callable(call):
+                try:
+                    call()
+                    print("✅  Test '%s' passed!" % (name))
+                except Exception as err:
+                    print("⛔️  Test failed with exception: " + str(err))
+                    sys.exit(1)
+        return testfunc
+    return func
 
 class TestError(Exception):
     """The base TestError case."""

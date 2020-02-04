@@ -4,12 +4,12 @@
 The following test functions are provided to test that the lexer
 works as intended for both files and regular strings.
 """
-from efficacy import OSTokenizer
+from efficacy import OSTokenizer, OSTokenType
 from tests.utils import test, TestError
 from os import getcwd
 
-@test
-def test_lexer_on_string():
+@test(name="basic string tokenization")
+def tokenize_basic_string():
     """Test that the lexer can tokenize a given string."""
     lexer = OSTokenizer()
     source = "example t = t > 6 ? t + 5 : t\n"
@@ -18,10 +18,23 @@ def test_lexer_on_string():
     if not tokens:
         raise TestError("Expected a list of tokens but received an empty list.")
 
-    print(tokens)
+    expected = [(OSTokenType.identifier, 'example'),
+                (OSTokenType.identifier, 't'),
+                (OSTokenType.operator, '='),
+                (OSTokenType.identifier, 't'),
+                (OSTokenType.operator, '>'),
+                (OSTokenType.number, '6'),
+                (OSTokenType.symbol, '?'),
+                (OSTokenType.identifier, 't'),
+                (OSTokenType.operator, '+'),
+                (OSTokenType.number, '5'),
+                (OSTokenType.symbol, ':'),
+                (OSTokenType.identifier, 't')]
+    if tokens != expected:
+        raise TestError("Tokenized list doesn't match expected tokens.")
 
-@test
-def test_lexer_on_file():
+@test(name="file tokenization")
+def tokenize_file():
     """Test that the lexer can tokenize an OcellusScript file."""
     lexer = OSTokenizer()
     source = ""
@@ -33,5 +46,5 @@ def test_lexer_on_file():
 
 if __name__ == "__main__":
     print("Running lexer tests...")
-    test_lexer_on_string()
-    test_lexer_on_file()
+    tokenize_basic_string()
+    tokenize_file()
