@@ -1,3 +1,8 @@
+"""
+The `lexer` submodule of Efficacy contains all of the tools necessary
+to tokenize a string or a file into a a list of OcellusScript tokens.
+"""
+
 #
 # OcellusScript Tokenizer
 # (C) 2020 Marquis Kurt.
@@ -7,36 +12,47 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
 
-"""
-    This module contains the tokenizer and the tokens for the OcellusScript
-    language.
-"""
-
 from string import ascii_letters, digits
 from enum import Enum
 
 class _OSTokenState(Enum):
-    """Basic state manager for tokenizing"""
+    """An enumeration type for the different token states.
+
+    This enumeration is used internally to denote what state the
+    tokenization process is in when processing a token and should
+    not be used in other places.
+    """
     start = "START"
     in_id = "IN PROGRESS"
     end = "FINISH"
     error = "ERRORED"
 
 class OSTokenType(Enum):
-    """Enumerations for token types in OcellusScript"""
-    identifier = "IDENTIFIER"
-    string = "STRING"
-    docstring = "DOCSTRING"
-    comment = "COMMENT"
-    symbol = "SYMBOL"
-    num_integer = "INTEGER"
-    num_float = "FLOAT"
-    operator = "OPERATOR"
-    number = "NUMBER"
+    """An enumeration type for the different token types.
+
+    This enumeration class is used to differentiate between
+    the different types of tokens used for OcellusScript
+    parsing. The values of the enumerations correspond to the
+    lexical grammar names for each type.
+    """
+    identifier = "Identifier"
+    string = "StringConstant"
+    docstring = "DocstringConstant"
+    comment = "Comment"
+    symbol = "SymbolConstant"
+    num_integer = "IntConstant"
+    num_float = "FloatConstant"
+    operator = "Operator"
+    number = "NumConstant"
+    unknown = "UnknownConstant"
 
 
 class OSTokenizer(object):
-    """The base class for a tokenizer."""
+    """The tokenizing class for OcellusScript.
+
+    The tokenizer is responsible for converting a stream of characters
+    into OcellusScript tokens that can be used for parsing.
+    """
 
     def is_alpha_num(self, char):
         """Check whether a characer is an alphanumeric character.
@@ -75,6 +91,8 @@ class OSTokenizer(object):
 
         Args:
             script: The string to tokenize.
+
+        Returns: A list containing tuples with the token's type (`OSTokenType`) and token.
         """
 
         # Generate an empty list of tokens and the sample token, as well as the current
