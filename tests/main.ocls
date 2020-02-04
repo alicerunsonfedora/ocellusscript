@@ -10,9 +10,9 @@
 # easier. Ocellus include features like pattern matching, optional types, ternary operators, 
 # and docstrings.
 
-module Sample where
-
 import Main
+
+module Sample where
 
 # Section 1: Variable Storage
 # As this is meant to be functional, we're really making functions
