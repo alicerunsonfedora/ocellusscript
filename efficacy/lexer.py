@@ -15,7 +15,7 @@
 from string import ascii_letters, digits
 from enum import Enum
 
-class OSTokenState(Enum):
+class _OSTokenState(Enum):
     """Basic state manager for tokenizing"""
     start = "START"
     in_id = "IN PROGRESS"
@@ -81,7 +81,7 @@ class OSTokenizer(object):
         # state, current character, and the token type.
         tokens = []
         token = ""
-        state = OSTokenState.start
+        state = _OSTokenState.start
         char = ""
         token_type = None
 
@@ -95,7 +95,7 @@ class OSTokenizer(object):
             char = source.pop(0)
 
             # If we're not in a token already, check if we can start a token.
-            if state == OSTokenState.start:
+            if state == _OSTokenState.start:
 
                 # Mark the token as an identifier.
                 if char in ascii_letters:
@@ -122,41 +122,41 @@ class OSTokenizer(object):
                 # the next few characters for the token and add the current character
                 # to the token.
                 if token_type:
-                    state = OSTokenState.in_id
+                    state = _OSTokenState.in_id
                     token += char
 
             # If we're currently processing the token, check to see if the current character
             # will end our token.
-            elif state == OSTokenState.in_id:
+            elif state == _OSTokenState.in_id:
 
                 # If we're looking at an identifier and the character isn't a letter, terminate
                 # here and "unread" the character.
                 if token_type == OSTokenType.identifier and char not in ascii_letters:
-                    state = OSTokenState.end
+                    state = _OSTokenState.end
                     source.insert(0, char)
 
                 # If we're looking at a number and the character isn't a digit, terminate here
                 # and "unread" the character.
                 elif token_type == OSTokenType.number and char not in digits:
-                    state = OSTokenState.end
+                    state = _OSTokenState.end
                     source.insert(0, char)
 
                 elif token_type == OSTokenType.comment and char == "\n":
-                    state = OSTokenState.end
+                    state = _OSTokenState.end
                     source.insert(0, char)
 
                 elif token_type == OSTokenType.docstring and char == "`":
-                    state = OSTokenState.end
+                    state = _OSTokenState.end
                     token += char
 
                 elif token_type == OSTokenType.operator and not self.is_operator(char):
-                    state = OSTokenState.end
+                    state = _OSTokenState.end
                     source.insert(0, char)
 
                 # If we're looking at a symbol and the character isn't a symbol, terminate here
                 # and "unread" the character.
                 elif token_type == OSTokenType.symbol and not self.is_symbol(char):
-                    state = OSTokenState.end
+                    state = _OSTokenState.end
                     source.insert(0, char)
 
                 # Otherwise, regardless of the type, add the character to the token.
@@ -165,11 +165,11 @@ class OSTokenizer(object):
 
             # If we're at the end of processing a token, add a tuple containing the token's type
             # and the token itself before resetting for the next iteration.
-            elif state == OSTokenState.end:
+            elif state == _OSTokenState.end:
                 tokens.append((token_type, token))
                 token = ""
                 token_type = None
-                state = OSTokenState.start
+                state = _OSTokenState.start
 
         # Finally, return the list of tokens.
         return tokens

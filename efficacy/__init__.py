@@ -3,6 +3,6 @@
     components to process OcellusScript.
 """
 
-from .lexer import OSTokenizer
+from .lexer import *
 
 __VERSION = "0.1.0"
