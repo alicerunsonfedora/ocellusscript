@@ -9,6 +9,8 @@ OcellusScript is a functional programming language designed to work hand-in-hand
 
 This repository contains the specifications and documentation for the OcellusScript programming language, as well as the source code for Efficacy, the compiler and interpreter for OcellusScript.
 
+> ⚠️ Note: OcellusScript is still a work in progress and is not fully functional as a language yet.
+
 ## Quick Links
 
 - [OcellusScript Documentation](doc.md)
