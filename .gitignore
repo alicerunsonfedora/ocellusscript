@@ -2,3 +2,4 @@
 **/**.egg-info
 **/.vscode/**
 **/**.pyc
+efficacy/__pycache__/lexer.cpython-38.pyc
