@@ -15,7 +15,7 @@ def test(call):
                 call()
                 print("✅  Test passed!")
             except Exception as err:
-                print("⛔️  Test failed with exception " + err)
+                print("⛔️  Test failed with exception " + str(err))
     return testfunc
 
 class TestError(Exception):
