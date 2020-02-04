@@ -105,6 +105,15 @@ version = "1.4.1"
 
 [[package]]
 category = "dev"
+description = "Type Hints for Python"
+marker = "python_version >= \"2.7\" and python_version < \"3.0\""
+name = "typing"
+optional = false
+python-versions = "*"
+version = "3.7.4.1"
+
+[[package]]
+category = "dev"
 description = "Module for decorators, wrappers and monkey patching."
 marker = "python_version >= \"3.7\""
 name = "wrapt"
@@ -113,7 +122,7 @@ python-versions = "*"
 version = "1.11.2"
 
 [metadata]
-content-hash = "72befa242c76caac90edf10d4a29979b3f385c521eb0cb1ed965caef20d94156"
+content-hash = "ddc92e70d91e407401055bb3e799b136e8f0f4ad7e4a8593ea45ed808c1673f8"
 python-versions = ">=2.7"
 
 [metadata.files]
@@ -189,6 +198,11 @@ typed-ast = [
     {file = "typed_ast-1.4.1-cp38-cp38-win_amd64.whl", hash = "sha256:fc0fea399acb12edbf8a628ba8d2312f583bdbdb3335635db062fa98cf71fca4"},
     {file = "typed_ast-1.4.1-cp39-cp39-macosx_10_15_x86_64.whl", hash = "sha256:d43943ef777f9a1c42bf4e552ba23ac77a6351de620aa9acf64ad54933ad4d34"},
     {file = "typed_ast-1.4.1.tar.gz", hash = "sha256:8c8aaad94455178e3187ab22c8b01a3837f8ee50e09cf31f1ba129eb293ec30b"},
+]
+typing = [
+    {file = "typing-3.7.4.1-py2-none-any.whl", hash = "sha256:c8cabb5ab8945cd2f54917be357d134db9cc1eb039e59d1606dc1e60cb1d9d36"},
+    {file = "typing-3.7.4.1-py3-none-any.whl", hash = "sha256:f38d83c5a7a7086543a0f649564d661859c5146a85775ab90c0d2f93ffaa9714"},
+    {file = "typing-3.7.4.1.tar.gz", hash = "sha256:91dfe6f3f706ee8cc32d38edbbf304e9b7583fb37108fef38229617f8b3eba23"},
 ]
 wrapt = [
     {file = "wrapt-1.11.2.tar.gz", hash = "sha256:565a021fd19419476b9362b05eeaa094178de64f8361e44468f9e9d7843901e1"},
