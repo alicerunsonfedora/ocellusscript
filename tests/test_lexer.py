@@ -11,7 +11,7 @@ from tests.utils import test, TestError
 def test_lexer_on_string():
     """Test that the lexer can tokenize a given string."""
     lexer = OSTokenizer()
-    source = "example t = t > 6 ? t + 5 : t"
+    source = "example t = t > 6 ? t + 5 : t\n"
 
     tokens = lexer.tokenize(source)
     if not tokens:

@@ -59,6 +59,17 @@ class OSTokenizer(object):
         symbols = "<>,?[]()-=+*/%`\\!:"
         return char in symbols
 
+    def is_operator(self, char):
+        """Check whether a character is an operator.
+
+        Args:
+            char: The character to check.
+
+        Returns: Boolean indicated whether the character is an operator.
+        """
+        operators = "<>-+*/%="
+        return self.is_symbol(char) and char in operators
+
     def tokenize(self, script=""):
         """Generate a list of tokens from a given string.
 
@@ -94,9 +105,18 @@ class OSTokenizer(object):
                 elif char in digits:
                     token_type = OSTokenType.number
 
-                # Mark the token as a symbol.
+                # Mark the token as a spcial type of symbol. Comments and docstrings
+                # take precedence, then operators, then regular symbols.
                 elif self.is_symbol(char):
-                    token_type = OSTokenType.symbol
+
+                    if char == "#":
+                        token_type = OSTokenType.comment
+                    elif char == "`":
+                        token_type = OSTokenType.docstring
+                    elif self.is_operator(char):
+                        token_type = OSTokenType.operator
+                    else:
+                        token_type = OSTokenType.symbol
 
                 # If we have found a token type, mark that we will begin processing
                 # the next few characters for the token and add the current character
@@ -118,6 +138,18 @@ class OSTokenizer(object):
                 # If we're looking at a number and the character isn't a digit, terminate here
                 # and "unread" the character.
                 elif token_type == OSTokenType.number and char not in digits:
+                    state = OSTokenState.end
+                    source.insert(0, char)
+
+                elif token_type == OSTokenType.comment and char == "\n":
+                    state = OSTokenState.end
+                    source.insert(0, char)
+
+                elif token_type == OSTokenType.docstring and char == "`":
+                    state = OSTokenState.end
+                    token += char
+
+                elif token_type == OSTokenType.operator and not self.is_operator(char):
                     state = OSTokenState.end
                     source.insert(0, char)
 
