@@ -14,6 +14,9 @@ to tokenize a string or a file into a a list of OcellusScript tokens.
 
 from string import ascii_letters, digits
 from enum import Enum
+from typing import NewType
+
+Keyword = NewType('Keyword', str)
 
 class _OSTokenState(Enum):
     """An enumeration type for the different token states.
@@ -36,6 +39,7 @@ class OSTokenType(Enum):
     lexical grammar names for each type.
     """
     identifier = "Identifier"
+    keyword = "Keyword"
     string = "StringConstant"
     docstring = "DocstringConstant"
     comment = "Comment"
@@ -44,8 +48,6 @@ class OSTokenType(Enum):
     num_float = "FloatConstant"
     operator = "Operator"
     number = "NumConstant"
-    unknown = "UnknownConstant"
-
 
 class OSTokenizer(object):
     """The tokenizing class for OcellusScript.
@@ -83,8 +85,37 @@ class OSTokenizer(object):
 
         Returns: Boolean indicated whether the character is an operator.
         """
-        operators = "<>-+*/%="
-        return self.is_symbol(char) and char in operators
+        operators = ["<", ">", "-", "+", "-", "*", "/", "%", "=", "and", "not", "or"]
+        return char in operators
+
+    def is_keyword(self, word):
+        """Determine whether the list of characters corresponds to
+        a keyword.
+
+        Args:
+            word: The string to check.
+        """
+        valid_basic_types = ["Character",
+                             "String",
+                             "Integer",
+                             "Boolean",
+                             "Float",
+                             "Callable",
+                             "Anything",
+                             "Nothing",
+                             "Error"]
+
+        valid_statements = ["import",
+                            "module",
+                            "where",
+                            "takes",
+                            "returns",
+                            "log",
+                            "type",
+                            "datatype"]
+
+        valid_keywords = valid_basic_types + valid_statements
+        return word in valid_keywords
 
     def tokenize(self, script=""):
         """Generate a list of tokens from a given string.
@@ -184,6 +215,11 @@ class OSTokenizer(object):
             # If we're at the end of processing a token, add a tuple containing the token's type
             # and the token itself before resetting for the next iteration.
             elif state == _OSTokenState.end:
+
+                # If the token is a keyword, change the token's type.
+                if token_type == OSTokenType.identifier and self.is_keyword(token):
+                    token_type = OSTokenType.keyword
+
                 tokens.append((token_type, token))
                 token = ""
                 token_type = None
