@@ -106,7 +106,7 @@ version = "1.4.1"
 [[package]]
 category = "dev"
 description = "Type Hints for Python"
-marker = "python_version >= \"2.7\" and python_version < \"3.0\""
+marker = "python_version < \"3.5\""
 name = "typing"
 optional = false
 python-versions = "*"
@@ -122,7 +122,7 @@ python-versions = "*"
 version = "1.11.2"
 
 [metadata]
-content-hash = "ddc92e70d91e407401055bb3e799b136e8f0f4ad7e4a8593ea45ed808c1673f8"
+content-hash = "085f1fe09790d2c6dc84da2f0764c506d4b9e70e8c770674bc1ff3c1e057f880"
 python-versions = ">=2.7"
 
 [metadata.files]

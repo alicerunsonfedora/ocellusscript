@@ -21,12 +21,12 @@ jobs:
       - name: Setup Poetry dependencies
         uses: abatilo/actions-poetry@v1.1.0
         with:
-          python_version: join("python", matrix.pyversions)
+          python_version: ${{ matrix.pyversions }}
           poetry_version: 1.0.3
           args: install
       - name: Run tests
         uses: abatilo/actions-poetry@v1.1.0
         with:
-          python_version: join("python", matrix.pyversions)
+          python_version: ${{ matrix.pyversions }}
           poetry_version: 1.0.3
           args: run ./tests/test_lexer.py
