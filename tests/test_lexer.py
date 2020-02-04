@@ -4,7 +4,7 @@
 The following test functions are provided to test that the lexer
 works as intended for both files and regular strings.
 """
-from efficacy import __VERSION, OSTokenizer
+from efficacy import OSTokenizer
 from tests.utils import test, TestError
 
 @test
