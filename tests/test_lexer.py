@@ -6,6 +6,7 @@ works as intended for both files and regular strings.
 """
 from efficacy import OSTokenizer
 from tests.utils import test, TestError
+from os import getcwd
 
 @test
 def test_lexer_on_string():
@@ -24,7 +25,7 @@ def test_lexer_on_file():
     """Test that the lexer can tokenize an OcellusScript file."""
     lexer = OSTokenizer()
     source = ""
-    with open("main.ocls", "r") as srcfile:
+    with open(getcwd() + "/tests/main.ocls", "r") as srcfile:
         source = srcfile.read()
     tokens = lexer.tokenize(source)
     if not tokens:
