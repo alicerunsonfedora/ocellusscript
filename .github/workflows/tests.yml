@@ -25,5 +25,8 @@ jobs:
           poetry_version: 1.0.3
           args: install
       - name: Run tests
-        run: |
-          ./tests/test_lexer.py
+        uses: abatilo/actions-poetry@v1.1.0
+        with:
+          python_version: ${{ matrix.pyversions }}
+          poetry_version: 1.0.3
+          args: run ./tests/test_lexer.py
