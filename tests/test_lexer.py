@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-"""This module contains the tests for Efficacy."""
+"""This module contains the lexer tests for Efficacy.
+
+The following test functions are provided to test that the lexer
+works as intended for both files and regular strings.
+"""
 from efficacy import __VERSION, OSTokenizer
+from tests.utils import test, TestError
 
-class TestError(Exception):
-    """The base TestError case."""
-
-def test_version():
-    """Test that the package version matches."""
-    if __VERSION != "0.1.0":
-        raise TestError("Version number doesn't match manifest.")
-
+@test
 def test_lexer_on_string():
     """Test that the lexer can tokenize a given string."""
     lexer = OSTokenizer()
@@ -17,10 +15,11 @@ def test_lexer_on_string():
 
     tokens = lexer.tokenize(source)
     if not tokens:
-        raise TestError("Expected a list of tokens bu received an empty list.")
+        raise TestError("Expected a list of tokens but received an empty list.")
 
     print(tokens)
 
+@test
 def test_lexer_on_file():
     """Test that the lexer can tokenize an OcellusScript file."""
     lexer = OSTokenizer()
@@ -32,5 +31,6 @@ def test_lexer_on_file():
         raise TestError("Expected a list of tokens but received an empty list.")
 
 if __name__ == "__main__":
-    test_version()
+    print("Running lexer tests...")
     test_lexer_on_string()
+    test_lexer_on_file()
