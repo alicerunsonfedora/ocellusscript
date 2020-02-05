@@ -24,3 +24,14 @@ This repository contains the specifications and documentation for the OcellusScr
 - Poetry project manager
 
 To build Efficacy, clone this repository and then run `poetry install`, followed by `poetry publish`.
+
+## Efficacy Usage
+
+To run Efficacy, just run `efficacy` into the terminal. Running it without any command should open the interactive interpreter environment.
+
+### Additional arguments
+
+- `-i file.ocls`/`--input file.ocls`: The path to the source file to compile.
+- `-o exec`/`--output exec`: The path to the newly-created executable after compiling.
+- `-oT tokens.json`/`--output-tokens tokens.json`: The path to the newly-created JSON file containing all of the tokens parsed.
+- `-v`/`--version`: Reports the version of the Efficacy package. 
