@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """This submodule contains the component necessary to make a
 printed test."""
 
