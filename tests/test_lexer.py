@@ -23,8 +23,11 @@ def test_tokenize_basic():
     lexer = OSTokenizer()
     source = "example t = t > 6.0 ? t + 5.3 : t\n"
 
-    tokens = [{t[0].value: t[1]} for t in lexer.tokenize(source)]
+    tokens = []
     expected_tokens = []
+    all_tokens = lexer.tokenize(source)
+    for token_type, token in all_tokens:
+        tokens.append({token_type.value: token})
     with open(getcwd() + "/tests/lexer_samples/basic.json", "r") as sample:
         expected_tokens = json.load(sample)
     assert tokens == expected_tokens
@@ -40,8 +43,11 @@ def test_tokenize_basic_with_docstring():
              + "`Add 5.3 to a value if it's greater than 6.`\n" \
              + "example t = t > 6.0 ? t + 5.3 : t\n"
 
-    tokens = [{t[0].value: t[1]} for t in lexer.tokenize(source)]
+    tokens = []
     expected_tokens = []
+    all_tokens = lexer.tokenize(source)
+    for token_type, token in all_tokens:
+        tokens.append({token_type.value: token})
     with open(getcwd() + "/tests/lexer_samples/basic_with_docstring.json", "r") as sample:
         expected_tokens = json.load(sample)
     assert tokens == expected_tokens
