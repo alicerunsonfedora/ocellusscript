@@ -3,16 +3,48 @@
 The following test functions are provided to test that the lexer
 works as intended for both files and regular strings.
 """
+
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#
+
+import json
 from os import getcwd
 from efficacy import OSTokenizer
 
-def test_tokenize_basic_string():
-    """Test that the lexer can tokenize a given string."""
-    lexer = OSTokenizer()
-    source = "example takes Integer returns Integer\nexample t = t > 6 ? t + 5 : t\n"
+def test_tokenize_basic():
+    """Test that the lexer can tokenize a basic string.
 
-    tokens = lexer.tokenize(source)
-    assert len(tokens) > 0
+    This test will also attempt to verify that the tokens match what's
+    processed in the lexer_samples folder.
+    """
+    lexer = OSTokenizer()
+    source = "example t = t > 6.0 ? t + 5.3 : t\n"
+
+    tokens = [{t[0].value: t[1]} for t in lexer.tokenize(source)]
+    expected_tokens = []
+    with open(getcwd() + "/tests/lexer_samples/basic.json", "r") as sample:
+        expected_tokens = json.load(sample)
+    assert tokens == expected_tokens
+
+def test_tokenize_basic_with_docstring():
+    """Test that the lexer can tokenize a basic string with a docstring.
+
+    This test will also attempt to verify that the tokens match what's
+    processed in the lexer_samples folder.
+    """
+    lexer = OSTokenizer()
+    source = "example takes Float returns Float\n" \
+             + "`Add 5.3 to a value if it's greater than 6.`\n" \
+             + "example t = t > 6.0 ? t + 5.3 : t\n"
+
+    tokens = [{t[0].value: t[1]} for t in lexer.tokenize(source)]
+    expected_tokens = []
+    with open(getcwd() + "/tests/lexer_samples/basic_with_docstring.json", "r") as sample:
+        expected_tokens = json.load(sample)
+    assert tokens == expected_tokens
 
 def test_tokenize_file():
     """Test that the lexer can tokenize an OcellusScript file."""

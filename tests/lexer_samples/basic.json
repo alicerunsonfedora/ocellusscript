@@ -1,0 +1,38 @@
+[
+    {
+        "Identifier": "example"
+    },
+    {
+        "Identifier": "t"
+    },
+    {
+        "Operator": "="
+    },
+    {
+        "Identifier": "t"
+    },
+    {
+        "Operator": ">"
+    },
+    {
+        "FloatConstant": "6.0"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Identifier": "t"
+    },
+    {
+        "Operator": "+"
+    },
+    {
+        "FloatConstant": "5.3"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "Identifier": "t"
+    }
+]

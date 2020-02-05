@@ -1,0 +1,56 @@
+[
+    {
+        "Identifier": "example"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Float"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Float"
+    },
+    {
+        "DocstringConstant": "`Add 5.3 to a value if it's greater than 6.`"
+    },
+    {
+        "Identifier": "example"
+    },
+    {
+        "Identifier": "t"
+    },
+    {
+        "Operator": "="
+    },
+    {
+        "Identifier": "t"
+    },
+    {
+        "Operator": ">"
+    },
+    {
+        "FloatConstant": "6.0"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Identifier": "t"
+    },
+    {
+        "Operator": "+"
+    },
+    {
+        "FloatConstant": "5.3"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "Identifier": "t"
+    }
+]
