@@ -5,6 +5,9 @@ description = "Efficacy is a lexer, compiler, and interpreter for OcellusScript.
 authors = ["Marquis Kurt <software@marquiskurt.net>"]
 license = "MPL-2.0"
 
+[tool.poetry.scripts]
+efficacy = "efficacy:main"
+
 [tool.poetry.dependencies]
 python = ">=2.7"
 enum = [{ version = "^0.4.7", python="^2.7" }]

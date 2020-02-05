@@ -6,7 +6,7 @@ A Haskell-inspired functional programming language
 ![Python](https://img.shields.io/badge/python-2.7+-blue.svg) 
 ![GitHub Status](https://github.com/alicerunsonfedora/ocellusscript/workflows/Tests/badge.svg)
 
-OcellusScript is a functional programming language designed to work hand-in-hand with Unscripted's minigame. It heavily draws inspiration from languages like Haskell, Swift, JavaScript/ES5, and Python. OcellusScript aims to be an easy-to-use language that can perform powerful tasks and includes features like pattern matching, optional types, ternary operators, custom data types, and documentation string.
+OcellusScript is a functional programming language, originally designed to work hand-in-hand with the coding mini game from the Unscripted visual novel. OcellusScript heavily draws inspiration and syntax from languages like Haskell, Swift, JavaScript/ES5, and Python. OcellusScript aims to be an easy-to-use, type safe, and powerful language.
 
 This repository contains the specifications and documentation for the OcellusScript programming language, as well as the source code for Efficacy, the compiler and interpreter for OcellusScript.
 
