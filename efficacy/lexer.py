@@ -74,16 +74,16 @@ class OSTokenizer(object):
         symbols = "<>,?[]()-=+*/%`\\!:#"
         return char in symbols
 
-    def is_operator(self, char):
-        """Check whether a character is an operator.
+    def is_operator(self, partial):
+        """Check whether a string is an operator.
 
         Args:
-            char: The character to check.
+            partial: The string to check.
 
         Returns: Boolean indicated whether the character is an operator.
         """
-        operators = ["<", ">", "-", "+", "-", "*", "/", "%", "=", "and", "not", "or"]
-        return char in operators
+        operators = ["<", ">", "-", "+", "-", "*", "/", "%", "=", ">=", "<=", "==", "and", "not", "or"]
+        return partial in operators
 
     def is_keyword(self, word):
         """Determine whether the list of characters corresponds to
@@ -108,10 +108,8 @@ class OSTokenizer(object):
                             "takes",
                             "returns",
                             "log",
-                            "type",
-                            "datatype",
                             "only",
-                            "but",
+                            "except",
                             "warn",
                             "true",
                             "false",
@@ -168,6 +166,8 @@ class OSTokenizer(object):
                         token_type = OSTokenType.comment
                     elif char == "`":
                         token_type = OSTokenType.docstring
+                    elif char == "\"":
+                        token_type = OSTokenType.string
                     elif self.is_operator(char):
                         token_type = OSTokenType.operator
                     else:
@@ -217,6 +217,12 @@ class OSTokenizer(object):
                     state = _OSTokenState.end
                     source.insert(0, char)
 
+                # If we're looking at a string and the character is a double quote, terminate
+                # here and "unread" the character.
+                elif token_type == OSTokenType.string and char == "\"" and char != "\\\"":
+                    state = _OSTokenState.end
+                    source.insert(0, char)
+
                 # If we're looking at a comment and the character is a new line, terminate
                 # here and "unread" the character.
                 elif token_type == OSTokenType.comment and char == "\n":
@@ -229,9 +235,9 @@ class OSTokenizer(object):
                     state = _OSTokenState.end
                     token += char
 
-                # If we're looking at an operator and the character is not an operator, terminate
+                # If we're looking at an operator and the curren token is not an operator, terminate
                 # here and "unread" the character.
-                elif token_type == OSTokenType.operator and not self.is_operator(char):
+                elif token_type == OSTokenType.operator and not self.is_operator(token + char):
                     state = _OSTokenState.end
                     source.insert(0, char)
 
