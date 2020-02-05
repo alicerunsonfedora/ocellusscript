@@ -16,6 +16,7 @@ This repository contains the specifications and documentation for the OcellusScr
 
 - [OcellusScript Documentation](doc.md)
 - [OcellusScript Technical Specifications](spec.md)
+- [OcellusScript Support for VS Code](https://github.com/alicerunsonfedora/ocellusscript-vscode)
 
 ## Build Requirements for Efficacy
 
