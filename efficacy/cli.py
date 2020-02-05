@@ -63,9 +63,10 @@ def _make_token_file(ifile="", ofile=""):
     tokens = lexer.tokenize(source)
 
     # Generate the JSON object of all the tokens and types.
-    for token_type, token in tokens:
-        token_key = token_type if isinstance(token_type, str) else token_type.value
-        tokens.append({token_key: token})
+    if tokens:
+        for token_type, token in tokens:
+            token_key = token_type if isinstance(token_type, str) else token_type.value
+            json_contents.append({token_key: token})
 
     # Write the file to JSON.
     with open(ofile, "w+") as out:
@@ -73,14 +74,19 @@ def _make_token_file(ifile="", ofile=""):
 
     return
 
-def run_cli():
-    """Start the main process for the CLI application."""
+def run_cli(with_args=None):
+    """Start the main process for the CLI application.
+    
+    Args:
+        with_args: (Optional) The arguments to run the CLI with. Will default
+        to sys.argv if no arguments have been supplied.
+    """
     parser = _generate_args()
     args = []
 
     # Parse any arguments from the CLI when run.
     if sys.argv[1:]:
-        args = parser.parse_args(sys.argv[1:])
+        args = parser.parse_args(with_args if with_args else sys.argv[1:])
 
     # Process the arguments if we have any.
     if args:
