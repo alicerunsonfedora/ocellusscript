@@ -2,15 +2,18 @@
 
 ## What is OcellusScript?
 
-OcellusScript is a functional programming language designed to work hand-in-hand with Unscripted's minigame. It heavily draws inspiration from languages like Haskell, Swift, JavaScript/ES5, and Python. OcellusScript aims to be an easy-to-use language that can perform powerful tasks and includes features like pattern matching, optional types, ternary operators, custom data types, and documentation strings.
+OcellusScript is a functional programming language, originally designed to work hand-in-hand with the coding mini game from the Unscripted visual novel. OcellusScript heavily draws inspiration and syntax from languages like Haskell, Swift, JavaScript/ES5, and Python. OcellusScript aims to be an easy-to-use, type safe, and powerful language.
 
 ## Documentation
+
+The following document describes the capabilities of OcellusScript and how to get started writing programs in OcellusScript. More information on the specifications of OcellusScript can be found in the [specification document](spec.md).
 
 ### Expressions and Basic Types
 
 OcellusScript works like most programming languages and contains basic types:
 
-- **Strings** are usually a collection of alphanumeric/Unicode characters wrapped in double quotes (example: `"Howdy"`).
+- **Characters** are an individual alphanumeric or Unicode character wrapped in single quotes (example: `'\n'`).
+- **Strings** are usually a [list](#lists-and-pattern-matching) of Characters wrapped in double quotes (example: `"Howdy"`).
 - **Integers** are whole numbers (example: `5`).
 - **Floats** are numbers that aren't exactly whole; rather, they may be a decimal or fraction (example: `3.141`).
 - **Booleans** are a binary type that usually is either `true` (1) or `false` (0).
@@ -18,7 +21,7 @@ OcellusScript works like most programming languages and contains basic types:
 Likewise, there are other types in Ocellus:
 
 - **Callables** are functions, expressions, or methods.
-- **Nothing** is a void type to indicate a value of nothing. Usually comparable to `null` or `nil` in other languages.
+- **Nothing** is a void type to indicate a value of nothing. Usually comparable to `null` or `nil` in other languages. It is also the default type when no value is given in an [optional type](#optional-types).
 - **Anything** is also a void type, but is often used as a container type to describe any type.
 - **Error** is a String-like type that disrupts program execution flow or requires special processing.
 
