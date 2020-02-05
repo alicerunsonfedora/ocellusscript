@@ -27,7 +27,8 @@ def test_tokenize_basic():
     expected_tokens = []
     all_tokens = lexer.tokenize(source)
     for token_type, token in all_tokens:
-        tokens.append({token_type.value: token})
+        token_key = token_type if isinstance(token_type, str) else token_type.value
+        tokens.append({token_key: token})
     with open(getcwd() + "/tests/lexer_samples/basic.json", "r") as sample:
         expected_tokens = json.load(sample)
     assert tokens == expected_tokens
@@ -47,7 +48,8 @@ def test_tokenize_basic_with_docstring():
     expected_tokens = []
     all_tokens = lexer.tokenize(source)
     for token_type, token in all_tokens:
-        tokens.append({token_type.value: token})
+        token_key = token_type if isinstance(token_type, str) else token_type.value
+        tokens.append({token_key: token})
     with open(getcwd() + "/tests/lexer_samples/basic_with_docstring.json", "r") as sample:
         expected_tokens = json.load(sample)
     assert tokens == expected_tokens
