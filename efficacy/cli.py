@@ -34,22 +34,32 @@ def _generate_args():
                         help="the path to the JSON token file")
     return parser
 
-def _make_token_file(input="", path=""):
+def _make_token_file(ifile="", ofile=""):
     """Generate a tokenized JSON file that contains all of the tokens from
-    a given source file."""
+    a given source file.
+
+    Args:
+        ifile: The path to the input file to tokenize.
+        ofile: The path to the JSON file to write the tokens to.
+    """
     source = ""
     lexer = OSTokenizer()
     json_contents = []
 
-    with open(input, "r") as srcfile:
+    if not ifile.endswith(".ocls"):
+        print("%s is not an OcellusScript file. Aborting." % (ifile))
+        return
+
+    with open(ifile, "r") as srcfile:
         source = srcfile.read()
 
     tokens = lexer.tokenize(source)
 
     for token_type, token in tokens:
-        json_contents.append({token_type.value: token})
+        token_key = token_type if isinstance(token_type, str) else token_type.value
+        tokens.append({token_key: token})
 
-    with open(path, "w+") as out:
+    with open(ofile, "w+") as out:
         out.writelines(json.dumps(json_contents, indent=4))
 
     return
@@ -65,7 +75,8 @@ def run_cli():
     if args:
         if args.input and args.output_tokens:
             for i, j in zip(args.input, args.output_tokens):
-                _make_token_file(input=i, path=os.path.join(os.getcwd(), j))
+                _make_token_file(ifile=os.path.join(os.getcwd(), i),
+                                 ofile=os.path.join(os.getcwd(), j))
     else:
         # TODO: Implement interactive mode
         print("Enter interactive mode here...")
