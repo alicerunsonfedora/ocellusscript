@@ -71,7 +71,7 @@ class OSTokenizer(object):
 
         Returns: Boolean indicating whether the character is a symbol.
         """
-        symbols = "<>,?[]()-=+*/%`\\!:"
+        symbols = "<>,?[]()-=+*/%`\\!:#"
         return char in symbols
 
     def is_operator(self, char):
@@ -111,7 +111,13 @@ class OSTokenizer(object):
                             "type",
                             "datatype",
                             "only",
-                            "but"]
+                            "but",
+                            "warn",
+                            "true",
+                            "false",
+                            "type",
+                            "datatype",
+                            "private"]
 
         valid_keywords = valid_basic_types + valid_statements
         return word in valid_keywords
