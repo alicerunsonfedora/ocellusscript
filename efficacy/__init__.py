@@ -21,5 +21,10 @@ OcellusScript files to executable code.
 #
 
 from efficacy.lexer import *
+from efficacy.cli import run_cli
 
 __VERSION = "0.1.0"
+
+def main():
+    """The main function."""
+    run_cli()
