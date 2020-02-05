@@ -1,4 +1,4 @@
-# OcellusScript
+# ![OcellusScript](logomark.svg)
 
 A Haskell-inspired functional programming language
 
