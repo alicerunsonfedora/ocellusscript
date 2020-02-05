@@ -82,7 +82,9 @@ class OSTokenizer(object):
 
         Returns: Boolean indicated whether the character is an operator.
         """
-        operators = ["<", ">", "-", "+", "-", "*", "/", "%", "=", ">=", "<=", "==", "and", "not", "or"]
+        operators = ["<", ">", "-", "+", "-", "*", "/", "%",
+                     "=", ">=", "<=", "==", "and", "not", "or", "??"]
+
         return partial in operators
 
     def is_keyword(self, word):

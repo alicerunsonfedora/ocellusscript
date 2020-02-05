@@ -22,4 +22,4 @@ Below are the lists containing valid keywords, symbols, operators, etc.
 | -- | -- |
 | Keyword | `Character`, `String`, `Integer`, `Boolean`, `Float`, `Callable`, `Anything`, `Nothing`, `Error`, `import`, `module`, `where`, `takes`, `returns`, `log`, `only`, `except`, `warn`, `true`, `false`, `type`, `datatype`, `private` |
 | Symbol | `<`, `>`, `,`, `?`, `[`, `]`, `(`, `)`, `-`, `=`, `+`, `*`, `/`, `%`, `\`, `!`, `:`, `#` |
-| Operator | `<`, `>`, `-`, `+`, `*`, `/`, `%`, `=`, `>=`, `<=`, `==`, `and`, `not`, `or` |
+| Operator | `<`, `>`, `-`, `+`, `*`, `/`, `%`, `=`, `>=`, `<=`, `==`, `and`, `not`, `or`, `??` |
