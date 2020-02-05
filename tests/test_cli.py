@@ -19,7 +19,7 @@ def test_write_tokens():
     current_tokens = []
     expected_tokens = []
 
-    if "tmp" in os.listdir():
+    if "tmp" in os.listdir(os.getcwd()):
         for file in os.listdir("tmp"):
             os.remove("tmp/" + file)
         os.rmdir("tmp")
