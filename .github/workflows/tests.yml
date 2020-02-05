@@ -18,15 +18,9 @@ jobs:
         with:
           python-version: ${{ matrix.pyversions }}
           architecture: 'x64'
-      - name: Setup Poetry dependencies
-        uses: abatilo/actions-poetry@v1.1.0
-        with:
-          python_version: ${{ matrix.pyversions }}
-          poetry_version: 1.0.3
-          args: install
-      - name: Run tests
-        uses: abatilo/actions-poetry@v1.1.0
-        with:
-          python_version: ${{ matrix.pyversions }}
-          poetry_version: 1.0.3
-          args: run ./tests/test_lexer.py
+      - name: Install Poetry
+        uses: dschep/install-poetry-action@v1.3
+      - name: Install dependencies and test
+        run: |
+          poetry install
+          ./tests/test_lexer.py
