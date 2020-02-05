@@ -14,9 +14,6 @@ to tokenize a string or a file into a a list of OcellusScript tokens.
 
 from string import ascii_letters, digits
 from enum import Enum
-from typing import NewType
-
-Keyword = NewType('Keyword', str)
 
 class _OSTokenState(Enum):
     """An enumeration type for the different token states.
@@ -38,12 +35,12 @@ class OSTokenType(Enum):
     parsing. The values of the enumerations correspond to the
     lexical grammar names for each type.
     """
-    identifier = "Identifier"
     keyword = "Keyword"
+    identifier = "Identifier"
     string = "StringConstant"
     docstring = "DocstringConstant"
-    comment = "Comment"
-    symbol = "SymbolConstant"
+    comment = "CommentConstant"
+    symbol = "Symbol"
     num_integer = "IntConstant"
     num_float = "FloatConstant"
     operator = "Operator"
@@ -112,7 +109,9 @@ class OSTokenizer(object):
                             "returns",
                             "log",
                             "type",
-                            "datatype"]
+                            "datatype",
+                            "only",
+                            "but"]
 
         valid_keywords = valid_basic_types + valid_statements
         return word in valid_keywords
@@ -123,7 +122,8 @@ class OSTokenizer(object):
         Args:
             script: The string to tokenize.
 
-        Returns: A list containing tuples with the token's type (`OSTokenType`) and token.
+        Returns: A list containing the tokens as token types that derive from the String
+        type.
         """
 
         # Generate an empty list of tokens and the sample token, as well as the current
@@ -184,20 +184,47 @@ class OSTokenizer(object):
                     state = _OSTokenState.end
                     source.insert(0, char)
 
-                # If we're looking at a number and the character isn't a digit, terminate here
-                # and "unread" the character.
-                elif token_type == OSTokenType.number and char not in digits:
+                # Check if we're looking at a number and follow some tokenizing rules.
+                elif token_type == OSTokenType.number:
+
+                    # If the character is a dot, change the token type to a float type
+                    # and add the character.
+                    if char == ".":
+                        token_type = OSTokenType.num_float
+                        token += char
+
+                    # Otherwise, if the character isn't a number, then change the token
+                    # type to an integer, terminate here, and "unread" the character.
+                    elif char not in digits:
+                        if token_type != OSTokenType.num_float:
+                            token_type = OSTokenType.num_integer
+                        state = _OSTokenState.end
+                        source.insert(0, char)
+
+                    # Otherwise, just add the character as normal.
+                    else:
+                        token += char
+
+                # Check if we're dealing with a float and terminate if the character is
+                # not a number and "unread" the character.
+                elif token_type == OSTokenType.num_float and char not in digits:
                     state = _OSTokenState.end
                     source.insert(0, char)
 
+                # If we're looking at a comment and the character is a new line, terminate
+                # here and "unread" the character.
                 elif token_type == OSTokenType.comment and char == "\n":
                     state = _OSTokenState.end
                     source.insert(0, char)
 
+                # If we're looking at a docstring and the character is the last backtick,
+                # terminate here and "unread" the character.
                 elif token_type == OSTokenType.docstring and char == "`":
                     state = _OSTokenState.end
                     token += char
 
+                # If we're looking at an operator and the character is not an operator, terminate
+                # here and "unread" the character.
                 elif token_type == OSTokenType.operator and not self.is_operator(char):
                     state = _OSTokenState.end
                     source.insert(0, char)
@@ -216,11 +243,15 @@ class OSTokenizer(object):
             # and the token itself before resetting for the next iteration.
             elif state == _OSTokenState.end:
 
-                # If the token is a keyword, change the token's type.
-                if token_type == OSTokenType.identifier and self.is_keyword(token):
-                    token_type = OSTokenType.keyword
+                # If the token is a keyword or a logical operator, change the token's type.
+                if token_type == OSTokenType.identifier:
+                    if self.is_keyword(token):
+                        token_type = OSTokenType.keyword
+                    elif self.is_operator(token):
+                        token_type = OSTokenType.operator
 
                 tokens.append((token_type, token))
+
                 token = ""
                 token_type = None
                 state = _OSTokenState.start
