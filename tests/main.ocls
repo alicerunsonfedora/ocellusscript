@@ -1,6 +1,6 @@
 #
 # Ocellus
-# A Haskell-inspired fake functional programming language
+# A Haskell-inspired functional programming language
 # (C) 2020 Marquis Kurt. All rights reserved.
 # 
 
@@ -51,10 +51,10 @@ reverse x = helper x "" where
             helper x string = string + x
             helper x:xs string = helper xs (string + x)
 
-testNil takes Integer returns Boolean?
+testNothing takes Integer returns Boolean?
 `Stores an optional boolean value when assigned 0.`
-testNil 0 = true
-testNil x = nil
+testNothing 0 = true
+testNothing x = Nothing
 
 # Section 3: Higher-order Functions
 # The following are Ocellus-implemented variations of the common map, filter, and reduce
@@ -105,7 +105,7 @@ reduce f x s = helper f x s where
 
 # Section 4: Optional Values
 # Ocellus should be able to support optional values where something could be stored as a specific 
-# type or as nil.
+# type or as Nothing.
 
 health takes Integer? returns Integer
 `Assign the current health. If no value is provided, 100 is used.
@@ -117,19 +117,19 @@ health value = value ?? 100
 
 
 takeDamage takes Integer and Integer? returns Integer
-""Subtract a health amount, either randomly or by a set amount.
+`Subtract a health amount, either randomly or by a set amount.
 
 Arguments:
     curr: The current health to subtract from.
     by: The health to subtract by, if any. Optional.
 `
 takeDamage curr by = helper curr by where
-                        helper h nil = h - (randInt 1 5)
+                        helper h Nothing = h - (randInt 1 5)
                         helper h a = h - a
 
 # This is here to demonstrate the following 'ohYeah' function.
 expressions takes Nothing returns [String]
-expressions = ["Oh", "Ooh", "Sure", nil]
+expressions = ["Oh", "Ooh", "Sure", Nothing]
 
 ohYeah takes [Anything?] returns [String]
 `Apply a 'yeah' to each string.
@@ -165,7 +165,7 @@ getDigitSum number = helper number 0 where
                             : helper (butLastDigit num) (result + (lastDigit num)) 
 
 getLifePathNumber takes (Integer, Integer, Integer) returns Integer
-""Gets the life path number by adding the digits of a tuple with
+`Gets the life path number by adding the digits of a tuple with
 a birthdate.
 
 Arguments:
@@ -194,7 +194,7 @@ for start end task = forHelper start start end task where
 
 # This list containing the names of villains is hidden, so this will not be visible when
 # importing this module into another file.
-hidden villains = ["AEGIS", "Gargamel", "Chrysalis"]
+private villains = ["AEGIS", "Gargamel", "Chrysalis"]
 
 warnOfVillains takes [String] returns Nothing
 warnOfVillains list = for 0 range ((length list) - 1) task where
@@ -240,7 +240,7 @@ datatype IntegerTree = IntegerBranch IntegerNode? IntegerTree IntegerTree
 addlapseTree takes IntegerTree returns Integer
 `Traverses the IntegerTree and adds up all of the values.
 
-Any values that are nil will be substituted with 0.
+Any values that are Nothing will be substituted with 0.
 
 Arguments:
     tree: The tree to traverse.
