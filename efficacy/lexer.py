@@ -128,8 +128,8 @@ class OSTokenizer(object):
         Args:
             script: The string to tokenize.
 
-        Returns: A list containing the tokens as token types that derive from the String
-        type.
+        Returns: A list containing the tokens as a tuple containing the token's type and
+        the token itself.
         """
 
         # Generate an empty list of tokens and the sample token, as well as the current
