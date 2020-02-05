@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """This module contains the lexer tests for Efficacy.
 
 The following test functions are provided to test that the lexer
