@@ -32,6 +32,10 @@ def _generate_args():
     parser.add_argument("-oT", "--output-tokens",
                         nargs=1, metavar="out.json",
                         help="the path to the JSON token file")
+    parser.add_argument("-v", "--version",
+                        nargs='?',
+                        const=True,
+                        help="display the version of Efficacy and exit")
     return parser
 
 def _make_token_file(ifile="", ofile=""):
@@ -46,19 +50,24 @@ def _make_token_file(ifile="", ofile=""):
     lexer = OSTokenizer()
     json_contents = []
 
+    # Exit if we aren't dealing with an OcellusScript file.
     if not ifile.endswith(".ocls"):
         print("%s is not an OcellusScript file. Aborting." % (ifile))
         return
 
+    # Get the source from the input file.
     with open(ifile, "r") as srcfile:
         source = srcfile.read()
 
+    # Tokenize the source.
     tokens = lexer.tokenize(source)
 
+    # Generate the JSON object of all the tokens and types.
     for token_type, token in tokens:
         token_key = token_type if isinstance(token_type, str) else token_type.value
         tokens.append({token_key: token})
 
+    # Write the file to JSON.
     with open(ofile, "w+") as out:
         out.writelines(json.dumps(json_contents, indent=4))
 
@@ -69,14 +78,25 @@ def run_cli():
     parser = _generate_args()
     args = []
 
+    # Parse any arguments from the CLI when run.
     if sys.argv[1:]:
         args = parser.parse_args(sys.argv[1:])
 
+    # Process the arguments if we have any.
     if args:
+        # If the command is version, display the version and exit.
+        if args.version:
+            print("Efficacy CLI v0.1.0")
+            return
+
+        # If the input and token output are specified, run the token
+        # generator.
         if args.input and args.output_tokens:
             for i, j in zip(args.input, args.output_tokens):
                 _make_token_file(ifile=os.path.join(os.getcwd(), i),
                                  ofile=os.path.join(os.getcwd(), j))
+            return
+
+    # If no arguments have been supplied, run the interactive environment.
     else:
-        # TODO: Implement interactive mode
         print("Enter interactive mode here...")
