@@ -163,15 +163,12 @@ class OSTokenizer(object):
                 # Mark the token as a spcial type of symbol. Comments and docstrings
                 # take precedence, then operators, then regular symbols.
                 elif self.is_symbol(char):
-
                     if char == "#":
                         token_type = OSTokenType.comment
                     elif char == "`":
                         token_type = OSTokenType.docstring
                     elif char == "\"":
                         token_type = OSTokenType.string
-                    elif self.is_operator(char):
-                        token_type = OSTokenType.operator
                     else:
                         token_type = OSTokenType.symbol
 
@@ -180,7 +177,9 @@ class OSTokenizer(object):
                 # to the token.
                 if token_type:
                     state = _OSTokenState.in_id
-                    token += char
+                    if token_type not in \
+                        [OSTokenType.comment, OSTokenType.string, OSTokenType.docstring]:
+                        token += char
 
             # If we're currently processing the token, check to see if the current character
             # will end our token.
@@ -188,9 +187,15 @@ class OSTokenizer(object):
 
                 # If we're looking at an identifier and the character isn't a letter, terminate
                 # here and "unread" the character.
-                if token_type == OSTokenType.identifier and char not in ascii_letters:
-                    state = _OSTokenState.end
-                    source.insert(0, char)
+                if token_type == OSTokenType.identifier:
+                    if char not in ascii_letters:
+                        state = _OSTokenState.end
+                        source.insert(0, char)
+
+                        if char != " ":
+                            source.insert(0, " ")
+                    else:
+                        token += char
 
                 # Check if we're looking at a number and follow some tokenizing rules.
                 elif token_type == OSTokenType.number:
@@ -215,43 +220,45 @@ class OSTokenizer(object):
 
                 # Check if we're dealing with a float and terminate if the character is
                 # not a number and "unread" the character.
-                elif token_type == OSTokenType.num_float and char not in digits:
-                    state = _OSTokenState.end
-                    source.insert(0, char)
+                elif token_type == OSTokenType.num_float:
+                    if char not in digits:
+                        state = _OSTokenState.end
+                        source.insert(0, char)
+                    else:
+                        token += char
 
                 # If we're looking at a string and the character is a double quote, terminate
                 # here and "unread" the character.
-                elif token_type == OSTokenType.string and char == "\"" and char != "\\\"":
-                    state = _OSTokenState.end
-                    source.insert(0, char)
+                elif token_type == OSTokenType.string:
+                    if char == "\"" and char != "\\\"":
+                        state = _OSTokenState.end
+                    else:
+                        token += char
 
                 # If we're looking at a comment and the character is a new line, terminate
                 # here and "unread" the character.
-                elif token_type == OSTokenType.comment and char == "\n":
-                    state = _OSTokenState.end
-                    source.insert(0, char)
+                elif token_type == OSTokenType.comment:
+                    if char == "\n":
+                        state = _OSTokenState.end
+                        source.insert(0, char)
+                    else:
+                        token += char
 
                 # If we're looking at a docstring and the character is the last backtick,
                 # terminate here and "unread" the character.
-                elif token_type == OSTokenType.docstring and char == "`":
-                    state = _OSTokenState.end
-                    token += char
+                elif token_type == OSTokenType.docstring:
+                    if char == "`":
+                        state = _OSTokenState.end
+                    else:
+                        token += char
 
-                # If we're looking at an operator and the curren token is not an operator, terminate
-                # here and "unread" the character.
-                elif token_type == OSTokenType.operator and not self.is_operator(token + char):
-                    state = _OSTokenState.end
-                    source.insert(0, char)
-
-                # If we're looking at a symbol and the character isn't a symbol, terminate here
-                # and "unread" the character.
-                elif token_type == OSTokenType.symbol and not self.is_symbol(char):
+                # If we're looking at a symbol terminate here and "unread" the character.
+                elif token_type == OSTokenType.symbol:
                     state = _OSTokenState.end
                     source.insert(0, char)
 
-                # Otherwise, regardless of the type, add the character to the token.
-                else:
-                    token += char
+                    if char != " ":
+                        source.insert(0, " ")
 
             # If we're at the end of processing a token, add a tuple containing the token's type
             # and the token itself before resetting for the next iteration.
@@ -261,8 +268,6 @@ class OSTokenizer(object):
                 if token_type == OSTokenType.identifier:
                     if self.is_keyword(token):
                         token_type = OSTokenType.keyword
-                    elif self.is_operator(token):
-                        token_type = OSTokenType.operator
 
                 excluded_types = [OSTokenType.comment]
 

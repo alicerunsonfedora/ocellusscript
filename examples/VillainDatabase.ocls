@@ -34,4 +34,4 @@ inVillainDatabase takes String returns Boolean
 Arguments:
     name: The name to run through the database search.
 `
-inVillainDatabase name = member name (map (lambda (Villain name _ ) -> name) knownVillains)
+inVillainDatabase name = member name (map (lambda (Villain name _) -> name) knownVillains)
