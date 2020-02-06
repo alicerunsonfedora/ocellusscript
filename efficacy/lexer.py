@@ -264,7 +264,10 @@ class OSTokenizer(object):
                     elif self.is_operator(token):
                         token_type = OSTokenType.operator
 
-                tokens.append((token_type, token))
+                excluded_types = [OSTokenType.comment]
+
+                if token_type not in excluded_types:
+                    tokens.append((token_type, token))
 
                 token = ""
                 token_type = None
