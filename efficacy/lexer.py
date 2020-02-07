@@ -153,12 +153,21 @@ class OSTokenizer(object):
         state = _OSTokenState.start
         token_type = None
 
+        # Loop while the state of the tokenization process isn't the end (or
+        # in error)
         while (state != _OSTokenState.end and state != _OSTokenState.error):
+
+            # If we don't have any more tokens to work with, exit out of the
+            # loop.
             if not self._contains_more_tokens():
                 break
 
+            # Grab the next character.
             char = self._get_next_char()
 
+            # If we're in the start state, look at what the character is to
+            # determine what kind of token we're building. If none of the
+            # criteria match, continue to the next token.
             if state == _OSTokenState.start:
                 if char in ascii_letters:
                     token_type = OSTokenType.identifier
@@ -175,11 +184,16 @@ class OSTokenizer(object):
                 else:
                     continue
 
+                # Add the token if we have determined its type and change the
+                # state to an in-progress mode.
                 if token_type is not None:
                     state = _OSTokenState.in_id
                     if token_type != OSTokenType.string:
                         token += char
 
+            # If we're in the process of building the token and have already started,
+            # apply some rules and determine whether the character will end the current
+            # token.
             elif state == _OSTokenState.in_id:
                 if token_type == OSTokenType.identifier:
                     if char not in ascii_letters:
@@ -224,12 +238,16 @@ class OSTokenizer(object):
                     state = _OSTokenState.end
                     self._unread(char)
 
+        # If we have somehow reached an error in tokenizing, exit now.
         if state == _OSTokenState.error:
             raise OSTokenizerError("Tokenizing failed.")
 
+        # If the token is an identifier, check if it's a keyword and change
+        # the type if necessary.
         if token_type == OSTokenType.identifier and self.is_keyword(token):
             token_type = OSTokenType.keyword
 
+        # Finally, return the tuple.
         return token_type, token
 
     def tokenize(self):
