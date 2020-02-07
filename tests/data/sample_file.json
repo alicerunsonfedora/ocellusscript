@@ -1,0 +1,2294 @@
+[
+    {
+        "Keyword": "import"
+    },
+    {
+        "Identifier": "Main"
+    },
+    {
+        "Keyword": "module"
+    },
+    {
+        "Identifier": "Sample"
+    },
+    {
+        "Keyword": "where"
+    },
+    {
+        "Identifier": "helloWorld"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Nothing"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "String"
+    },
+    {
+        "DocstringConstant": "`Give a simple Hello, world!"
+    },
+    {
+        "Identifier": "helloWorld"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "StringConstant": "Hello, world!"
+    },
+    {
+        "Identifier": "quickMaths"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Nothing"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "DocstringConstant": "`Show simple mathematical operations in a func."
+    },
+    {
+        "Identifier": "quickMaths"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "IntConstant": "1"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "IntConstant": "2"
+    },
+    {
+        "Identifier": "testBool"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Nothing"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Boolean"
+    },
+    {
+        "DocstringConstant": "`Store the false value"
+    },
+    {
+        "Identifier": "testBool"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Keyword": "false"
+    },
+    {
+        "Identifier": "square"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "DocstringConstant": "`Take an integer and multiply it by itself.\n\nArguments:\n    x: The number to square.\n"
+    },
+    {
+        "Identifier": "square"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Symbol": "*"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Identifier": "reverse"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "String"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "String"
+    },
+    {
+        "DocstringConstant": "`Reverses the string.\n\nArguments:\n    x: The string to reverse.\n"
+    },
+    {
+        "Identifier": "reverse"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "StringConstant": ""
+    },
+    {
+        "Keyword": "where"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "StringConstant": ""
+    },
+    {
+        "Identifier": "string"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "string"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Identifier": "string"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "string"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "Identifier": "xs"
+    },
+    {
+        "Identifier": "string"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "xs"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "string"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "testNothing"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Boolean"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "DocstringConstant": "`Stores an optional boolean value when assigned 0."
+    },
+    {
+        "Identifier": "testNothing"
+    },
+    {
+        "IntConstant": "0"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Keyword": "true"
+    },
+    {
+        "Identifier": "testNothing"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Keyword": "Nothing"
+    },
+    {
+        "Identifier": "map"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Keyword": "Callable"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "and"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "DocstringConstant": "`Generate a list with an applied function.\n\nArguments:\n    func: The function to run over every item in the list\n    x: The list to run the function on its items\n"
+    },
+    {
+        "Identifier": "map"
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Keyword": "where"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "Identifier": "j"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Identifier": "j"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "filter"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Keyword": "Callable"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Boolean"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "and"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "DocstringConstant": "`Generate a list given a condition and an existing list.\n\nArguments:\n    f: The function to mark items as true or false\n    x: The list to run the function on its items\n"
+    },
+    {
+        "Identifier": "filter"
+    },
+    {
+        "Identifier": "f"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "f"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Keyword": "where"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "Identifier": "j"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Identifier": "j"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "func"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "reduce"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Keyword": "Callable"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Identifier": "and"
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "and"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Identifier": "and"
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Symbol": "\\"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "DocstringConstant": "`Generate a single value from a list with a method of combination.\n\nArguments:\n    f: The function to combine values\n    x: The list to reduce to a single value\n    s: The starting value\n"
+    },
+    {
+        "Identifier": "reduce"
+    },
+    {
+        "Identifier": "f"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Identifier": "s"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "f"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Identifier": "s"
+    },
+    {
+        "Keyword": "where"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "combinator"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Identifier": "s"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "s"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "combinator"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Identifier": "s"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "combinator"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Identifier": "s"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "combinator"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "Identifier": "j"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "s"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "combinator"
+    },
+    {
+        "Identifier": "j"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "combinator"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Identifier": "s"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "health"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "DocstringConstant": "`Assign the current health. If no value is provided, 100 is used.\n\nArguments:\n    default: The value to set the health to. Optional.\n"
+    },
+    {
+        "Identifier": "health"
+    },
+    {
+        "Identifier": "value"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "value"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "IntConstant": "100"
+    },
+    {
+        "Identifier": "takeDamage"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "Identifier": "and"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "DocstringConstant": "`Subtract a health amount, either randomly or by a set amount.\n\nArguments:\n    curr: The current health to subtract from.\n    by: The health to subtract by, if any. Optional.\n"
+    },
+    {
+        "Identifier": "takeDamage"
+    },
+    {
+        "Identifier": "curr"
+    },
+    {
+        "Identifier": "by"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "curr"
+    },
+    {
+        "Identifier": "by"
+    },
+    {
+        "Keyword": "where"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "h"
+    },
+    {
+        "Keyword": "Nothing"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "h"
+    },
+    {
+        "Symbol": "-"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "randInt"
+    },
+    {
+        "IntConstant": "1"
+    },
+    {
+        "IntConstant": "5"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "h"
+    },
+    {
+        "Identifier": "a"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "h"
+    },
+    {
+        "Symbol": "-"
+    },
+    {
+        "Identifier": "a"
+    },
+    {
+        "Identifier": "expressions"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Nothing"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Keyword": "String"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Identifier": "expressions"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "StringConstant": "Oh"
+    },
+    {
+        "Symbol": ","
+    },
+    {
+        "StringConstant": "Ooh"
+    },
+    {
+        "Symbol": ","
+    },
+    {
+        "StringConstant": "Sure"
+    },
+    {
+        "Symbol": ","
+    },
+    {
+        "Keyword": "Nothing"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Identifier": "ohYeah"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Keyword": "String"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "DocstringConstant": "`Apply a 'yeah' to each string.\n\nArguments:\n    list: The list of expressions to add 'yeah' to\n"
+    },
+    {
+        "Identifier": "ohYeah"
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "map"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "lambda"
+    },
+    {
+        "Identifier": "a"
+    },
+    {
+        "Symbol": "-"
+    },
+    {
+        "Symbol": ">"
+    },
+    {
+        "Identifier": "a"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "StringConstant": ", yeah!"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "StringConstant": "Yeah!"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Identifier": "lastDigit"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "DocstringConstant": "`Get the last digit of a number."
+    },
+    {
+        "Identifier": "lastDigit"
+    },
+    {
+        "Identifier": "num"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "num"
+    },
+    {
+        "Symbol": "%"
+    },
+    {
+        "IntConstant": "10"
+    },
+    {
+        "Identifier": "butLastDigit"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "DocstringConstant": "`Get everything but the last digit of the number."
+    },
+    {
+        "Identifier": "butLastDigit"
+    },
+    {
+        "Identifier": "num"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "num"
+    },
+    {
+        "Symbol": "/"
+    },
+    {
+        "IntConstant": "10"
+    },
+    {
+        "Identifier": "getDigitSum"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "DocstringConstant": "`Gets the sum of the digits of a number.\n\nArguments:\n    number: The number to get the digit sum of.\n"
+    },
+    {
+        "Identifier": "getDigitSum"
+    },
+    {
+        "Identifier": "number"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "number"
+    },
+    {
+        "IntConstant": "0"
+    },
+    {
+        "Keyword": "where"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "num"
+    },
+    {
+        "Identifier": "result"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "number"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "IntConstant": "0"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Identifier": "result"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "butLastDigit"
+    },
+    {
+        "Identifier": "num"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "result"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "lastDigit"
+    },
+    {
+        "Identifier": "num"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "getLifePathNumber"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "Symbol": ","
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "Symbol": ","
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "DocstringConstant": "`Gets the life path number by adding the digits of a tuple with\na birthdate.\n\nArguments:\n    birthdate: The birthdate to get the life path number of\n"
+    },
+    {
+        "Identifier": "getLifePathNumber"
+    },
+    {
+        "Identifier": "month"
+    },
+    {
+        "Symbol": ","
+    },
+    {
+        "Identifier": "day"
+    },
+    {
+        "Symbol": ","
+    },
+    {
+        "Identifier": "year"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "getDigitSum"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "getDigitSum"
+    },
+    {
+        "Identifier": "month"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "getDigitSum"
+    },
+    {
+        "Identifier": "day"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "getDigitSum"
+    },
+    {
+        "Identifier": "year"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "for"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Identifier": "and"
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Identifier": "and"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Keyword": "Callable"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Anything"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Nothing"
+    },
+    {
+        "DocstringConstant": "`Iterate over a range and perform a task at each step.\n\nArguments:\n    start: The starting value.\n    end: The ending value.\n    task: The task to perform.\n"
+    },
+    {
+        "Identifier": "for"
+    },
+    {
+        "Identifier": "start"
+    },
+    {
+        "Identifier": "end"
+    },
+    {
+        "Identifier": "task"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "forHelper"
+    },
+    {
+        "Identifier": "start"
+    },
+    {
+        "Identifier": "start"
+    },
+    {
+        "Identifier": "end"
+    },
+    {
+        "Identifier": "task"
+    },
+    {
+        "Keyword": "where"
+    },
+    {
+        "Identifier": "forHelper"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Identifier": "n"
+    },
+    {
+        "Identifier": "j"
+    },
+    {
+        "Identifier": "t"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "j"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "n"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Identifier": "t"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "Identifier": "forHelper"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "IntConstant": "1"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "n"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "j"
+    },
+    {
+        "Symbol": "-"
+    },
+    {
+        "IntConstant": "1"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "t"
+    },
+    {
+        "Keyword": "private"
+    },
+    {
+        "Identifier": "villains"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "StringConstant": "AEGIS"
+    },
+    {
+        "Symbol": ","
+    },
+    {
+        "StringConstant": "Gargamel"
+    },
+    {
+        "Symbol": ","
+    },
+    {
+        "StringConstant": "Chrysalis"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Identifier": "warnOfVillains"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Keyword": "String"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Nothing"
+    },
+    {
+        "Identifier": "warnOfVillains"
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "for"
+    },
+    {
+        "IntConstant": "0"
+    },
+    {
+        "Identifier": "range"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "length"
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "-"
+    },
+    {
+        "IntConstant": "1"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Identifier": "task"
+    },
+    {
+        "Keyword": "where"
+    },
+    {
+        "Identifier": "task"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "member"
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Identifier": "villains"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Keyword": "warn"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "list"
+    },
+    {
+        "Symbol": "["
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": "]"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "StringConstant": " is a villain!"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "Keyword": "log"
+    },
+    {
+        "StringConstant": "Safe!"
+    },
+    {
+        "Identifier": "countToTen"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Nothing"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Nothing"
+    },
+    {
+        "Identifier": "countToTen"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "for"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": ","
+    },
+    {
+        "Identifier": "range"
+    },
+    {
+        "IntConstant": "10"
+    },
+    {
+        "Symbol": ","
+    },
+    {
+        "Identifier": "task"
+    },
+    {
+        "Keyword": "where"
+    },
+    {
+        "Identifier": "task"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Keyword": "log"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Keyword": "type"
+    },
+    {
+        "Identifier": "Side"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Keyword": "Float"
+    },
+    {
+        "Keyword": "type"
+    },
+    {
+        "Identifier": "Radius"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Keyword": "Float"
+    },
+    {
+        "Keyword": "datatype"
+    },
+    {
+        "Identifier": "Shape"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "Rectangle"
+    },
+    {
+        "Identifier": "Side"
+    },
+    {
+        "Identifier": "Side"
+    },
+    {
+        "Identifier": "or"
+    },
+    {
+        "Identifier": "Ellipse"
+    },
+    {
+        "Identifier": "Radius"
+    },
+    {
+        "Identifier": "Radius"
+    },
+    {
+        "Identifier": "area"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Identifier": "Shape"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Float"
+    },
+    {
+        "DocstringConstant": "`Get the area of a Shape\n\nArguments:\n    shape: The shape to get the area of.\n"
+    },
+    {
+        "Identifier": "area"
+    },
+    {
+        "Identifier": "shape"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "helper"
+    },
+    {
+        "Identifier": "shape"
+    },
+    {
+        "Keyword": "where"
+    },
+    {
+        "Identifier": "area"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "Rectangle"
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Identifier": "y"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "x"
+    },
+    {
+        "Symbol": "*"
+    },
+    {
+        "Identifier": "y"
+    },
+    {
+        "Identifier": "area"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "Ellipse"
+    },
+    {
+        "Identifier": "r"
+    },
+    {
+        "Identifier": "q"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "r"
+    },
+    {
+        "IntConstant": "1"
+    },
+    {
+        "Symbol": "*"
+    },
+    {
+        "Identifier": "r"
+    },
+    {
+        "IntConstant": "2"
+    },
+    {
+        "Symbol": "*"
+    },
+    {
+        "Identifier": "pi"
+    },
+    {
+        "Identifier": "squareFactory"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Identifier": "Side"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Identifier": "Shape"
+    },
+    {
+        "DocstringConstant": "`Generate a Rectangle shape with equal width and height."
+    },
+    {
+        "Identifier": "squareFactory"
+    },
+    {
+        "Identifier": "side"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "Rectangle"
+    },
+    {
+        "Identifier": "side"
+    },
+    {
+        "Identifier": "side"
+    },
+    {
+        "Keyword": "datatype"
+    },
+    {
+        "Identifier": "IntegerTree"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "IntegerBranch"
+    },
+    {
+        "Identifier": "IntegerNode"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Identifier": "IntegerTree"
+    },
+    {
+        "Identifier": "IntegerTree"
+    },
+    {
+        "Identifier": "or"
+    },
+    {
+        "Identifier": "IntegerLeaf"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Identifier": "addlapseTree"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Identifier": "IntegerTree"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "Integer"
+    },
+    {
+        "DocstringConstant": "`Traverses the IntegerTree and adds up all of the values.\n\nAny values that are Nothing will be substituted with 0.\n\nArguments:\n    tree: The tree to traverse.\n"
+    },
+    {
+        "Identifier": "addlapseTree"
+    },
+    {
+        "Identifier": "tree"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "collapseHelper"
+    },
+    {
+        "Identifier": "tree"
+    },
+    {
+        "Keyword": "where"
+    },
+    {
+        "Identifier": "collapseHelper"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "IntegerLeaf"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Identifier": "i"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "IntConstant": "0"
+    },
+    {
+        "Identifier": "collapseHelper"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "IntegerBranch"
+    },
+    {
+        "Identifier": "value"
+    },
+    {
+        "Identifier": "t"
+    },
+    {
+        "IntConstant": "1"
+    },
+    {
+        "Identifier": "t"
+    },
+    {
+        "IntConstant": "2"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "value"
+    },
+    {
+        "Symbol": "?"
+    },
+    {
+        "Identifier": "value"
+    },
+    {
+        "Symbol": ":"
+    },
+    {
+        "IntConstant": "0"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "collapseHelper"
+    },
+    {
+        "Identifier": "t"
+    },
+    {
+        "IntConstant": "1"
+    },
+    {
+        "Symbol": ")"
+    },
+    {
+        "Symbol": "+"
+    },
+    {
+        "Symbol": "("
+    },
+    {
+        "Identifier": "collapseHelper"
+    },
+    {
+        "Identifier": "t"
+    },
+    {
+        "IntConstant": "2"
+    },
+    {
+        "Symbol": ")"
+    }
+]

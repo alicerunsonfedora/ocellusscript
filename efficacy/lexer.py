@@ -15,6 +15,9 @@ to tokenize a string or a file into a a list of OcellusScript tokens.
 from string import ascii_letters, digits
 from enum import Enum
 
+class OSTokenizerError(Exception):
+    """An error used to indicate that the tokenizer has failed in some way."""
+
 class _OSTokenState(Enum):
     """An enumeration type for the different token states.
 
@@ -53,6 +56,25 @@ class OSTokenizer(object):
     into OcellusScript tokens that can be used for parsing.
     """
 
+    source = []
+
+    def _contains_more_tokens(self):
+        """Return whether the source isn't empty."""
+        return len(self.source) > 0
+
+    def _unread(self, item):
+        """Insert the item to the front of the source queue.
+        
+        Args:
+            item: The item to insert.
+        """
+        self.source.insert(0, item)
+
+    def _get_next_char(self):
+        """Returns the front of the source queue if it isn't empty."""
+        if self._contains_more_tokens():
+            return self.source.pop(0)
+
     def is_alpha_num(self, char):
         """Check whether a characer is an alphanumeric character.
 
@@ -71,7 +93,7 @@ class OSTokenizer(object):
 
         Returns: Boolean indicating whether the character is a symbol.
         """
-        symbols = "<>,?[]()-=+*/%`\\!:#"
+        symbols = "<>,?[]()-=+*/%`\\!:#_"
         return char in symbols
 
     def is_operator(self, partial):
@@ -122,7 +144,95 @@ class OSTokenizer(object):
         valid_keywords = valid_basic_types + valid_statements
         return word in valid_keywords
 
-    def tokenize(self, script=""):
+    def _get_token(self):
+        """Generate a single token from the source list.
+
+        Returns a tuple containing the token's type and the token itself.
+        """
+        token = char = ""
+        state = _OSTokenState.start
+        token_type = None
+
+        while (state != _OSTokenState.end and state != _OSTokenState.error):
+            if not self._contains_more_tokens():
+                break
+
+            char = self._get_next_char()
+
+            if state == _OSTokenState.start:
+                if char in ascii_letters:
+                    token_type = OSTokenType.identifier
+                elif char in digits:
+                    token_type = OSTokenType.number
+                elif char == "\"":
+                    token_type = OSTokenType.string
+                elif char == "#":
+                    token_type = OSTokenType.comment
+                elif char == "`":
+                    token_type = OSTokenType.docstring
+                elif self.is_symbol(char):
+                    token_type = OSTokenType.symbol
+                else:
+                    continue
+
+                if token_type is not None:
+                    state = _OSTokenState.in_id
+                    if token_type != OSTokenType.string:
+                        token += char
+
+            elif state == _OSTokenState.in_id:
+                if token_type == OSTokenType.identifier:
+                    if char not in ascii_letters:
+                        state = _OSTokenState.end
+                        self._unread(char)
+                    else:
+                        token += char
+                elif token_type == OSTokenType.number:
+                    if char == ".":
+                        token_type = OSTokenType.num_float
+                        token += char
+                    else:
+                        if char not in digits:
+                            token_type = OSTokenType.num_integer
+                            state = _OSTokenState.end
+                            self._unread(char)
+                        else:
+                            token += char
+                elif token_type == OSTokenType.num_float:
+                    if char not in digits:
+                        state = _OSTokenState.end
+                        self._unread(char)
+                    else:
+                        token += char
+                elif token_type == OSTokenType.string:
+                    if char == "\"":
+                        state = _OSTokenState.end
+                    else:
+                        token += char
+                elif token_type == OSTokenType.comment:
+                    if char == "\n":
+                        state = _OSTokenState.end
+                        self._unread(char)
+                    else:
+                        token += char
+                elif token_type == OSTokenType.docstring:
+                    if char == "`":
+                        state = _OSTokenState.end
+                    else:
+                        token += char
+                elif token_type == OSTokenType.symbol:
+                    state = _OSTokenState.end
+                    self._unread(char)
+
+        if state == _OSTokenState.error:
+            raise OSTokenizerError("Tokenizing failed.")
+
+        if token_type == OSTokenType.identifier and self.is_keyword(token):
+            token_type = OSTokenType.keyword
+
+        return token_type, token
+
+    def tokenize(self):
         """Generate a list of tokens from a given string.
 
         Args:
@@ -135,151 +245,16 @@ class OSTokenizer(object):
         # Generate an empty list of tokens and the sample token, as well as the current
         # state, current character, and the token type.
         tokens = []
-        token = ""
-        state = _OSTokenState.start
-        char = ""
-        token_type = None
 
-        # Take the current string and convert it into a list of characters.
-        source = list(script)
-
-        # Iterate through every character in the source list.
-        while source:
-
-            # Grab the front of the source queue.
-            char = source.pop(0)
-
-            # If we're not in a token already, check if we can start a token.
-            if state == _OSTokenState.start:
-
-                # Mark the token as an identifier.
-                if char in ascii_letters:
-                    token_type = OSTokenType.identifier
-
-                # Mark the token as a number.
-                elif char in digits:
-                    token_type = OSTokenType.number
-
-                # Mark the token as a spcial type of symbol. Comments and docstrings
-                # take precedence, then operators, then regular symbols.
-                elif self.is_symbol(char):
-                    if char == "#":
-                        token_type = OSTokenType.comment
-                    elif char == "`":
-                        token_type = OSTokenType.docstring
-                    elif char == "\"":
-                        token_type = OSTokenType.string
-                    else:
-                        token_type = OSTokenType.symbol
-
-                # If we have found a token type, mark that we will begin processing
-                # the next few characters for the token and add the current character
-                # to the token.
-                if token_type:
-                    state = _OSTokenState.in_id
-                    if token_type not in \
-                        [OSTokenType.comment, OSTokenType.string, OSTokenType.docstring]:
-                        token += char
-
-            # If we're currently processing the token, check to see if the current character
-            # will end our token.
-            elif state == _OSTokenState.in_id:
-
-                # If we're looking at an identifier and the character isn't a letter, terminate
-                # here and "unread" the character.
-                if token_type == OSTokenType.identifier:
-                    if char not in ascii_letters:
-                        state = _OSTokenState.end
-                        source.insert(0, char)
-
-                        if char != " ":
-                            source.insert(0, " ")
-                    else:
-                        token += char
-
-                # Check if we're looking at a number and follow some tokenizing rules.
-                elif token_type == OSTokenType.number:
-
-                    # If the character is a dot, change the token type to a float type
-                    # and add the character.
-                    if char == ".":
-                        token_type = OSTokenType.num_float
-                        token += char
-
-                    # Otherwise, if the character isn't a number, then change the token
-                    # type to an integer, terminate here, and "unread" the character.
-                    elif char not in digits:
-                        if token_type != OSTokenType.num_float:
-                            token_type = OSTokenType.num_integer
-                        state = _OSTokenState.end
-                        source.insert(0, char)
-
-                    # Otherwise, just add the character as normal.
-                    else:
-                        token += char
-
-                # Check if we're dealing with a float and terminate if the character is
-                # not a number and "unread" the character.
-                elif token_type == OSTokenType.num_float:
-                    if char not in digits:
-                        state = _OSTokenState.end
-                        source.insert(0, char)
-                    else:
-                        token += char
-
-                # If we're looking at a string and the character is a double quote, terminate
-                # here and "unread" the character.
-                elif token_type == OSTokenType.string:
-                    if char == "\"" and char != "\\\"":
-                        state = _OSTokenState.end
-                    else:
-                        token += char
-
-                # If we're looking at a comment and the character is a new line, terminate
-                # here and "unread" the character.
-                elif token_type == OSTokenType.comment:
-                    if char == "\n":
-                        state = _OSTokenState.end
-                        source.insert(0, char)
-                    else:
-                        token += char
-
-                # If we're looking at a docstring and the character is the last backtick,
-                # terminate here and "unread" the character.
-                elif token_type == OSTokenType.docstring:
-                    if char == "`":
-                        state = _OSTokenState.end
-                    else:
-                        token += char
-
-                # If we're looking at a symbol terminate here and "unread" the character.
-                elif token_type == OSTokenType.symbol:
-                    state = _OSTokenState.end
-                    source.insert(0, char)
-
-                    if char != " ":
-                        source.insert(0, " ")
-
-            # If we're at the end of processing a token, add a tuple containing the token's type
-            # and the token itself before resetting for the next iteration.
-            elif state == _OSTokenState.end:
-
-                # If the token is a keyword or a logical operator, change the token's type.
-                if token_type == OSTokenType.identifier:
-                    if self.is_keyword(token):
-                        token_type = OSTokenType.keyword
-
-                excluded_types = [OSTokenType.comment]
-
-                if token_type not in excluded_types:
-                    tokens.append((token_type, token))
-
-                token = ""
-                token_type = None
-                state = _OSTokenState.start
+        # Generate the tokens while the source isn't empty.
+        while self._contains_more_tokens():
+            t = self._get_token()
+            if t[0] != OSTokenType.comment:
+                tokens.append(t)
 
         # Finally, return the list of tokens.
         return tokens
 
-    def __init__(self):
+    def __init__(self, script=""):
         """Initialize the tokenizer."""
+        self.source = list(script)

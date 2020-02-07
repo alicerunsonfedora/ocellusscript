@@ -1,0 +1,47 @@
+[
+    {
+        "Keyword": "module"
+    },
+    {
+        "Identifier": "Incorrect"
+    },
+    {
+        "Keyword": "where"
+    },
+    {
+        "Identifier": "sampleString"
+    },
+    {
+        "Keyword": "takes"
+    },
+    {
+        "Keyword": "Nothing"
+    },
+    {
+        "Keyword": "returns"
+    },
+    {
+        "Keyword": "String"
+    },
+    {
+        "Identifier": "sampleString"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "StringConstant": "This will be left open!"
+    },
+    {
+        "Identifier": "main"
+    },
+    {
+        "Identifier": "args"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "sampleString"
+    }
+]

@@ -47,7 +47,6 @@ def _make_token_file(ifile="", ofile=""):
         ofile: The path to the JSON file to write the tokens to.
     """
     source = ""
-    lexer = OSTokenizer()
     json_contents = []
 
     # Exit if we aren't dealing with an OcellusScript file.
@@ -60,7 +59,8 @@ def _make_token_file(ifile="", ofile=""):
         source = srcfile.read()
 
     # Tokenize the source.
-    tokens = lexer.tokenize(source)
+    lexer = OSTokenizer(script=source)
+    tokens = lexer.tokenize()
 
     # Generate the JSON object of all the tokens and types.
     if tokens:

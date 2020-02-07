@@ -20,16 +20,17 @@ def test_tokenize_basic():
     This test will also attempt to verify that the tokens match what's
     processed in the lexer_samples folder.
     """
-    lexer = OSTokenizer()
-    source = "example t = t > 6.0 ? t + 5.3 : t\n"
-
+    source = "example t = t > 6.0 ? t + 5.3 : t"
     tokens = []
     expected_tokens = []
-    all_tokens = lexer.tokenize(source)
+
+    lexer = OSTokenizer(source)
+    all_tokens = lexer.tokenize()
+
     for token_type, token in all_tokens:
         token_key = token_type if isinstance(token_type, str) else token_type.value
         tokens.append({token_key: token})
-    with open(getcwd() + "/tests/lexer_samples/basic.json", "r") as sample:
+    with open(getcwd() + "/tests/data/basic.json", "r") as sample:
         expected_tokens = json.load(sample)
     assert tokens == expected_tokens
 
@@ -39,26 +40,59 @@ def test_tokenize_basic_with_docstring():
     This test will also attempt to verify that the tokens match what's
     processed in the lexer_samples folder.
     """
-    lexer = OSTokenizer()
     source = "example takes Float returns Float\n" \
              + "`Add 5.3 to a value if it's greater than 6.`\n" \
-             + "example t = t > 6.0 ? t + 5.3 : t\n"
-
+             + "example t = t > 6.0 ? t + 5.3 : t"
     tokens = []
     expected_tokens = []
-    all_tokens = lexer.tokenize(source)
+
+    lexer = OSTokenizer(source)
+    all_tokens = lexer.tokenize()
+
     for token_type, token in all_tokens:
         token_key = token_type if isinstance(token_type, str) else token_type.value
         tokens.append({token_key: token})
-    with open(getcwd() + "/tests/lexer_samples/basic_with_docstring.json", "r") as sample:
+    with open(getcwd() + "/tests/data/basic_with_docstring.json", "r") as sample:
         expected_tokens = json.load(sample)
     assert tokens == expected_tokens
 
 def test_tokenize_file():
     """Test that the lexer can tokenize an OcellusScript file."""
-    lexer = OSTokenizer()
     source = ""
-    with open(getcwd() + "/tests/main.ocls", "r") as srcfile:
+    current = []
+    expected = []
+
+    with open(getcwd() + "/examples/Sample.ocls", "r") as srcfile:
         source = srcfile.read()
-    tokens = lexer.tokenize(source)
-    assert len(tokens) > 0
+    lexer = OSTokenizer(source)
+    tokens = lexer.tokenize()
+
+    for token_type, token in tokens:
+        token_key = token_type if isinstance(token_type, str) else token_type.value
+        current.append({token_key: token})
+
+    with open(getcwd() + "/tests/data/sample_file.json", "r") as sample:
+        expected = json.load(sample)
+
+    assert len(tokens) > 0 and current == expected
+
+def test_bad_tokens():
+    """Test that the lexer will return the wrong tokens when a string is not
+    closed."""
+    source = ""
+    current = []
+    expected = []
+
+    with open(getcwd() + "/tests/data/bad.ocls", "r") as srcfile:
+        source = srcfile.read()
+    lexer = OSTokenizer(source)
+    tokens = lexer.tokenize()
+
+    for token_type, token in tokens:
+        token_key = token_type if isinstance(token_type, str) else token_type.value
+        current.append({token_key: token})
+
+    with open(getcwd() + "/tests/data/bad_tokens.json", "r") as sample:
+        expected = json.load(sample)
+
+    assert current != expected

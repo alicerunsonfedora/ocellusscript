@@ -15,7 +15,7 @@
         "Keyword": "Float"
     },
     {
-        "DocstringConstant": "`Add 5.3 to a value if it's greater than 6.`"
+        "DocstringConstant": "`Add 5.3 to a value if it's greater than 6."
     },
     {
         "Identifier": "example"
@@ -24,13 +24,13 @@
         "Identifier": "t"
     },
     {
-        "Operator": "="
+        "Symbol": "="
     },
     {
         "Identifier": "t"
     },
     {
-        "Operator": ">"
+        "Symbol": ">"
     },
     {
         "FloatConstant": "6.0"
@@ -42,7 +42,7 @@
         "Identifier": "t"
     },
     {
-        "Operator": "+"
+        "Symbol": "+"
     },
     {
         "FloatConstant": "5.3"

@@ -10,9 +10,9 @@ application works as intended.
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
 
-from efficacy.cli import run_cli
 import json
 import os
+from efficacy.cli import run_cli
 
 def test_write_tokens():
     """Test that the token writing functionality works as intended."""
@@ -27,7 +27,7 @@ def test_write_tokens():
     os.mkdir("tmp")
 
     with open("tmp/sample.ocls", "w+") as sample:
-        sample.write("example t = t > 6.0 ? t + 5.3 : t\n")
+        sample.write("example t = t > 6.0 ? t + 5.3 : t")
     run_cli(["-i", "tmp/sample.ocls", "-oT", "tmp/basic.json"])
 
     with open("tmp/basic.json", "r") as curr:
@@ -37,6 +37,6 @@ def test_write_tokens():
         os.remove("tmp/" + file)
     os.rmdir("tmp")
 
-    with open("tests/lexer_samples/basic.json") as expec:
+    with open("tests/data/basic.json") as expec:
         expected_tokens = json.loads(expec.read())
     assert current_tokens == expected_tokens
