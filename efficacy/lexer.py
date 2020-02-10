@@ -274,5 +274,9 @@ class OSTokenizer(object):
         return tokens
 
     def __init__(self, script=""):
-        """Initialize the tokenizer."""
+        """Initialize the tokenizer.
+        
+        Args:
+            script: The script string to tokenize
+        """
         self.source = list(script)
