@@ -1,0 +1,33 @@
+site_name: OcellusScript Documentation
+site_author: Marquis Kurt
+site_description: "Documentation for OcellusScript language"
+docs_dir: mkdocs/
+copyright: 'Copyright &copy; 2020 Marquis Kurt.'
+
+repo_name: 'OcellusScript + Efficacy'
+repo_url: 'https://github.com/alicerunsonfedora/ocellusscript'
+edit_uri: ""
+
+theme:
+  name: material
+  logo: 'logo.svg'
+  favicon: 'favicon.png'
+  palette:
+    primary: teal
+    secondary: red
+  font:
+    text: "Zilla Slab"
+    code: "JetBrains Mono"
+  feature:
+    tabs: true
+
+extra_css:
+  - 'styles/jb.css'
+
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+  - pymdownx.superfences

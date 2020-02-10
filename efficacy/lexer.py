@@ -253,9 +253,6 @@ class OSTokenizer(object):
     def tokenize(self):
         """Generate a list of tokens from a given string.
 
-        Args:
-            script: The string to tokenize.
-
         Returns: A list containing the tokens as a tuple containing the token's type and
         the token itself.
         """
