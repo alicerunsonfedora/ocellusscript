@@ -13,8 +13,8 @@ theme:
   logo: 'logo.svg'
   favicon: 'favicon.png'
   palette:
-    primary: teal
-    secondary: red
+    primary: 'teal'
+    accent: 'red'
   font:
     text: "Zilla Slab"
     code: "JetBrains Mono"
