@@ -19,7 +19,3 @@ To try compiling an example, download an [example file](https://github.com/alice
 ```
 efficacy -i <filename>.ocls -o example
 ```
-
-## Other tools
-
-- [Visual Studio Code extension](https://github.com/alicerunsonfedora/ocellusscript-vscode)
