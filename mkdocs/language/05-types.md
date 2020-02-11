@@ -2,7 +2,7 @@
 
 OcellusScript supports writing custom data types and types that inherit basic types. This can often be used to represent trees or a specific type of data.
 
-The `type` function can be used to define a new type that is inherited from any of the [basic types](#Expressions-and-Basic-Types):
+The `type` function can be used to define a new type that is inherited from any of the [basic types](./01-expressions.md):
 
 ```ocellusscript
 type Side = Float

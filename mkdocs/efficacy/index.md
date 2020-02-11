@@ -18,3 +18,8 @@ Alternatively, Efficacy can be added as a dependency to a Poetry project:
 ```
 poetry add efficacy; poetry update
 ```
+
+## Table of Contents
+
+1. [Usage](./01-cli.md)
+2. [Module](./module/index.md)

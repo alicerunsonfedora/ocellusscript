@@ -80,7 +80,7 @@ We can now see the following:
 
 ## Callables as Parameters in a Type Signature
 
-There may be cases where a function itself is passed into another function as a parameter, like in [higher-order functions](../07-hoc/). To accomodate for this, the type signature can be modified to indicate that it takes a function (`Callable`) with its own parameters and return type. Take a look at the example below:
+There may be cases where a function itself is passed into another function as a parameter, like in [higher-order functions](./07-hoc.md). To accomodate for this, the type signature can be modified to indicate that it takes a function (`Callable`) with its own parameters and return type. Take a look at the example below:
 
 ```ocellusscript
 test takes (Callable takes Integer returns Integer) \

@@ -14,7 +14,12 @@ Type signatures and docstrings are completely optional, but should be included t
 
 OcellusScript files should use space indents with a length of four spaces per indent.
 
-## Put Conditionals and Operators on Separate Lines
+## Separate Long Lines
+
+Longer lines should be separated into smaller lines to make the code easy to read and traverse. The following provides cases where lines should be split.
+
+
+### On Conditional Expressions
 
 While it is possible to do an in-line ternary operator for a conditional, if the condition evaluation is lengthy, consider putting them on separate lines:
 
@@ -25,7 +30,7 @@ doStuff x = x % 5 == 1
                 : x + 5
 ```
 
-This should also be applied with operators and lists, if necessary:
+### On Operators and Lists
 
 ```ocellusscript
 type Name = String
@@ -40,13 +45,15 @@ myList = [(Changeling "Ocellus"),
           (Zebra "Zecora")]
 ```
 
-This should additionally be applied with parameters of functions, if necessary:
+### On Parameters and Functions
 
 ```ocellusscript
 inVillainDatabase name = member
                             name
                             (map (lambda (Villain name _ ) -> name) knownVillains)
 ```
+
+### Using `\` Separator
 
 If needed, the `\` operator at the end of a line can be used to break up other components like type signatures:
 
@@ -55,7 +62,7 @@ for takes Integer and Integer and \
     (Callable takes Anything? returns Anything?) returns Nothing
 ```
 
-## Indent Functions Defined with `where`
+###  On Functions Defined with `where`
 
 When possible, functions that use the `where` syntax to be defined on the next lines should be indented:
 

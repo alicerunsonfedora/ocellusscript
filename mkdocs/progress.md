@@ -3,9 +3,9 @@
 !!! warning
     OcellusScript is a work-in-progress language, so not all components of OcellusScript are functional. Below is a running checklist.
 
-## Language
-- [X] Lexical element specification
-- [ ] Parser and expression tree specification
+## Language Specification
+- [X] Lexical elements
+- [ ] Expression structure
 
 ## Efficacy
 

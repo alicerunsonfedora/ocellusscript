@@ -7,7 +7,7 @@ Start the main process for the CLI application.
     
 **Arguments**
 
-- `with_args`: (Optional) The arguments to run the CLI with. Will default to `sys.argv` if no arguments have been supplied.
+- `with_args`: (Optional) The arguments to run the CLI with (see [Using Efficacy CLI](../01-cli.md#arguments)). Will default to `sys.argv` if no arguments have been supplied.
 
 !!! example
     Below is an example of how the CLI can be called programmatically using `run_cli()`.

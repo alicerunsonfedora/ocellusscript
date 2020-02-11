@@ -5,7 +5,7 @@ The `lexer` submodule of Efficacy contains all of the tools necessary to tokeniz
 
 An enumeration type for the different token types.
 
-This enumeration class is used to differentiate between the different types of tokens used for OcellusScript parsing. The values of the enumerations correspond to the [lexical grammar names](../../../language/11-spec/#lexical-elements) for each type.
+This enumeration class is used to differentiate between the different types of tokens used for OcellusScript parsing. The values of the enumerations correspond to the [lexical grammar names](../../language/11-spec.md#lexical-elements) for each type.
 
 | Key | Corresponding Value |
 | --- | ------------------- |

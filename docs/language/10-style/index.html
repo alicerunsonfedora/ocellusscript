@@ -378,8 +378,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../efficacy/module/" title="Usage" class="md-nav__link">
-      Usage
+    <a href="../../efficacy/module/" title="The Efficacy Module" class="md-nav__link">
+      The Efficacy Module
     </a>
   </li>
 
@@ -445,8 +445,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../" title="Welcome" class="md-nav__link">
-      Welcome
+    <a href="../" title="Welcome to OcellusScript" class="md-nav__link">
+      Welcome <small>to OcellusScript</small>
     </a>
   </li>
 
@@ -613,16 +613,50 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#put-conditionals-and-operators-on-separate-lines" class="md-nav__link">
-    Put Conditionals and Operators on Separate Lines
+  <a href="#separate-long-lines" class="md-nav__link">
+    Separate Long Lines
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on-conditional-expressions" class="md-nav__link">
+    On Conditional Expressions
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#indent-functions-defined-with-where" class="md-nav__link">
-    Indent Functions Defined with where
+        
+          <li class="md-nav__item">
+  <a href="#on-operators-and-lists" class="md-nav__link">
+    On Operators and Lists
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-parameters-and-functions" class="md-nav__link">
+    On Parameters and Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-separator" class="md-nav__link">
+    Using \ Separator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-functions-defined-with-where" class="md-nav__link">
+    On Functions Defined with where
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -650,8 +684,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../11-spec/" title="Language Specification" class="md-nav__link">
-      Language Specification
+    <a href="../11-spec/" title="Specification" class="md-nav__link">
+      Specification
     </a>
   </li>
 
@@ -703,16 +737,50 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#put-conditionals-and-operators-on-separate-lines" class="md-nav__link">
-    Put Conditionals and Operators on Separate Lines
+  <a href="#separate-long-lines" class="md-nav__link">
+    Separate Long Lines
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on-conditional-expressions" class="md-nav__link">
+    On Conditional Expressions
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#indent-functions-defined-with-where" class="md-nav__link">
-    Indent Functions Defined with where
+        
+          <li class="md-nav__item">
+  <a href="#on-operators-and-lists" class="md-nav__link">
+    On Operators and Lists
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-parameters-and-functions" class="md-nav__link">
+    On Parameters and Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-separator" class="md-nav__link">
+    Using \ Separator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-functions-defined-with-where" class="md-nav__link">
+    On Functions Defined with where
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -748,7 +816,9 @@
 <p>Type signatures and docstrings are completely optional, but should be included to reduce confusion of input and output types, as well as providing sufficient documentation that can be called with <code>help</code>.</p>
 <h2 id="use-consistent-indentation">Use Consistent Indentation<a class="headerlink" href="#use-consistent-indentation" title="Permanent link">&para;</a></h2>
 <p>OcellusScript files should use space indents with a length of four spaces per indent.</p>
-<h2 id="put-conditionals-and-operators-on-separate-lines">Put Conditionals and Operators on Separate Lines<a class="headerlink" href="#put-conditionals-and-operators-on-separate-lines" title="Permanent link">&para;</a></h2>
+<h2 id="separate-long-lines">Separate Long Lines<a class="headerlink" href="#separate-long-lines" title="Permanent link">&para;</a></h2>
+<p>Longer lines should be separated into smaller lines to make the code easy to read and traverse. The following provides cases where lines should be split.</p>
+<h3 id="on-conditional-expressions">On Conditional Expressions<a class="headerlink" href="#on-conditional-expressions" title="Permanent link">&para;</a></h3>
 <p>While it is possible to do an in-line ternary operator for a conditional, if the condition evaluation is lengthy, consider putting them on separate lines:</p>
 <div class="codehilite"><pre><span></span><code>doStuff takes Integer returns Integer
 doStuff x = x % 5 == 1
@@ -756,7 +826,7 @@ doStuff x = x % 5 == 1
                 : x + 5
 </code></pre></div>
 
-<p>This should also be applied with operators and lists, if necessary:</p>
+<h3 id="on-operators-and-lists">On Operators and Lists<a class="headerlink" href="#on-operators-and-lists" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><code>type Name = String
 datatype Equestrian = Pony Name
                         or Changeling Name
@@ -769,18 +839,19 @@ myList = [(Changeling &quot;Ocellus&quot;),
           (Zebra &quot;Zecora&quot;)]
 </code></pre></div>
 
-<p>This should additionally be applied with parameters of functions, if necessary:</p>
+<h3 id="on-parameters-and-functions">On Parameters and Functions<a class="headerlink" href="#on-parameters-and-functions" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><code>inVillainDatabase name = member
                             name
                             (map (lambda (Villain name _ ) -&gt; name) knownVillains)
 </code></pre></div>
 
+<h3 id="using-separator">Using <code>\</code> Separator<a class="headerlink" href="#using-separator" title="Permanent link">&para;</a></h3>
 <p>If needed, the <code>\</code> operator at the end of a line can be used to break up other components like type signatures:</p>
 <div class="codehilite"><pre><span></span><code>for takes Integer and Integer and \
     (Callable takes Anything? returns Anything?) returns Nothing
 </code></pre></div>
 
-<h2 id="indent-functions-defined-with-where">Indent Functions Defined with <code>where</code><a class="headerlink" href="#indent-functions-defined-with-where" title="Permanent link">&para;</a></h2>
+<h3 id="on-functions-defined-with-where">On Functions Defined with <code>where</code><a class="headerlink" href="#on-functions-defined-with-where" title="Permanent link">&para;</a></h3>
 <p>When possible, functions that use the <code>where</code> syntax to be defined on the next lines should be indented:</p>
 <div class="codehilite"><pre><span></span><code>printLetters takes String returns Nothing
 printLetters string = for 0 (length string) task where
@@ -840,13 +911,13 @@ main args = log &quot;Imported!&quot;
           </a>
         
         
-          <a href="../11-spec/" title="Language Specification" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../11-spec/" title="Specification" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Language Specification
+                Specification
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
