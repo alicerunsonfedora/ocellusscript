@@ -204,6 +204,8 @@
         
       
         
+      
+        
   
   
     <li class="md-tabs__item">
@@ -290,6 +292,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../progress/" title="Current Progress" class="md-nav__link">
+      Current Progress
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../vscode/" title="VS Code Extension" class="md-nav__link">
       VS Code Extension
     </a>
@@ -305,13 +319,13 @@
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
     
-    <label class="md-nav__link" for="nav-3">
+    <label class="md-nav__link" for="nav-4">
       Efficacy
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
+      <label class="md-nav__title" for="nav-4">
         Efficacy
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -393,13 +407,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-3" type="checkbox" id="nav-3-3">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-3" type="checkbox" id="nav-4-3">
     
-    <label class="md-nav__link" for="nav-3-3">
+    <label class="md-nav__link" for="nav-4-3">
       Module
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-3-3">
+      <label class="md-nav__title" for="nav-4-3">
         Module
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -458,13 +472,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
     
-    <label class="md-nav__link" for="nav-4">
+    <label class="md-nav__link" for="nav-5">
       Language
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-4">
+      <label class="md-nav__title" for="nav-5">
         Language
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -687,7 +701,7 @@
 <tr>
 <td><code>-i</code></td>
 <td><code>--input</code></td>
-<td>No*</td>
+<td>No<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></td>
 <td>The path to the input file to compile</td>
 </tr>
 <tr>
@@ -704,7 +718,6 @@
 </tr>
 </tbody>
 </table>
-<p>*This argument is required only if you're compiling files.</p>
 <h2 id="creating-a-token-file">Creating a Token File<a class="headerlink" href="#creating-a-token-file" title="Permanent link">&para;</a></h2>
 <p>Efficacy supports creating a JSON file containing the tokens it discovered while tokenizing the input file. It mainly contains a list of objects with the token type (see <a href="../../language/11-spec/#lexical-elements">Lexical Elements</a>) and the token itself:</p>
 <div class="codehilite"><pre><span></span><code><span class="p">[</span>
@@ -717,6 +730,14 @@
 </code></pre></div>
 
 <p>This token file is useful when comparing a lexer's ability to tokenize an OcellusScript file to Efficacy's lexer, <code>OSTokenizer</code>.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>The <code>input</code> argument is required when compiling files or preparing a tokenized JSON file.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
                 
                   
                 

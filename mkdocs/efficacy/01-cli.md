@@ -8,11 +8,9 @@ The following are arguments that can be passed to Efficacy to specify details. R
 
 | Argument | Full Argument | Required | Description |
 | -------- | ------------- | -------- | ----------- |
-| `-i` | `--input` | No* | The path to the input file to compile |
+| `-i` | `--input` | No[^1] | The path to the input file to compile |
 | `-o` | `--output` | No | The path to where the compiled executable will be placed |
 | `-oT` | `--output-tokens` | No | The path to where the token file will be placed |
-
-\*This argument is required only if you're compiling files.
 
 ## Creating a Token File
 
@@ -29,3 +27,5 @@ Efficacy supports creating a JSON file containing the tokens it discovered while
 ```
 
 This token file is useful when comparing a lexer's ability to tokenize an OcellusScript file to Efficacy's lexer, `OSTokenizer`.
+
+[^1]: The `input` argument is required when compiling files or preparing a tokenized JSON file.
