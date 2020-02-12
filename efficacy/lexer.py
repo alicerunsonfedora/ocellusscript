@@ -272,7 +272,7 @@ class OSTokenizer(object):
 
     def __init__(self, script=""):
         """Initialize the tokenizer.
-        
+
         Args:
             script: The script string to tokenize
         """
