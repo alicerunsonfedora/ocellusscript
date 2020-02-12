@@ -8,6 +8,9 @@ OcellusScript is a simple functional programming language, originally designed t
 
 ## Quick start
 
+!!! warning
+    Efficacy is still being developed and cannot be installed from PyPI yet. You can still [download the source code](https://github.com/alicerunsonfedora/ocellusscript) and build it yourself to try it out. More information on the progress of Efficacy can be read on the [current progress](./progress.md#efficacy) page.
+
 To get started with writing OcellusScript code, install the Efficacy tools using pip:
 
 ```
