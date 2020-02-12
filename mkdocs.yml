@@ -23,6 +23,7 @@ theme:
 
 extra_css:
   - 'styles/jb.css'
+  - 'styles/overrides.css'
 
 markdown_extensions:
   - footnotes
