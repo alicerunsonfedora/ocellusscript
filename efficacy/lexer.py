@@ -64,7 +64,7 @@ class OSTokenizer(object):
 
     def _unread(self, item):
         """Insert the item to the front of the source queue.
-        
+
         Arguments:
             item: The item to insert.
         """
@@ -263,9 +263,9 @@ class OSTokenizer(object):
 
         # Generate the tokens while the source isn't empty.
         while self._contains_more_tokens():
-            t = self._get_token()
-            if t[0] != OSTokenType.comment:
-                tokens.append(t)
+            token = self._get_token()
+            if token[0] != OSTokenType.comment:
+                tokens.append(token)
 
         # Finally, return the list of tokens.
         return tokens
