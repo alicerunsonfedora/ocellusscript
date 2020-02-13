@@ -76,7 +76,7 @@ def _make_token_file(ifile="", ofile=""):
 
 def run_cli(with_args=None):
     """Start the main process for the CLI application.
-    
+
     Arguments:
         with_Arguments: (Optional) The arguments to run the CLI with. Will default
         to sys.argv if no arguments have been supplied.
@@ -89,7 +89,7 @@ def run_cli(with_args=None):
         args = parser.parse_args(with_args if with_args else sys.argv[1:])
 
     # Process the arguments if we have any.
-    if Arguments:
+    if args:
         # If the command is version, display the version and exit.
         if args.version:
             print("Efficacy CLI v0.1.0")
