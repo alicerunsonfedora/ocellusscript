@@ -34,12 +34,14 @@ The standard expression grammars are responsible for handling basic expressions 
 
 | Grammar | Corresponding Tokens |
 | ------- | -------------------- |
-| expression | `equalityExpression 'and' equalityExpression | equalityExpression 'or' equalityExpression | 'not' equalityExpression | equalityExpression` |
+| expression | `functionReturn | (expression) ? (expression) : (expression) | booleanExpression` |
+| booleanExpression | `equalityExpression 'and' equalityExpression | equalityExpression 'or' equalityExpression | 'not' equalityExpression | equalityExpression` |
 | equalityExpression | `inequalityExpression == inequalityExpression | inequalityExpression != inequalityExpression | inequalityExpression` |
 | inequalityExpression | `valueExpression > valueExpression | valueExpression < valueExpression | valueExpression` |
 | valueExpression | `valueExpression + additiveExpression | valueExpression - additiveExpression | additiveExpression` |
 | additiveExpression | `additiveExpression * multiplicativeExpression | additiveExpression - multiplicativeExpression | additiveExpression % multiplicativeExpression | multiplicativeExpression`
 | multiplicativeExpression | `(expression) | StringConstant | IntegerConstant | FloatConstant | keywordConstant |` |
+| optionalExpression | `(StringConstant | IntegerConstant | FloatConstant | keywordConstant) ?? (StringConstant | IntegerConstant | FloatConstant | keywordConstant)` |
 | keywordConstant | `'true' | 'false' | 'Anything' | 'Nothing' | 'Error'` |
 
 ### Functions
@@ -48,9 +50,8 @@ The function grammars handle the grammars for defining functions with expression
 
 | Grammar | Corresponding Tokens |
 | ------- | -------------------- |
-| `function` | `Identifier (signature)? (Docstring)? (Identifier*)? = (conditionalExpression | expression  | functionReturn)` |
-| `conditionExpression` | `(functionReturn | expression) ? (functionReturn | expression) : (functionReturn | expression)` |
+| `function` | `Identifier (signature)? (Docstring)? (Identifier*)? = (expression  | functionReturn)` |
+| `functionReturn` | `Identifier (expression | Identifier)*` |
 | `signature` | `Identifier 'takes' (typeList) 'returns' (typeList)` |
 | `typeList` | `type ('and' type)* | type (',' type)*` |
-| `type` | `'String' | 'Integer' | 'Float' | 'Character' | 'Error' | 'Anything' | 'Nothing' | 'Boolean' | 'Callable' | optionalType | Identifier` |
-| `optionalType` | `type('?')?` |
+| `type` | `('String' | 'Integer' | 'Float' | 'Character' | 'Error' | 'Anything' | 'Nothing' | 'Boolean' | 'Callable' | Identifier)('?')?` |

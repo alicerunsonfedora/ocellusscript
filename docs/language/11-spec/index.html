@@ -774,6 +774,10 @@
 <tbody>
 <tr>
 <td>expression</td>
+<td><code>functionReturn | (expression) ? (expression) : (expression) | booleanExpression</code></td>
+</tr>
+<tr>
+<td>booleanExpression</td>
 <td><code>equalityExpression 'and' equalityExpression | equalityExpression 'or' equalityExpression | 'not' equalityExpression | equalityExpression</code></td>
 </tr>
 <tr>
@@ -797,6 +801,10 @@
 <td><code>(expression) | StringConstant | IntegerConstant | FloatConstant | keywordConstant |</code></td>
 </tr>
 <tr>
+<td>optionalExpression</td>
+<td><code>(StringConstant | IntegerConstant | FloatConstant | keywordConstant) ?? (StringConstant | IntegerConstant | FloatConstant | keywordConstant)</code></td>
+</tr>
+<tr>
 <td>keywordConstant</td>
 <td><code>'true' | 'false' | 'Anything' | 'Nothing' | 'Error'</code></td>
 </tr>
@@ -814,11 +822,11 @@
 <tbody>
 <tr>
 <td><code>function</code></td>
-<td><code>Identifier (signature)? (Docstring)? (Identifier*)? = (conditionalExpression | expression  | functionReturn)</code></td>
+<td><code>Identifier (signature)? (Docstring)? (Identifier*)? = (expression  | functionReturn)</code></td>
 </tr>
 <tr>
-<td><code>conditionExpression</code></td>
-<td><code>(functionReturn | expression) ? (functionReturn | expression) : (functionReturn | expression)</code></td>
+<td><code>functionReturn</code></td>
+<td><code>Identifier (expression | Identifier)*</code></td>
 </tr>
 <tr>
 <td><code>signature</code></td>
@@ -830,11 +838,7 @@
 </tr>
 <tr>
 <td><code>type</code></td>
-<td><code>'String' | 'Integer' | 'Float' | 'Character' | 'Error' | 'Anything' | 'Nothing' | 'Boolean' | 'Callable' | optionalType | Identifier</code></td>
-</tr>
-<tr>
-<td><code>optionalType</code></td>
-<td><code>type('?')?</code></td>
+<td><code>('String' | 'Integer' | 'Float' | 'Character' | 'Error' | 'Anything' | 'Nothing' | 'Boolean' | 'Callable' | Identifier)('?')?</code></td>
 </tr>
 </tbody>
 </table>
