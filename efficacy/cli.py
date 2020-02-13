@@ -42,7 +42,7 @@ def _make_token_file(ifile="", ofile=""):
     """Generate a tokenized JSON file that contains all of the tokens from
     a given source file.
 
-    Args:
+    Arguments:
         ifile: The path to the input file to tokenize.
         ofile: The path to the JSON file to write the tokens to.
     """
@@ -77,8 +77,8 @@ def _make_token_file(ifile="", ofile=""):
 def run_cli(with_args=None):
     """Start the main process for the CLI application.
     
-    Args:
-        with_args: (Optional) The arguments to run the CLI with. Will default
+    Arguments:
+        with_Arguments: (Optional) The arguments to run the CLI with. Will default
         to sys.argv if no arguments have been supplied.
     """
     parser = _generate_args()
@@ -89,7 +89,7 @@ def run_cli(with_args=None):
         args = parser.parse_args(with_args if with_args else sys.argv[1:])
 
     # Process the arguments if we have any.
-    if args:
+    if Arguments:
         # If the command is version, display the version and exit.
         if args.version:
             print("Efficacy CLI v0.1.0")

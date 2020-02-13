@@ -65,7 +65,7 @@ class OSTokenizer(object):
     def _unread(self, item):
         """Insert the item to the front of the source queue.
         
-        Args:
+        Arguments:
             item: The item to insert.
         """
         self.source.insert(0, item)
@@ -78,7 +78,7 @@ class OSTokenizer(object):
     def is_alpha_num(self, char):
         """Check whether a characer is an alphanumeric character.
 
-        Args:
+        Arguments:
             char: The character to check against.
 
         Returns: Boolean indicating whether the character is alphanumeric.
@@ -88,7 +88,7 @@ class OSTokenizer(object):
     def is_symbol(self, char):
         """Check whether a character is a symbol.
 
-        Args:
+        Arguments:
             char: The character to check.
 
         Returns: Boolean indicating whether the character is a symbol.
@@ -99,7 +99,7 @@ class OSTokenizer(object):
     def is_operator(self, partial):
         """Check whether a string is an operator.
 
-        Args:
+        Arguments:
             partial: The string to check.
 
         Returns: Boolean indicated whether the character is an operator.
@@ -113,7 +113,7 @@ class OSTokenizer(object):
         """Determine whether the list of characters corresponds to
         a keyword.
 
-        Args:
+        Arguments:
             word: The string to check.
         """
         valid_basic_types = ["Character",
@@ -273,7 +273,7 @@ class OSTokenizer(object):
     def __init__(self, script=""):
         """Initialize the tokenizer.
 
-        Args:
+        Arguments:
             script: The script string to tokenize
         """
         self.source = list(script)
