@@ -117,6 +117,14 @@ class OSFunctionNode(_OSNode):
         self.help = docstring
         self.private = private
 
+class OSFunctionReturnNode(_OSNode):
+    """A basic representation of a function return node."""
+    def __init__(self, name, params, defines_inline=False, inline_func=None):
+        _OSNode.__init__(self, name)
+        self.params = params
+        self.defines_inline = defines_inline
+        self.inline_func = inline_func
+
 class OSModuleNode(OSFunctionNode):
     """A basic representation of a module node."""
     def __init__(self, name, assocated_fns, dependencies=None):
@@ -150,6 +158,12 @@ class OSParser(object):
             self.__current = self._tokens.pop(0)
 
     def _revert(self):
+        """Roll back the most recent action and push it back into the list
+        of tokens.
+
+        Always sets `__previous` to `None`, `None`, regardless of the previous
+        values in that list.
+        """
         if self.__previous != (None, None):
             self._tokens.insert(0, self.__previous)
             self.__current = self.__previous
@@ -221,6 +235,14 @@ class OSParser(object):
         raise NotImplementedError()
 
     def _type(self):
+        """Get a type, if available.
+
+        Returns: Either an `OSOptionalTypeNode` for an optional type
+        or an `OSTypeNode` containing the type in question.
+
+        Raises: `OSParserError` if the type passed was not a primitive
+        type or a type that was previously defined before.
+        """
         ctype, ctoken = self.__current
         standard_types = ["String", "Integer", "Character", "Float",
                           "Boolean", "Anything", "Nothing", "Callable"]
@@ -240,6 +262,13 @@ class OSParser(object):
             return OSTypeNode(typename, typevalue=None)
 
     def _type_list(self):
+        """Get a list of types, if available.
+
+        Returns: A list of `OSOptionalTypeNode` and/or `OSTypeNode`.
+
+        Raises: `OSParser` error if any type in the list is not a primitive
+        type or a custom-defined type.
+        """
         ctype, ctoken = self.__current
         if ctype != OSTokenType.keyword and ctype != OSTokenType.identifier:
             raise OSParserError("%s is not a valid keyword or identifier." % (ctoken))
@@ -256,6 +285,13 @@ class OSParser(object):
         return types
 
     def _fn_signature(self):
+        """Get a function type signature, if available.
+
+        Returns: `OSSignatureNode` containing the signature properties of the
+        function.
+
+        Raises: `OSParserError` if the signature is invalid.
+        """
         ctype, ctoken = self.__current
         if ctoken in self.__newfuncs:
             raise OSParserError("Type signature for %s already defined." % (ctoken))
@@ -282,19 +318,101 @@ class OSParser(object):
 
         return OSSignatureNode(name=fn_name, input=input_types, output=output_type)
 
-    def _fn_definition(self):
+    def _fn_return(self):
         ctype, ctoken = self.__current
+        if ctype != OSTokenType.identifier:
+            raise OSParserError("Expected an identifier, received %s instead."
+                                % (ctoken))
+
+        fn_name = ctoken
+        fn_params = []
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype == OSTokenType.identifier:
+            while ctype == OSTokenType.identifier:
+                fn_params.append(ctoken)
+                self._advance()
+                ctype, ctoken = self.__current
+        return None
+
+
+    def _fn_definition(self):
+        """Get a function definition, if available.
+
+        Returns: `OSFunctionNode` with a child expression tree, optional signature,
+        and docstring.
+
+        Raises: `OSParserError` if the function definition is invalid.
+        """
+        ctype, ctoken = self.__current
+
+        fn_private = False
+
+        if ctype == OSTokenType.keyword and ctoken == "private":
+            fn_private = True
+            self._advance()
+            ctype, ctoken = self.__current
 
         if ctype != OSTokenType.identifier:
             raise OSParserError("Expected a function identifier here: %s" % (ctoken))
 
         fn_name = ctoken
+        fn_signature = None
+        fn_docstring = None
+        fn_result = None
+        fn_params = []
 
         if fn_name in self.__newfuncs:
             raise OSParserError("Function %s was already defined." % (fn_name))
 
-        # TODO: Determine how to switch between signature and definition...
+        self._advance()
+        ntype, _ = self.__current
+        if ntype == OSTokenType.keyword:
+            self._revert()
+            fn_signature = self._fn_signature()
+            self._advance()
 
+        ctype, ctoken = self.__current
+        if ctype == OSTokenType.docstring:
+            fn_docstring = ctoken
+
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype == OSTokenType.identifier:
+            while ctype == OSTokenType.identifier:
+                fn_params.append(ctoken)
+                self._advance()
+                ctype, ctoken = self.__current
+        else:
+            fn_params = [OSNothingTypeNode()]
+
+        self._advance()
+        ctype, ctoken = self.__current
+        if ctype != OSTokenType.symbol and ctoken != "=":
+            raise OSParserError("Expected assignment in function definition, got %s instead."
+                                % (ctoken))
+
+        self._advance()
+        ctype, ctoken = self.__current
+
+        # TODO: Fix this section to properly determine whether we're looking at an
+        # expression or a function return. Currently, doing a newfuncs check doesn't
+        # account for defining functions inside of itself.
+
+        if ctype == OSTokenType.identifier and ctoken in self.__newfuncs:
+            fn_result = self._fn_return() # pylint:disable=assignment-from-none
+        else:
+            fn_result = self._expanded_expression()
+
+        self.__newfuncs.append(fn_name)
+
+        return OSFunctionNode(name=fn_name,
+                              result=fn_result,
+                              signature=fn_signature,
+                              docstring=fn_docstring,
+                              private=fn_private)
 
 
     def parse(self):
