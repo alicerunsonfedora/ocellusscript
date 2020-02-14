@@ -1191,7 +1191,7 @@
         "Symbol": "("
     },
     {
-        "Identifier": "lambda"
+        "Keyword": "lambda"
     },
     {
         "Identifier": "a"
