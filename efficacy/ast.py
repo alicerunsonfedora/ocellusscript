@@ -40,8 +40,7 @@ class OSTypeNode(_OSNode):
     expression evaluation).
 
     Attributes:
-        typename: The name of the type to define.
-        typevalue: The value of the type.
+        type: The name of the type to define.
     """
     def __init__(self, typename, typevalue):
         """Construct a type node.
@@ -185,6 +184,73 @@ class OSOptionalTypeNode(OSTypeNode):
         OSTypeNode.__init__(self, typename="Optional", typevalue=possible_type)
         self.lhs = possible_value
         self.rhs = OSNothingTypeNode()
+
+class OSTypeDeclarationNode(OSTypeNode):
+    """An OcellusScript custom type declaration node.
+
+    Custom type declarations subclass from `OSTypeNode` and often shadow an existing
+    type.
+
+    Attributes:
+        extends_type: The primitive type that the custom type draws from.
+    """
+    def __init__(self, name, extends, value=None):
+        """Construct a custom type declaration node.
+
+        Arguments:
+            name: The name of the custom type.
+            extends: The primitive type that this custom type shadows.
+            value: The value of the type, if any. Defaults to None.
+        """
+        OSTypeNode.__init__(self, typename=name, typevalue=value)
+        self.extends_type = extends
+
+    def raw_type(self):
+        """Return the primitive or 'raw' version of this type."""
+        if self.extends_type == "Character":
+            return OSCharacterTypeNode(value=self.root)
+        elif self.extends_type == "String":
+            return OSStringTypeNode(value=self.root)
+        elif self.extends_type == "Integer":
+            return OSIntTypeNode(value=self.root)
+        elif self.extends_type == "Float":
+            return OSFloatTypeNode(value=self.root)
+        elif self.extends_type == "Boolean":
+            return OSBooleanTypeNode(value=self.root)
+        elif self.extends_type == "Anything":
+            return OSAnythingTypeNode(value=self.root)
+        else:
+            return OSNothingTypeNode()
+
+class OSDatatypeDeclarationNode(OSTypeNode):
+    """An OcellusScript data type declaration node.
+
+    Custom data type nodes sublass from `OSTypeNode` and define their own structures
+    of how data is organized.
+
+    Attributes:
+        options: The different options that define this data type.
+    """
+    def __init__(self, name, value, options):
+        """Construct a datatype declaration node.
+
+        Arguments:
+            name: The name of the custom data type
+            value: The assigned value of this data type, if any.
+            options: The options for this data type.
+        """
+        OSTypeNode.__init__(self, name, value)
+        self.options = options
+
+class OSDatatypeOptionNode(OSTypeNode):
+    """An OcellusScript data type option node.
+
+    The data type option node is a subclass of `OSTypeNode` that defines an option for a data
+    type. The `typename` is set to the option's identifier and `typevalue` is set to the list
+    of primitive data types that follow it.
+    """
+    def __init__(self, name, types):
+        OSTypeNode.__init__(self, typename=name, typevalue=types)
 
 class OSListTypeReferenceNode(OSTypeNode):
     """An OcellusScript list type reference node.

@@ -15,7 +15,7 @@ compilation or additional processing.
 
 from random import random
 from efficacy.lexer import OSTokenizer, OSTokenType
-from efficacy.ast import * # pylint: disable=wildcard-import
+from efficacy.ast import * # pylint: disable=wildcard-import,unused-wildcard-import
 
 class OSParserError(Exception):
     """The error to use when the parser has failed."""
@@ -32,6 +32,8 @@ class OSParser(object):
     _tokenizer = OSTokenizer("")
     _tokens = []
     _tree = []
+    _standard_types = ["String", "Integer", "Character", "Float",
+                       "Boolean", "Anything", "Nothing", "Callable"]
 
     __previous = None, None
     __current = None, None
@@ -138,11 +140,9 @@ class OSParser(object):
         type or a type that was previously defined before.
         """
         ctype, ctoken = self.__current
-        standard_types = ["String", "Integer", "Character", "Float",
-                          "Boolean", "Anything", "Nothing", "Callable"]
         if ctype != OSTokenType.identifier and ctype != OSTokenType.keyword:
             raise OSParserError("Expected an identifier or keyword here: %s" % ctoken)
-        if ctoken not in standard_types and ctoken not in self.__newtypes:
+        if ctoken not in self._standard_types and ctoken not in self.__newtypes:
             raise OSParserError("%s is not a valid type." % ctoken)
 
         typename = ctoken
@@ -246,7 +246,6 @@ class OSParser(object):
                                     defines_inline=fn_definition is not None,
                                     inline_func=fn_definition)
 
-
     def _fn_definition(self):
         """Get a function definition, if available.
 
@@ -318,10 +317,135 @@ class OSParser(object):
                               private=fn_private)
 
     def _type_declaration(self):
-        raise NotImplementedError()
+        """Get a type declaration, if available.
+
+        Returns: `OSTypeDeclarationNode` if a type was declared.
+
+        Raises: `OSParserError` if the parsing of the type declaration failed.
+        """
+        ctype, ctoken = self.__current
+
+        if ctype != OSTokenType.keyword and ctoken != "type":
+            raise OSParserError("Expected type declaration keyword.")
+
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype != OSTokenType.identifier:
+            raise OSParserError("Expected type identifier but received %s instead."
+                                % (ctoken))
+
+        new_type_name = ctoken
+        new_type_extends = None
+
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype != OSTokenType.symbol and ctoken != "=":
+            raise OSParserError("Expected type declaration assignment here.")
+
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype != OSTokenType.keyword and ctoken not in self._standard_types:
+            raise OSParserError("Expected a standard type but received %s instead." % (ctoken))
+
+        new_type_extends = ctoken
+        self.__newtypes.append(new_type_name)
+
+        return OSTypeDeclarationNode(new_type_name, new_type_extends)
+
+    def _datatype_options(self):
+        """Get a data type option declaration list, if available.
+
+        Returns: A list of `OSDatatypeOptionNode` with all of the data type options.
+
+        Raises: `OSParserError` if the parsing of data type options fails.
+        """
+        options = []
+        ctype, ctoken = self.__current
+
+        if ctype != OSTokenType.identifier:
+            raise OSParserError("Expected identifier for datatype option.")
+
+        f_id = ctoken
+        f_types = []
+
+        self._advance()
+        ctype, ctoken = self.__current
+
+        while ctype == OSTokenType.keyword and\
+            (ctoken in self._standard_types or ctoken in self.__newtypes):
+            f_types.append(self._type())
+            self._advance()
+            ctype, ctoken = self.__current
+
+        options.append(OSDatatypeOptionNode(f_id, f_types))
+
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype == OSTokenType.keyword and ctoken == "or":
+            while ctype == OSTokenType.keyword and ctoken == "or":
+                self._advance()
+                ctype, ctoken = self.__current
+
+                if ctype != OSTokenType.identifier:
+                    raise OSParserError("Expected identifier for datatype option.")
+
+                o_id = ctoken
+                o_types = []
+
+                self._advance()
+                ctype, ctoken = self.__current
+
+                while ctype == OSTokenType.keyword and\
+                    (ctoken in self._standard_types or ctoken in self.__newtypes):
+                    o_types.append(self._type())
+                    self._advance()
+                    ctype, ctoken = self.__current
+
+                options.append(OSDatatypeOptionNode(o_id, o_types))
+
+        return options
+
 
     def _datatype_declaration(self):
-        raise NotImplementedError()
+        """Get a datatype declaration, if available.
+
+        Returns: `OSDatatypeDeclarationNode` containing the data type information.
+
+        Raises: `OSParserError` if parsing the datatype declaration fails.
+        """
+        ctype, ctoken = self.__current
+
+        if ctype != OSTokenType.keyword and ctoken != "datatype":
+            raise OSParserError("Expected datatype declaration keyword here.")
+
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype != OSTokenType.identifier:
+            raise OSParserError("Expected datatype identifier here.")
+
+        data_type_name = ctoken
+        data_type_options = []
+
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype != OSTokenType.symbol and ctoken != '=':
+            raise OSParserError("Expected datatype declaration assignment here.")
+
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype != OSTokenType.identifier:
+            raise OSParserError("Expected identifier for datatype option.")
+
+        data_type_options = self._datatype_options()
+
+        return OSDatatypeDeclarationNode(data_type_name, None, data_type_options)
 
     def _imports(self):
         """Get all import statements, if possible.
@@ -484,7 +608,8 @@ class OSParser(object):
 
         if tokens:
             if script:
-                raise OSParserError("Cannot instantiate parser with both a script and list of tokens.")
+                raise OSParserError("Cannot instantiate parser with both a script\
+                                    and list of tokens.")
             self._tokens = tokens
 
         self._tree = []

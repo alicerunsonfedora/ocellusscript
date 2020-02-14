@@ -139,7 +139,8 @@ class OSTokenizer(object):
                             "false",
                             "type",
                             "datatype",
-                            "private"]
+                            "private",
+                            "lambda"]
 
         valid_keywords = valid_basic_types + valid_statements
         return word in valid_keywords
