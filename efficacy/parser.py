@@ -14,122 +14,10 @@ compilation or additional processing.
 #
 
 from efficacy.lexer import OSTokenizer, OSTokenType
+from efficacy.ast import * # pylint: disable=wildcard-import
 
 class OSParserError(Exception):
     """The error to use when the parser has failed."""
-
-class _OSNode(object):
-    """A basic representation of a tree node."""
-    def __init__(self, root, lhs=None, rhs=None):
-        self.root = root
-        self.lhs = lhs
-        self.rhs = rhs
-
-class OSTypeNode(_OSNode):
-    """A basic representation of a type node."""
-    def __init__(self, typename, typevalue):
-        _OSNode.__init__(self, root=typevalue)
-        self.type = typename
-
-class OSNothingTypeNode(OSTypeNode):
-    """A basic representation of a "Nothing" type."""
-    def __init__(self):
-        OSTypeNode.__init__(self, typename="Nothing", typevalue=None)
-
-class OSAnythingTypeNode(OSTypeNode):
-    """A basic representation of an Anything type."""
-    def __init__(self, value, special_type=None):
-        OSTypeNode.__init__(self, typename=special_type if special_type else "Anything",
-                            typevalue=value)
-
-class OSErrorTypeNode(OSTypeNode):
-    """A basic representation of an Error type."""
-    def __init__(self, error):
-        OSTypeNode.__init__(self, typename="Error", typevalue=error)
-
-class OSCharacterTypeNode(OSAnythingTypeNode):
-    """A basic representation of a Character type."""
-    def __init__(self, value):
-        OSAnythingTypeNode.__init__(self, value, special_type="Character")
-
-class OSStringTypeNode(OSAnythingTypeNode):
-    """A basic representation of a String type."""
-    def __init__(self, value):
-        OSAnythingTypeNode.__init__(self, value, special_type="String")
-
-class OSIntTypeNode(OSAnythingTypeNode):
-    """A basic representation of an Integer type."""
-    def __init__(self, value):
-        OSAnythingTypeNode.__init__(self, value, special_type="Integer")
-
-class OSFloatTypeNode(OSAnythingTypeNode):
-    """A basic representation of a Float type."""
-    def __init__(self, value):
-        OSAnythingTypeNode.__init__(self, value, special_type="Float")
-
-class OSBooleanTypeNode(OSAnythingTypeNode):
-    """A basic representation of a Boolean type."""
-    def __init__(self, value):
-        OSAnythingTypeNode.__init__(self, value, special_type="Boolean")
-
-class OSListTypeNode(OSAnythingTypeNode):
-    """A basic representation of a list node."""
-    def __init__(self, values, content_type):
-        OSAnythingTypeNode.__init__(self, value=values, special_type="List")
-        self.list_type = content_type
-
-class OSOptionalTypeNode(OSTypeNode):
-    """A basic representation of an optional type node."""
-    def __init__(self, possible_value, possible_type="Anything"):
-        OSTypeNode.__init__(self, typename="Optional", typevalue=possible_type)
-        self.lhs = possible_value
-        self.rhs = OSNothingTypeNode()
-
-class OSListTypeReferenceNode(OSTypeNode):
-    """A basic representation of a list type (reference).
-
-    This node is typically used for type signatures.
-    """
-    def __init__(self, content_type):
-        OSTypeNode.__init__(self, typename="List", typevalue=content_type)
-
-class OSExpressionNode(_OSNode):
-    """A basic representation of an expression node."""
-    def __init__(self, operation, left=None, right=None):
-        _OSNode.__init__(self, root=operation, lhs=left, rhs=right)
-
-class OSConditionalExpressionNode(OSExpressionNode):
-    """A basic representation of a conditional expression node."""
-    def __init__(self, condition, true=None, false=None):
-        OSExpressionNode.__init__(self, operation=condition, left=true, right=false)
-
-class OSSignatureNode(_OSNode):
-    """A basic representation of a type signature node."""
-    def __init__(self, name, input, output): # pylint:disable=redefined-builtin
-        _OSNode.__init__(self, root=name, lhs=input, rhs=output)
-
-class OSFunctionNode(_OSNode):
-    """A basic representation of a function node."""
-    def __init__(self, name, result, signature=None, docstring=None, private=False):
-        _OSNode.__init__(self, root=result)
-        self.name = name
-        self.types = signature
-        self.help = docstring
-        self.private = private
-
-class OSFunctionReturnNode(_OSNode):
-    """A basic representation of a function return node."""
-    def __init__(self, name, params, defines_inline=False, inline_func=None):
-        _OSNode.__init__(self, name)
-        self.params = params
-        self.defines_inline = defines_inline
-        self.inline_func = inline_func
-
-class OSModuleNode(OSFunctionNode):
-    """A basic representation of a module node."""
-    def __init__(self, name, assocated_fns, dependencies=None):
-        OSFunctionNode.__init__(self, name, result=assocated_fns)
-        self.dependencies = dependencies
 
 class OSParser(object):
     """The parsing class for OcellusScript.
@@ -193,8 +81,13 @@ class OSParser(object):
     def _basic_expression(self):
         """Get a basic expression, if available.
 
+        Basic expressions are considered standard, single primitive types
+        (`"I at the dog."`) or an expression wrapped in a set of parentheses
+        (`(2 + 8)`).
+
         Returns: A subclassed `OSTypeNode`, or an `OSExpressionNode` if
-        the expression contains operations.
+        the expression is parenthetical and contains additional operations
+        inside.
 
         Raises: `OSParserError` if the expression in question is not valid.
         """
@@ -208,7 +101,7 @@ class OSParser(object):
         elif ctype == OSTokenType.keyword:
             return self._keyword_constant(ctoken)
         elif ctype == OSTokenType.symbol and ctoken == "(":
-            return self._expanded_expression()
+            return self._expression()
         else:
             raise OSParserError("%s is not a valid expression in this context." % (ctoken))
 
@@ -231,7 +124,7 @@ class OSParser(object):
     def _boolean_expression(self):
         raise NotImplementedError()
 
-    def _expanded_expression(self):
+    def _expression(self):
         raise NotImplementedError()
 
     def _type(self):
@@ -319,6 +212,13 @@ class OSParser(object):
         return OSSignatureNode(name=fn_name, input=input_types, output=output_type)
 
     def _fn_return(self):
+        """Get the function call return statement, if available.
+
+        Returns: `OSFunctionReturnNode` containing the function name and the
+        paramaters passed, as well as any inline function calls.
+
+        Raises: `OSParserError` if the function call return is invalid.
+        """
         ctype, ctoken = self.__current
         if ctype != OSTokenType.identifier:
             raise OSParserError("Expected an identifier, received %s instead."
@@ -326,6 +226,7 @@ class OSParser(object):
 
         fn_name = ctoken
         fn_params = []
+        fn_definition = None
         self._advance()
         ctype, ctoken = self.__current
 
@@ -334,7 +235,15 @@ class OSParser(object):
                 fn_params.append(ctoken)
                 self._advance()
                 ctype, ctoken = self.__current
-        return None
+
+        if ctype == OSTokenType.keyword and ctoken == "where":
+            self._advance()
+            fn_definition = self._fn_definition()
+
+        return OSFunctionReturnNode(name=fn_name,
+                                    params=fn_params,
+                                    defines_inline=fn_definition is not None,
+                                    inline_func=fn_definition)
 
 
     def _fn_definition(self):
@@ -397,14 +306,7 @@ class OSParser(object):
         self._advance()
         ctype, ctoken = self.__current
 
-        # TODO: Fix this section to properly determine whether we're looking at an
-        # expression or a function return. Currently, doing a newfuncs check doesn't
-        # account for defining functions inside of itself.
-
-        if ctype == OSTokenType.identifier and ctoken in self.__newfuncs:
-            fn_result = self._fn_return() # pylint:disable=assignment-from-none
-        else:
-            fn_result = self._expanded_expression()
+        fn_result = self._expression()
 
         self.__newfuncs.append(fn_name)
 
