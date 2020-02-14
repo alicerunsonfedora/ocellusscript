@@ -13,6 +13,7 @@ compilation or additional processing.
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
 
+from random import random
 from efficacy.lexer import OSTokenizer, OSTokenType
 from efficacy.ast import * # pylint: disable=wildcard-import
 
@@ -316,6 +317,138 @@ class OSParser(object):
                               docstring=fn_docstring,
                               private=fn_private)
 
+    def _type_declaration(self):
+        raise NotImplementedError()
+
+    def _datatype_declaration(self):
+        raise NotImplementedError()
+
+    def _imports(self):
+        """Get all import statements, if possible.
+
+        Returns: A list of strings containing what to import.
+
+        Raises: `OSParserError` if import parsing fails.
+        """
+        depends = []
+        import_name = ""
+        ctype, ctoken = self.__current
+
+        while ctype == OSTokenType.keyword and ctoken == "import":
+            self._advance()
+            ctype, ctoken = self.__current
+            if ctype != OSTokenType.identifier:
+                raise OSParserError("Expected a module identifier here but got %s instead"
+                                    % (ctoken))
+            import_name = ctoken
+            self._advance()
+            ctype, ctoken = self.__current
+
+            if ctype == OSTokenType.keyword:
+                if ctoken == "except":
+                    no_imports = []
+                    self._advance()
+                    ctype, ctoken = self.__current
+
+                    if ctype != OSTokenType.identifier:
+                        raise OSParserError("Expected a function identifier\
+                                                here but got %s instead"
+                                            % (ctoken))
+
+                    while ctype == OSTokenType.identifier:
+                        no_imports.append(ctoken)
+                        self._advance()
+
+                        ctype, ctoken = self.__current
+
+                        while ctype == OSTokenType.symbol and ctoken == ",":
+                            self._advance()
+                            ctype, ctoken = self.__current
+                            no_imports.append(ctoken)
+                            self._advance()
+
+                    no_imports = list(map(lambda a: import_name + "!" + a, no_imports))
+                    depends += no_imports
+                elif ctoken == "only":
+                    only_imports = []
+                    self._advance()
+                    ctype, ctoken = self.__current
+
+                    if ctype != OSTokenType.identifier:
+                        raise OSParserError("Expected a function identifier\
+                                                here but got %s instead"
+                                            % (ctoken))
+
+                    while ctype == OSTokenType.identifier:
+                        only_imports.append(ctoken)
+                        self._advance()
+
+                        ctype, ctoken = self.__current
+
+                        while ctype == OSTokenType.symbol and ctoken == ",":
+                            self._advance()
+                            ctype, ctoken = self.__current
+                            only_imports.append(ctoken)
+                            self._advance()
+
+                    no_imports = list(map(lambda a: import_name + "." + a, only_imports))
+                    depends += only_imports
+                else:
+                    raise OSParserError("Unexpected keyword %s in import statement" % (ctoken))
+        return depends
+
+    def _md_definition(self):
+        """Get a module definition.
+
+        Returns: `OSModuleNode` with the dependencies and child functions/types defined. If no name
+        was detected, a random name similar to the following is assigned instead:
+        `ocellus_173646287183`.
+
+        Raises: `OSParserError` if parsing the module failed.
+        """
+        ctype, ctoken = self.__current
+        name = ""
+        dependencies = []
+        fns = []
+
+        if ctype == OSTokenType.keyword and ctoken == "import":
+            dependencies = self._imports()
+            self._advance()
+            ctype, ctoken = self.__current
+
+        if ctype != OSTokenType.keyword and ctoken != "module":
+            name = "ocellus_" + str(random())
+        else:
+            self._advance()
+            ctype, ctoken = self.__current
+            if ctype != OSTokenType.identifier:
+                raise OSParserError("Expected module name identifier but got %s instead"
+                                    % (ctoken))
+            name = ctoken
+
+        self._advance()
+        ctype, ctoken = self.__current
+        if ctype != OSTokenType.keyword and ctoken != "where":
+            raise OSParserError("Expected where keyword here but got %s instead." % (ctoken))
+
+        self._advance()
+        ctype, ctoken = self.__current
+
+        while ctype == OSTokenType.identifier or ctype == OSTokenType.keyword:
+            if ctype == OSTokenType.keyword:
+                if ctoken == "type":
+                    fns.append(self._type_declaration())
+                elif ctoken == "datatype":
+                    fns.append(self._datatype_declaration())
+                else:
+                    raise OSParserError("Unexpected keyword %s found here." % (ctoken))
+            else:
+                fns.append(self._fn_definition())
+
+            self._advance()
+            ctype, ctoken = self.__current
+
+        return OSModuleNode(name, fns, dependencies=dependencies)
 
     def parse(self):
         """Parse through the list of tokens or script and return the expression
@@ -331,6 +464,8 @@ class OSParser(object):
         """
         if not self._tokens and self._tokenizer.source:
             self._tokens = self._tokenizer.tokenize()
+        self._advance()
+        self._tree = [self._md_definition()]
         return self._tree
 
     def __init__(self, script="", tokens=None):
