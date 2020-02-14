@@ -5,7 +5,8 @@ The `efficacy` module contains all of the publicly available tools
 for Efficacy that include, but are not limited to:
 
 - The tokenizer (`OSTokenizer`)
-- The parser (`OSCompiler`)
+- The parser (`OSParser`)
+- The compiler (`OSCompiler`)
 
 This module also contains the interactive CLI program to convert
 OcellusScript files to executable code.
@@ -21,6 +22,7 @@ OcellusScript files to executable code.
 #
 
 from efficacy.lexer import *
+from efficacy.parser import *
 from efficacy.cli import run_cli
 
 __VERSION = "0.1.0"
