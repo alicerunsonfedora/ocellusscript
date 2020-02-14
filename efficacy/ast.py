@@ -220,18 +220,64 @@ class OSExpressionNode(_OSNode):
         _OSNode.__init__(self, root=operation, lhs=left, rhs=right)
 
 class OSConditionalExpressionNode(OSExpressionNode):
-    """A basic representation of a conditional expression node."""
+    """An OcellusScript conditional expression node.
+
+    A conditional expression node contains the condition to evaluate for truthiness as the
+    root of the node, with the left branch corresponding to the value or expression to use
+    when the condition returns true, and the right branch corresponding to the value or
+    expression to use when the condition returns false.
+    """
     def __init__(self, condition, true=None, false=None):
+        """Construct a contidional expression node.
+
+        Arguments:
+            condition: The condition to evaluate for truthiness.
+            true: The expression or value to return when the condition is true.
+            false: The expression or value to return when the condition is false.
+        """
         OSExpressionNode.__init__(self, operation=condition, left=true, right=false)
 
 class OSSignatureNode(_OSNode):
-    """A basic representation of a type signature node."""
+    """An OcellusScript type signature node.
+
+    Type signature nodes contain the input type and output type information for a designated
+    function and are usually an attribute of an `OSFunctionNode`. The root of the node contains
+    the function's name, and the left and right branches contains the input types and output types,
+    respectively.
+    """
     def __init__(self, name, input, output): # pylint:disable=redefined-builtin
+        """Construct a type signature node.
+
+        Arguments:
+            name: The name of the function associated with this signature
+            input: The list of input types as parameters of this function
+            output: The list of output types as the result of this function
+        """
         _OSNode.__init__(self, root=name, lhs=input, rhs=output)
 
 class OSFunctionNode(_OSNode):
-    """A basic representation of a function node."""
+    """An OcellusScript function node.
+
+    A function node contains the information necessary to recreate a function. The root of this
+    node is typically the result expression and does not use any child branches.
+
+    Attributes:
+        name: The name of the function
+        types: The type signature of this function, if it exists.
+        help: The docstring for this function, if it exists.
+        private: Whether the function is considered a private function of a module.
+        Defaults to False.
+    """
     def __init__(self, name, result, signature=None, docstring=None, private=False):
+        """Construct a function node.
+
+        Arguments:
+            name: The name of the function.
+            result: The result expression of this function.
+            signature: The type signature for this function, if any. Defaults to None.
+            docstring: The help docstring for this function, if any. Defaults to None.
+            private: Whether this function is private. Defaults to False.
+        """
         _OSNode.__init__(self, root=result)
         self.name = name
         self.types = signature
@@ -239,15 +285,49 @@ class OSFunctionNode(_OSNode):
         self.private = private
 
 class OSFunctionReturnNode(_OSNode):
-    """A basic representation of a function return node."""
+    """An OcellusScript function return node.
+
+    Function return nodes are used to indicate that an expression will use the result of a function
+    with a given name and set of parameters. Function return nodes also can have inline functions
+    that are defined, typically using the `where` statement.
+
+    Attributes:
+        params: The parameters passed to the function.
+        defines_inline: Whether the function return includes a new function definition. Defaults to
+        False.
+        inline_func: The function definition if defines_inline is true. Defaults to None.
+    """
     def __init__(self, name, params, defines_inline=False, inline_func=None):
+        """Construct a function return node.
+
+        Arguments:
+            name: The name of the function being called.
+            params: The list of parameters being called.
+            defines_inline: Whether the call is defining a new function. Defaults to False.
+            inline_func: The in-line function being defined. Defaults to None.
+        """
         _OSNode.__init__(self, name)
         self.params = params
         self.defines_inline = defines_inline
         self.inline_func = inline_func
 
 class OSModuleNode(OSFunctionNode):
-    """A basic representation of a module node."""
+    """An OcellusScript module node.
+
+    Module nodes are subclassed from `OSFunctionNode` and are typically the root node of an
+    OcellusScript file. Module nodes contain information such as dependencies from import
+    statements and the root node consists of all of the functions defined in that module.
+
+    Attributes:
+        dependencies: The required modules to be imported.
+    """
     def __init__(self, name, assocated_fns, dependencies=None):
+        """Construct an OcellusScript module node.
+
+        Arguments:
+            name: The name of the module.
+            associated_fns: The associated functions defined in this module.
+            dependencies: The list of dependencies needed for this module. Defaults to none.
+        """
         OSFunctionNode.__init__(self, name, result=assocated_fns)
         self.dependencies = dependencies
