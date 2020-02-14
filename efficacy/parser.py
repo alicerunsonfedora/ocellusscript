@@ -484,7 +484,7 @@ class OSParser(object):
 
         if tokens:
             if script:
-                raise OSParserError("Cannot instantiate parser with a script and list of tokens.")
+                raise OSParserError("Cannot instantiate parser with both a script and list of tokens.")
             self._tokens = tokens
 
         self._tree = []

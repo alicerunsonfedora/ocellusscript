@@ -28,7 +28,7 @@ OcellusScript uses the following grammar set to define functions, expressions, t
 
 Expression grammars are organized in terms of precedence in ascending order (low --> high).
 
-### Standard Expressions 
+### Standard Expressions
 
 The standard expression grammars are responsible for handling basic expressions such as `5 + 6` or `isOkay and isNotNull`.
 
@@ -55,3 +55,19 @@ The function grammars handle the grammars for defining functions with expression
 | `signature` | `Identifier 'takes' (typeList) 'returns' (typeList)` |
 | `typeList` | `type ('and' type)* | type (',' type)*` |
 | `type` | `('String' | 'Integer' | 'Float' | 'Character' | 'Error' | 'Anything' | 'Nothing' | 'Boolean' | 'Callable' | Identifier)('?')?` |
+
+### Custom Declarations
+
+| Grammar | Corresponding Tokens |
+| ------- | -------------------- |
+| typeDeclaration | `'type' Identifier '=' type` |
+| datatypeDeclaration | `'datatype' Identifier '=' (Identifier)* ('or' (Identifier)*)*` |
+
+### Modules
+
+The module grammar handles defining modules. If a file does _not_ contain a module, a new module should be created with a random name.
+
+| Grammar | Corresponding Tokens |
+| ------- | -------------------- |
+| module | `(importStatements)* ('module' Identifier 'where')? (function | typeDeclaration | datatypeDeclaration)*` |
+| importStatements | `'import' Identifier (('only' | 'except') Identifier (',' Identifier)*)?` |

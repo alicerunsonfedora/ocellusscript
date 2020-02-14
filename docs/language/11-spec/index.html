@@ -634,6 +634,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#custom-declarations" class="md-nav__link">
+    Custom Declarations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    Modules
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -700,6 +714,20 @@
           <li class="md-nav__item">
   <a href="#functions" class="md-nav__link">
     Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-declarations" class="md-nav__link">
+    Custom Declarations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    Modules
   </a>
   
 </li>
@@ -839,6 +867,45 @@
 <tr>
 <td><code>type</code></td>
 <td><code>('String' | 'Integer' | 'Float' | 'Character' | 'Error' | 'Anything' | 'Nothing' | 'Boolean' | 'Callable' | Identifier)('?')?</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="custom-declarations">Custom Declarations<a class="headerlink" href="#custom-declarations" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Grammar</th>
+<th>Corresponding Tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>typeDeclaration</td>
+<td><code>'type' Identifier '=' type</code></td>
+</tr>
+<tr>
+<td>datatypeDeclaration</td>
+<td><code>'datatype' Identifier '=' (Identifier)* ('or' (Identifier)*)*</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="modules">Modules<a class="headerlink" href="#modules" title="Permanent link">&para;</a></h3>
+<p>The module grammar handles defining modules. If a file does <em>not</em> contain a module, a new module should be created with a random name.</p>
+<table>
+<thead>
+<tr>
+<th>Grammar</th>
+<th>Corresponding Tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>module</td>
+<td><code>(importStatements)* ('module' Identifier 'where')? (function | typeDeclaration | datatypeDeclaration)*</code></td>
+</tr>
+<tr>
+<td>importStatements</td>
+<td><code>'import' Identifier (('only' | 'except') Identifier (',' Identifier)*)?</code></td>
 </tr>
 </tbody>
 </table>
