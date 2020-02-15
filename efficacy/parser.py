@@ -56,7 +56,7 @@ class OSParser(object):
         values in that list.
         """
         if self.__previous != (None, None):
-            self._tokens.insert(0, self.__previous)
+            # self._tokens.insert(0, self.__previous)
             self.__current = self.__previous
             self.__previous = None, None
 
@@ -97,38 +97,279 @@ class OSParser(object):
         ctype, ctoken = self.__current
         if ctype == OSTokenType.string:
             return OSStringTypeNode(value=ctoken)
-        elif ctype == OSTokenType.num_integer:
+
+        if ctype == OSTokenType.num_integer:
             return OSIntTypeNode(value=ctoken)
-        elif ctype == OSTokenType.num_float:
+
+        if ctype == OSTokenType.num_float:
             return OSFloatTypeNode(value=ctoken)
-        elif ctype == OSTokenType.keyword:
+
+        if ctype == OSTokenType.keyword:
             return self._keyword_constant(ctoken)
-        elif ctype == OSTokenType.symbol and ctoken == "(":
+
+        if ctype == OSTokenType.symbol and ctoken == "(":
             return self._expression()
-        else:
-            raise OSParserError("%s is not a valid expression in this context." % (ctoken))
+
+        raise OSParserError("%s is not a valid expression in this context." % (ctoken))
 
     def _multiplicative_expression(self):
+        """Get a multiplicative expression node, if available.
+
+        Returns: `OSExpressionNode` with the operator at the top, and the branches
+        being the expressions to multiply, divide, or get the remainder of from division.
+        If no operator was provided (i.e., the expression is not a multiplicative expression),
+        `"expr"` will be used as the operator.
+
+        Raises: `OSParserError` if the parsing of the expression failed.
+        """
+        lhs = rhs = None
+        oper = "expr"
         ctype, ctoken = self.__current
-        raise NotImplementedError()
+
+        lhs = self._basic_expression()
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype == OSTokenType.symbol:
+            if ctoken not in ["*", "/", "%"]:
+                raise OSParserError("Expected multiplicative operator here.")
+            oper = ctoken
+            self._advance()
+            ctype, ctoken = self.__current
+            rhs = self._basic_expression()
+
+        return OSExpressionNode(oper, lhs, rhs)
 
     def _additive_expression(self):
-        raise NotImplementedError()
+        """Get an additive expression node, if available.
+
+        Returns: `OSExpressionNode` with the operator at the top, and the branches
+        being the expressions to add or subtract. If no operator was provided (i.e.,
+        the expression is not an additive expression), `"expr"` will be used as the
+        operator.
+
+        Raises: `OSParserError` if the parsing of the expression failed.
+        """
+        lhs = rhs = None
+        oper = "expr"
+        ctype, ctoken = self.__current
+
+        lhs = self._multiplicative_expression()
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype == OSTokenType.symbol:
+            if ctoken not in ["+", "-"]:
+                raise OSParserError("Expected additive operator here.")
+
+            oper = ctoken
+            self._advance()
+            ctype, ctoken = self.__current
+
+            rhs = self._multiplicative_expression()
+
+        return OSExpressionNode(oper, lhs, rhs)
+
 
     def _valued_expression(self):
-        raise NotImplementedError()
+        """Get a value expression node, if available.
+
+        Value expressions refer to inequalities that do not compare equality directly
+        (i.e., `>` and `<`).
+
+        Returns: `OSExpressionNode` with the operator at the top, and the branches
+        being the expressions to check for inequality. If no operator was provided (i.e.,
+        the expression is not a value expression), `"expr"` will be used as the
+        operator.
+
+        Raises: `OSParserError` if the parsing of the expression failed.
+        """
+        lhs = rhs = None
+        oper = "expr"
+        ctype, ctoken = self.__current
+
+        lhs = self._additive_expression()
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype == OSTokenType.symbol:
+            if ctoken not in [">", "<"]:
+                raise OSParserError("Expected value operator here.")
+            oper = ctoken
+            self._advance()
+            ctype, ctoken = self.__current
+
+            rhs = self._additive_expression()
+
+        return OSExpressionNode(oper, lhs, rhs)
 
     def _inequality_expression(self):
-        raise NotImplementedError()
+        """Get an inequality expression node, if available.
+
+        Inequality expressions refer to inequalities such as `>=` and `<=`. Expressions
+        without including a value are considered "value expressions". These expressions
+        are separate from each other to indicate precedence of these types of expressions
+        over exclusive inequalities.
+
+        Returns: `OSExpressionNode` with the operator at the top, and the branches
+        being the expressions to check for inequality. If no operator was provided (i.e.,
+        the expression is not an inequality expression), `"expr"` will be used as the
+        operator.
+
+        Raises: `OSParserError` if the parsing of the expression failed.
+        """
+        lhs = rhs = None
+        oper = "expr"
+        ctype, ctoken = self.__current
+
+        lhs = self._valued_expression()
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype == OSTokenType.symbol:
+            if ctoken not in [">", "<"]:
+                raise OSParserError("Expected inequality operator here.")
+            oper = ctoken
+            self._advance()
+            ctype, ctoken = self.__current
+
+            if ctype != OSTokenType.symbol and ctoken != "=":
+                raise OSParserError("Expected inequality operator here.")
+            oper += ctoken
+            self._advance()
+            ctype, ctoken = self.__current
+
+            rhs = self._valued_expression()
+
+        return OSExpressionNode(oper, lhs, rhs)
 
     def _equality_expression(self):
-        raise NotImplementedError()
+        """Get an equality expression node, if available.
+
+        Returns: `OSExpressionNode` with the operator at the top, and the branches
+        being the expressions to check for equality. If no operator was provided (i.e.,
+        the expression is not an equality expression), `"expr"` will be used as the
+        operator.
+
+        Raises: `OSParserError` if the parsing of the expression failed.
+        """
+        lhs = rhs = None
+        oper = "expr"
+        ctype, ctoken = self.__current
+
+        lhs = self._inequality_expression()
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype == OSTokenType.symbol:
+            if ctoken not in ["=", "!"]:
+                raise OSParserError("Expected expression operator here.")
+
+            oper = ctoken
+            self._advance()
+            ctype, ctoken = self.__current
+            if ctype != OSTokenType.symbol and ctoken != "=":
+                raise OSParserError("Expected expression operator here.")
+
+            oper += ctoken
+            self._advance()
+            ctype, ctoken = self.__current
+
+            rhs = self._inequality_expression()
+
+        return OSExpressionNode(oper, lhs, rhs)
+
 
     def _boolean_expression(self):
-        raise NotImplementedError()
+        """Get a boolean expression, if available.
+
+        Returns: `OSExpressionNode` with the boolean operator at the root
+        and the compared expressions as children (or None). If no operator was
+        provided (i.e., the expression is not a boolean expression), `"expr"`
+        will be used as the operator.
+
+        Raises: `OSParserError` if the parsing of the expression failed.
+        """
+        lhs = rhs = None
+        oper = "expr"
+        ctype, ctoken = self.__current
+
+        if ctype == OSTokenType.keyword and ctoken == "not":
+            oper = ctoken
+            self._advance()
+            ctype, ctoken = self.__current
+
+        lhs = self._equality_expression()
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype == OSTokenType.keyword:
+            if ctoken not in ["and", "or"]:
+                raise OSParserError("Expected operation keyword but got %s instead" % (ctoken))
+
+            oper = ctoken
+            self._advance()
+            ctype, ctoken = self.__current
+
+            rhs = self._equality_expression()
+
+        return OSExpressionNode(oper, lhs, rhs)
 
     def _expression(self):
-        raise NotImplementedError()
+        """Get an expression node, if available.
+
+        An expression can either be the return call from a function, a conditional
+        expression, an optional expression (`e ?? 0`), or a deeper boolean expression.
+
+        Returns: `OSExpressionNode` if the expression is a deeper expression or optional
+        expression, `OSFunctionReturnNode` if the expression if a function return call, or
+        `OSConditionalExpressionNode` if the expression is a conditional expression.
+
+        Raises: `OSParserError` if the parsing of the expression failed.
+        """
+        lhs = rhs = cond = None
+        oper = "expr"
+        ctype, ctoken = self.__current
+
+        if ctype == OSTokenType.identifier:
+            return self._fn_return()
+        else:
+            lhs = self._boolean_expression()
+
+        self._advance()
+        ctype, ctoken = self.__current
+
+        if ctype == OSTokenType.symbol:
+            if ctoken == "?":
+                cond = lhs
+                lhs = None
+                self._advance()
+                ctype, ctoken = self.__current
+
+                if ctoken == OSTokenType.symbol and ctoken == "?":
+                    oper = "??"
+                    lhs = cond
+                    cond = None
+                    self._advance()
+                    ctype, ctoken = self.__current
+                    rhs = self._expression()
+
+                    return OSExpressionNode(oper, lhs, rhs)
+
+                lhs = self._expression()
+                self._advance()
+                ctype, ctoken = self.__current
+
+                if ctype != OSTokenType.symbol and ctoken != ":":
+                    raise OSParserError("Expected false condition operator here.")
+                self._advance()
+                ctype, ctoken = self.__current
+
+                rhs = self._expression()
+
+                return OSConditionalExpressionNode(cond, true=lhs, false=rhs)
+
+        return OSExpressionNode(oper, lhs, rhs)
 
     def _type(self):
         """Get a type, if available.
@@ -517,6 +758,8 @@ class OSParser(object):
 
                     no_imports = list(map(lambda a: import_name + "." + a, only_imports))
                     depends += only_imports
+                elif ctoken == "module":
+                    break
                 else:
                     raise OSParserError("Unexpected keyword %s in import statement" % (ctoken))
         return depends
@@ -552,8 +795,10 @@ class OSParser(object):
 
         self._advance()
         ctype, ctoken = self.__current
-        if ctype != OSTokenType.keyword and ctoken != "where":
-            raise OSParserError("Expected where keyword here but got %s instead." % (ctoken))
+
+        if not name.startswith("ocellus_"):
+            if ctype != OSTokenType.keyword and ctoken != "where":
+                raise OSParserError("Expected where keyword here but got %s instead." % (ctoken))
 
         self._advance()
         ctype, ctoken = self.__current
