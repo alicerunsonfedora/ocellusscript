@@ -50,6 +50,7 @@ class OSParser(object):
         if len(self._tokens) > 0:
             self.__previous = self.__current
             self.__current = self._tokens.pop(0)
+            return self.__current
 
     def _revert(self):
         """Roll back the most recent action and push it back into the list
@@ -124,18 +125,15 @@ class OSParser(object):
         if ctype != OSTokenType.symbol and ctoken != "[":
             raise OSSyntaxError("Missing list opening bracket, got %s instead" % (ctoken))
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         while ctoken != "]":
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
             list_item_stack.append(self._expression())
             # self._advance()
 
             while ctype == OSTokenType.symbol and ctoken == ",":
-                self._advance()
-                ctype, ctoken = self.__current
+                ctype, ctoken = self._advance()
                 list_item_stack.append(self._expression())
 
         self._advance()
@@ -163,15 +161,13 @@ class OSParser(object):
         ctype, ctoken = self.__current
 
         lhs = self._basic_expression()
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype == OSTokenType.symbol:
             if ctoken not in ["*", "/", "%"]:
                 raise OSSyntaxError("Expected multiplicative operator here: %s" % (ctoken))
             oper = ctoken
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
             rhs = self._basic_expression()
 
         return OSExpressionNode(oper, lhs, rhs)
@@ -191,16 +187,14 @@ class OSParser(object):
         ctype, ctoken = self.__current
 
         lhs = self._multiplicative_expression()
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype == OSTokenType.symbol:
             if ctoken not in ["+", "-"]:
                 raise OSSyntaxError("Expected additive operator here: %s" % (ctoken))
 
             oper = ctoken
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
 
             rhs = self._multiplicative_expression()
 
@@ -225,15 +219,13 @@ class OSParser(object):
         ctype, ctoken = self.__current
 
         lhs = self._additive_expression()
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype == OSTokenType.symbol:
             if ctoken not in [">", "<"]:
                 raise OSSyntaxError("Expected value operator here: %s" % (ctoken))
             oper = ctoken
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
 
             rhs = self._additive_expression()
 
@@ -259,21 +251,18 @@ class OSParser(object):
         ctype, ctoken = self.__current
 
         lhs = self._valued_expression()
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype == OSTokenType.symbol:
             if ctoken not in [">", "<"]:
                 raise OSSyntaxError("Expected inequality operator here: %s" % (ctoken))
             oper = ctoken
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
 
             if ctype != OSTokenType.symbol and ctoken != "=":
                 raise OSSyntaxError("Expected inequality operator here: %s" % (ctoken))
             oper += ctoken
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
 
             rhs = self._valued_expression()
 
@@ -294,22 +283,19 @@ class OSParser(object):
         ctype, ctoken = self.__current
 
         lhs = self._inequality_expression()
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype == OSTokenType.symbol:
             if ctoken not in ["=", "!"]:
                 raise OSSyntaxError("Expected expression operator here: %s" % (ctoken))
 
             oper = ctoken
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
             if ctype != OSTokenType.symbol and ctoken != "=":
                 raise OSSyntaxError("Expected expression operator here: %s" % (ctoken))
 
             oper += ctoken
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
 
             rhs = self._inequality_expression()
 
@@ -332,20 +318,17 @@ class OSParser(object):
 
         if ctype == OSTokenType.keyword and ctoken == "not":
             oper = ctoken
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
 
         lhs = self._equality_expression()
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype == OSTokenType.keyword:
             if ctoken not in ["and", "or"]:
                 raise OSParserError("Expected operation keyword but got %s instead" % (ctoken))
 
             oper = ctoken
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
 
             rhs = self._equality_expression()
 
@@ -377,34 +360,29 @@ class OSParser(object):
         else:
             lhs = self._boolean_expression()
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype == OSTokenType.symbol:
             if ctoken == "?":
                 cond = lhs
                 lhs = None
-                self._advance()
-                ctype, ctoken = self.__current
+                ctype, ctoken = self._advance()
 
                 if ctoken == OSTokenType.symbol and ctoken == "?":
                     oper = "??"
                     lhs = cond
                     cond = None
-                    self._advance()
-                    ctype, ctoken = self.__current
+                    ctype, ctoken = self._advance()
                     rhs = self._expression()
 
                     return OSExpressionNode(oper, lhs, rhs)
 
                 lhs = self._expression()
-                self._advance()
-                ctype, ctoken = self.__current
+                ctype, ctoken = self._advance()
 
                 if ctype != OSTokenType.symbol and ctoken != ":":
                     raise OSParserError("Expected false condition operator here: %s" % (ctoken))
-                self._advance()
-                ctype, ctoken = self.__current
+                ctype, ctoken = self._advance()
 
                 rhs = self._expression()
 
@@ -426,8 +404,7 @@ class OSParser(object):
 
         if ctype == OSTokenType.symbol and ctoken == "[":
             is_list = True
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
 
         if ctype != OSTokenType.identifier and ctype != OSTokenType.keyword:
             raise OSParserError("Expected an identifier or keyword here: %s" % ctoken)
@@ -436,8 +413,7 @@ class OSParser(object):
 
         typename = ctoken
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype == OSTokenType.symbol and ctoken == "?":
             return OSOptionalTypeNode(possible_value=None, possible_type=ctype)
@@ -484,8 +460,7 @@ class OSParser(object):
         input_types = None
         output_type = None
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype != OSTokenType.keyword and ctoken != "takes":
             raise OSParserError("Expected 'takes' here in type signature but got %s instead."
@@ -518,14 +493,12 @@ class OSParser(object):
         fn_name = ctoken
         fn_params = []
         fn_definition = None
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype == OSTokenType.identifier:
             while ctype == OSTokenType.identifier:
                 fn_params.append(ctoken)
-                self._advance()
-                ctype, ctoken = self.__current
+                ctype, ctoken = self._advance()
 
         if ctype == OSTokenType.keyword and ctoken == "where":
             self._advance()
@@ -550,8 +523,7 @@ class OSParser(object):
 
         if ctype == OSTokenType.keyword and ctoken == "private":
             fn_private = True
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
 
         if ctype != OSTokenType.identifier:
             raise OSParserError("Expected a function identifier here: %s" % (ctoken))
@@ -571,19 +543,16 @@ class OSParser(object):
             self._revert()
             fn_signature = self._fn_signature()
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
         if ctype == OSTokenType.docstring:
             fn_docstring = ctoken
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype == OSTokenType.identifier:
             while ctype == OSTokenType.identifier:
                 fn_params.append(ctoken)
-                self._advance()
-                ctype, ctoken = self.__current
+                ctype, ctoken = self._advance()
         else:
             fn_params = [OSNothingTypeNode()]
 
@@ -592,8 +561,7 @@ class OSParser(object):
             raise OSParserError("Expected assignment in function definition, got %s instead."
                                 % (ctoken))
 
-        self._advance()
-        ctype, ctoken = self.__current
+        # ctype, ctoken = self._advance()
 
         fn_result = self._expression()
 
@@ -617,8 +585,7 @@ class OSParser(object):
         if ctype != OSTokenType.keyword and ctoken != "type":
             raise OSParserError("Expected type declaration keyword.")
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype != OSTokenType.identifier:
             raise OSParserError("Expected type identifier but received %s instead."
@@ -627,14 +594,12 @@ class OSParser(object):
         new_type_name = ctoken
         new_type_extends = None
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype != OSTokenType.symbol and ctoken != "=":
             raise OSParserError("Expected type declaration assignment here.")
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype != OSTokenType.keyword and ctoken not in self._standard_types:
             raise OSParserError("Expected a standard type but received %s instead." % (ctoken))
@@ -660,25 +625,21 @@ class OSParser(object):
         f_id = ctoken
         f_types = []
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         while ctype == OSTokenType.keyword and\
             (ctoken in self._standard_types or ctoken in self.__newtypes):
             f_types.append(self._type())
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
 
         self.__newtypes.append(f_id)
         options.append(OSDatatypeOptionNode(f_id, f_types))
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype == OSTokenType.keyword and ctoken == "or":
             while ctype == OSTokenType.keyword and ctoken == "or":
-                self._advance()
-                ctype, ctoken = self.__current
+                ctype, ctoken = self._advance()
 
                 if ctype != OSTokenType.identifier:
                     raise OSParserError("Expected identifier for datatype option.")
@@ -686,14 +647,12 @@ class OSParser(object):
                 o_id = ctoken
                 o_types = []
 
-                self._advance()
-                ctype, ctoken = self.__current
+                ctype, ctoken = self._advance()
 
                 while ctype == OSTokenType.keyword and\
                     (ctoken in self._standard_types or ctoken in self.__newtypes):
                     o_types.append(self._type())
-                    self._advance()
-                    ctype, ctoken = self.__current
+                    ctype, ctoken = self._advance()
 
                 self.__newtypes.append(o_id)
                 options.append(OSDatatypeOptionNode(o_id, o_types))
@@ -713,8 +672,7 @@ class OSParser(object):
         if ctype != OSTokenType.keyword and ctoken != "datatype":
             raise OSParserError("Expected datatype declaration keyword here.")
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype != OSTokenType.identifier:
             raise OSParserError("Expected datatype identifier here.")
@@ -722,14 +680,12 @@ class OSParser(object):
         data_type_name = ctoken
         data_type_options = []
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype != OSTokenType.symbol and ctoken != '=':
             raise OSParserError("Expected datatype declaration assignment here.")
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if ctype != OSTokenType.identifier:
             raise OSParserError("Expected identifier for datatype option.")
@@ -751,20 +707,17 @@ class OSParser(object):
         ctype, ctoken = self.__current
 
         while ctype == OSTokenType.keyword and ctoken == "import":
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
             if ctype != OSTokenType.identifier:
                 raise OSParserError("Expected a module identifier here but got %s instead"
                                     % (ctoken))
             import_name = ctoken
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
 
             if ctype == OSTokenType.keyword:
                 if ctoken == "except":
                     no_imports = []
-                    self._advance()
-                    ctype, ctoken = self.__current
+                    ctype, ctoken = self._advance()
 
                     if ctype != OSTokenType.identifier:
                         raise OSParserError("Expected a function identifier\
@@ -773,13 +726,10 @@ class OSParser(object):
 
                     while ctype == OSTokenType.identifier:
                         no_imports.append(ctoken)
-                        self._advance()
-
-                        ctype, ctoken = self.__current
+                        ctype, ctoken = self._advance()
 
                         while ctype == OSTokenType.symbol and ctoken == ",":
-                            self._advance()
-                            ctype, ctoken = self.__current
+                            ctype, ctoken = self._advance()
                             no_imports.append(ctoken)
                             self._advance()
 
@@ -787,8 +737,7 @@ class OSParser(object):
                     depends += no_imports
                 elif ctoken == "only":
                     only_imports = []
-                    self._advance()
-                    ctype, ctoken = self.__current
+                    ctype, ctoken = self._advance()
 
                     if ctype != OSTokenType.identifier:
                         raise OSParserError("Expected a function identifier\
@@ -797,13 +746,10 @@ class OSParser(object):
 
                     while ctype == OSTokenType.identifier:
                         only_imports.append(ctoken)
-                        self._advance()
-
-                        ctype, ctoken = self.__current
+                        ctype, ctoken = self._advance()
 
                         while ctype == OSTokenType.symbol and ctoken == ",":
-                            self._advance()
-                            ctype, ctoken = self.__current
+                            ctype, ctoken = self._advance()
                             only_imports.append(ctoken)
                             self._advance()
 
@@ -831,28 +777,24 @@ class OSParser(object):
 
         if ctype == OSTokenType.keyword and ctoken == "import":
             dependencies = self._imports()
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
 
         if ctype != OSTokenType.keyword and ctoken != "module":
             name = "ocellus_" + str(random())
         else:
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
             if ctype != OSTokenType.identifier:
                 raise OSParserError("Expected module name identifier but got %s instead"
                                     % (ctoken))
             name = ctoken
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         if not name.startswith("ocellus_"):
             if ctype != OSTokenType.keyword and ctoken != "where":
                 raise OSParserError("Expected where keyword here but got %s instead." % (ctoken))
 
-        self._advance()
-        ctype, ctoken = self.__current
+        ctype, ctoken = self._advance()
 
         while ctype == OSTokenType.identifier or ctype == OSTokenType.keyword:
             if ctype == OSTokenType.keyword:
@@ -865,8 +807,7 @@ class OSParser(object):
             else:
                 fns.append(self._fn_definition())
 
-            self._advance()
-            ctype, ctoken = self.__current
+            ctype, ctoken = self._advance()
 
         return OSModuleNode(name, fns, dependencies=dependencies)
 
@@ -916,7 +857,7 @@ if __name__ == "__main__":
     SOURCE = """
 module Test where
 
-example t = (t > 5) ? t : 8
+example t = [1, 2, 3, 4]
     """
     MYPARSE = OSParser(SOURCE)
     p = MYPARSE.parse()
