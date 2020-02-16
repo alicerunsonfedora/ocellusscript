@@ -367,8 +367,10 @@ class OSParser(object):
         if ctype == OSTokenType.identifier:
             if ctoken in self.__newtypes:
                 return self._datatype_options
-            else:
+            elif ctoken in self.__newfuncs:
                 return self._fn_return()
+            else:
+                return OSFunctionVariableNode(ctoken)
         else:
             lhs = self._boolean_expression()
 
@@ -906,3 +908,13 @@ class OSParser(object):
         self._tree = []
         self.__current = self.__previous = None, None
         self.__newtypes = self.__newfuncs = []
+
+if __name__ == "__main__":
+    SOURCE = """
+module Test where
+
+example t = (t > 5) ? t : 8
+    """
+    MYPARSE = OSParser(SOURCE)
+    p = MYPARSE.parse()
+    print(p)

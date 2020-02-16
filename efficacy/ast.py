@@ -386,6 +386,13 @@ class OSFunctionReturnNode(_OSNode):
         self.defines_inline = defines_inline
         self.inline_func = inline_func
 
+class OSFunctionVariableNode(_OSNode):
+    """An OcellusScript function variable node."""
+    def __init__(self, name, valtype="Anything"):
+        _OSNode.__init__(self, root=(name, valtype))
+        self.name = name
+        self.type = valtype
+
 class OSModuleNode(OSFunctionNode):
     """An OcellusScript module node.
 
