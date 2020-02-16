@@ -56,7 +56,7 @@ class OSParser(object):
         values in that list.
         """
         if self.__previous != (None, None):
-            # self._tokens.insert(0, self.__previous)
+            self._tokens.insert(0, self.__current)
             self.__current = self.__previous
             self.__previous = None, None
 
@@ -409,7 +409,6 @@ class OSParser(object):
             raise OSParserError("%s is not a valid keyword or identifier." % (ctoken))
 
         types = [self._type()]
-        self._advance()
         ctype, ctoken = self.__current
 
         while ctype == OSTokenType.keyword and ctoken == "and":
@@ -521,7 +520,6 @@ class OSParser(object):
         if ntype == OSTokenType.keyword:
             self._revert()
             fn_signature = self._fn_signature()
-            self._advance()
 
         ctype, ctoken = self.__current
         if ctype == OSTokenType.docstring:
@@ -538,7 +536,6 @@ class OSParser(object):
         else:
             fn_params = [OSNothingTypeNode()]
 
-        self._advance()
         ctype, ctoken = self.__current
         if ctype != OSTokenType.symbol and ctoken != "=":
             raise OSParserError("Expected assignment in function definition, got %s instead."
