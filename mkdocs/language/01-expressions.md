@@ -32,3 +32,23 @@ The following operators can be used to evaluate an expression:
 - `/` will divide numbers. In the case of integers, these will try to divide it evenly and give the whole number with no remainder. For floats, this will return the whole number and its remainder.
 - `%` will get the remainder of a division, usually use with integers.
 - `==` will check if two values are equal to each other.
+
+## Expression Precedence
+
+OcellusScript will handle certain expressions a little bit differently and follow a specific order of operations. The following is the order of precedence ind descending order (i.e., highest at the top).
+
+- Basic expression types (`8`), expressions wrapped in parentheses (`(7 - 2)`), and/or lists (`[1, 2, 3]`)
+- Multiplicative expressions such as multiplication (`g * 5`), division (`g / 5`), and remainder division (modulus) (`g % 5`)
+- Additive expressions such as addition (`m + 7`) and subtraction (`m - 5`)
+- Basic inequality expressions such as greater-than (`h > 5`) and less-than (`h < 5`)
+- Complex inequality expressions such as greater-than-or-equal-to (`m >= 8`) and less-than-or-equal-to (`h <= 5`)
+- Equality expressions (`m == g` or `m != g`)
+- [Boolean expressions](./03-conditionals.md#boolean-operators) (`a and b`, `a or b`, `not a`)
+- [Conditional expressions](./03-conditionals.md#working-with-conditionals) (`a ? b : c`)
+
+Sometimes, OcellusScript may be unaware of when an expression is meant to be evaluated before an outer expression. Wrap your expression in parentheses to avoid this:
+
+```ocellusscript
+example f = f > 5 ? f : -1      # Syntax error
+example f = (f > 5) ? f : -1    # OK
+```

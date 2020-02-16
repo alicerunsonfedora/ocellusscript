@@ -499,6 +499,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#expression-precedence" class="md-nav__link">
+    Expression Precedence
+  </a>
+  
+</li>
+      
       
       
       
@@ -669,6 +676,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#expression-precedence" class="md-nav__link">
+    Expression Precedence
+  </a>
+  
+</li>
+      
       
       
       
@@ -719,6 +733,22 @@
 <li><code>%</code> will get the remainder of a division, usually use with integers.</li>
 <li><code>==</code> will check if two values are equal to each other.</li>
 </ul>
+<h2 id="expression-precedence">Expression Precedence<a class="headerlink" href="#expression-precedence" title="Permanent link">&para;</a></h2>
+<p>OcellusScript will handle certain expressions a little bit differently and follow a specific order of operations. The following is the order of precedence ind descending order (i.e., highest at the top).</p>
+<ul>
+<li>Basic expression types (<code>8</code>), expressions wrapped in parentheses (<code>(7 - 2)</code>), and/or lists (<code>[1, 2, 3]</code>)</li>
+<li>Multiplicative expressions such as multiplication (<code>g * 5</code>), division (<code>g / 5</code>), and remainder division (modulus) (<code>g % 5</code>)</li>
+<li>Additive expressions such as addition (<code>m + 7</code>) and subtraction (<code>m - 5</code>)</li>
+<li>Basic inequality expressions such as greater-than (<code>h &gt; 5</code>) and less-than (<code>h &lt; 5</code>)</li>
+<li>Complex inequality expressions such as greater-than-or-equal-to (<code>m &gt;= 8</code>) and less-than-or-equal-to (<code>h &lt;= 5</code>)</li>
+<li>Equality expressions (<code>m == g</code> or <code>m != g</code>)</li>
+<li><a href="../03-conditionals/#boolean-operators">Boolean expressions</a> (<code>a and b</code>, <code>a or b</code>, <code>not a</code>)</li>
+<li><a href="../03-conditionals/#working-with-conditionals">Conditional expressions</a> (<code>a ? b : c</code>)</li>
+</ul>
+<p>Sometimes, OcellusScript may be unaware of when an expression is meant to be evaluated before an outer expression. Wrap your expression in parentheses to avoid this:</p>
+<div class="codehilite"><pre><span></span><code>example f = f &gt; 5 ? f : -1      # Syntax error
+example f = (f &gt; 5) ? f : -1    # OK
+</code></pre></div>
                 
                   
                 

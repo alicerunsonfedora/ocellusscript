@@ -18,7 +18,7 @@ def test_parser_basic():
     source = """
 module Test where
 
-example t = t > 5 ? t : 8
+example t = (t > 5) ? t : 8
     """
 
     myparse = OSParser(source)

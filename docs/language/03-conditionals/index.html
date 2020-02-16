@@ -707,7 +707,7 @@
 </ul>
 <h2 id="working-with-conditionals">Working with Conditionals<a class="headerlink" href="#working-with-conditionals" title="Permanent link">&para;</a></h2>
 <p>The ternary operator syntax is used to determine what to further evaluate or return based on a condition. The typical syntax is as follows:
-<div class="codehilite"><pre><span></span><code>condition
+<div class="codehilite"><pre><span></span><code>(condition)
     ? (expression to evaluate if condition)
     : (expression to evaluate if not condition)
 </code></pre></div></p>
@@ -715,9 +715,9 @@
 <div class="codehilite"><pre><span></span><code>condition ? true : false
 </code></pre></div></p>
 <p>so, for example, the following will make a log entry depending on what gets passed into the function <code>warnForVillain</code>:</p>
-<div class="codehilite"><pre><span></span><code>warnForVillain name = isVillain name
-                        ? warn &quot;Careful! &quot; + villain + &quot; is a villain.&quot;
-                        : log &quot;You&#39;re safe.&quot; 
+<div class="codehilite"><pre><span></span><code>warnForVillain name = (isVillain name)
+                        ? (warn &quot;Careful! &quot; + villain + &quot; is a villain.&quot;)
+                        : (log &quot;You&#39;re safe.&quot;)
 </code></pre></div>
                 
                   

@@ -24,7 +24,7 @@ Comparisons and conditions can work with each other using boolean operators:
 
 The ternary operator syntax is used to determine what to further evaluate or return based on a condition. The typical syntax is as follows:
 ```ocellusscript
-condition
+(condition)
     ? (expression to evaluate if condition)
     : (expression to evaluate if not condition)
 ```
@@ -37,7 +37,7 @@ condition ? true : false
 so, for example, the following will make a log entry depending on what gets passed into the function `warnForVillain`:
 
 ```ocellusscript
-warnForVillain name = isVillain name
-                        ? warn "Careful! " + villain + " is a villain."
-                        : log "You're safe." 
+warnForVillain name = (isVillain name)
+                        ? (warn "Careful! " + villain + " is a villain.")
+                        : (log "You're safe.")
 ```
