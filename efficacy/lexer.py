@@ -189,7 +189,7 @@ class OSTokenizer(object):
                 # state to an in-progress mode.
                 if token_type is not None:
                     state = _OSTokenState.in_id
-                    if token_type != OSTokenType.string:
+                    if token_type != OSTokenType.string and token_type != OSTokenType.docstring:
                         token += char
 
             # If we're in the process of building the token and have already started,
