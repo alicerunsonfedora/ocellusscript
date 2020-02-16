@@ -20,6 +20,9 @@ from efficacy.ast import * # pylint: disable=wildcard-import,unused-wildcard-imp
 class OSParserError(Exception):
     """The error to use when the parser has failed."""
 
+class OSSyntaxError(OSParserError):
+    """The error to use when the parser has encountered a syntax error."""
+
 class OSParser(object):
     """The parsing class for OcellusScript.
 
@@ -119,7 +122,7 @@ class OSParser(object):
         ctype, ctoken = self.__current
         list_item_stack = []
         if ctype != OSTokenType.symbol and ctoken != "[":
-            raise OSParserError("Missing list opening bracket, got %s instead" % (ctoken))
+            raise OSSyntaxError("Missing list opening bracket, got %s instead" % (ctoken))
 
         self._advance()
         ctype, ctoken = self.__current
@@ -165,7 +168,7 @@ class OSParser(object):
 
         if ctype == OSTokenType.symbol:
             if ctoken not in ["*", "/", "%"]:
-                raise OSParserError("Expected multiplicative operator here: %s" % (ctoken))
+                raise OSSyntaxError("Expected multiplicative operator here: %s" % (ctoken))
             oper = ctoken
             self._advance()
             ctype, ctoken = self.__current
@@ -193,7 +196,7 @@ class OSParser(object):
 
         if ctype == OSTokenType.symbol:
             if ctoken not in ["+", "-"]:
-                raise OSParserError("Expected additive operator here: %s" % (ctoken))
+                raise OSSyntaxError("Expected additive operator here: %s" % (ctoken))
 
             oper = ctoken
             self._advance()
@@ -227,7 +230,7 @@ class OSParser(object):
 
         if ctype == OSTokenType.symbol:
             if ctoken not in [">", "<"]:
-                raise OSParserError("Expected value operator here: %s" % (ctoken))
+                raise OSSyntaxError("Expected value operator here: %s" % (ctoken))
             oper = ctoken
             self._advance()
             ctype, ctoken = self.__current
@@ -261,13 +264,13 @@ class OSParser(object):
 
         if ctype == OSTokenType.symbol:
             if ctoken not in [">", "<"]:
-                raise OSParserError("Expected inequality operator here: %s" % (ctoken))
+                raise OSSyntaxError("Expected inequality operator here: %s" % (ctoken))
             oper = ctoken
             self._advance()
             ctype, ctoken = self.__current
 
             if ctype != OSTokenType.symbol and ctoken != "=":
-                raise OSParserError("Expected inequality operator here: %s" % (ctoken))
+                raise OSSyntaxError("Expected inequality operator here: %s" % (ctoken))
             oper += ctoken
             self._advance()
             ctype, ctoken = self.__current
@@ -296,13 +299,13 @@ class OSParser(object):
 
         if ctype == OSTokenType.symbol:
             if ctoken not in ["=", "!"]:
-                raise OSParserError("Expected expression operator here: %s" % (ctoken))
+                raise OSSyntaxError("Expected expression operator here: %s" % (ctoken))
 
             oper = ctoken
             self._advance()
             ctype, ctoken = self.__current
             if ctype != OSTokenType.symbol and ctoken != "=":
-                raise OSParserError("Expected expression operator here: %s" % (ctoken))
+                raise OSSyntaxError("Expected expression operator here: %s" % (ctoken))
 
             oper += ctoken
             self._advance()
