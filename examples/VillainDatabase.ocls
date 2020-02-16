@@ -2,7 +2,7 @@
 # VillainDatabase
 # A sample module for OcellusScript
 # (C) 2020 Marquis Kurt
-# 
+#
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -15,7 +15,7 @@ type Name = String
 
 datatype KnownVillain = Villain Name Reform
 
-knownVillains takes Nothing returns [KnownVillains]
+knownVillains takes Nothing returns [KnownVillain]
 `Get the villain database.`
 knownVillains = [(Villain "Nightmare Moon" true),
                  (Villain "Discord" true),
@@ -24,7 +24,7 @@ knownVillains = [(Villain "Nightmare Moon" true),
                  (Villain "Starlight Glimmer" false),
                  (Villain "Chrysalis" false)]
 
-knownByReform takes Nothing returns [KnownVillains]
+knownByReform takes Nothing returns [KnownVillain]
 `Grabs all villains that have reformed.`
 knownByReform = filter (lambda (Villain _ reform) -> reform) knownVillains
 

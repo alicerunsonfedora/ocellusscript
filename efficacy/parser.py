@@ -110,7 +110,40 @@ class OSParser(object):
         if ctype == OSTokenType.symbol and ctoken == "(":
             return self._expression()
 
+        if ctype == OSTokenType.symbol and ctoken == "[":
+            return self._list_expression()
+
         raise OSParserError("%s is not a valid expression in this context." % (ctoken))
+
+    def _list_expression(self):
+        ctype, ctoken = self.__current
+        list_item_stack = []
+        if ctype != OSTokenType.symbol and ctoken != "[":
+            raise OSParserError("Missing list opening bracket, got %s instead" % (ctoken))
+
+        self._advance()
+        ctype, ctoken = self.__current
+
+        while ctoken != "]":
+            self._advance()
+            ctype, ctoken = self.__current
+            list_item_stack.append(self._expression())
+            # self._advance()
+
+            while ctype == OSTokenType.symbol and ctoken == ",":
+                self._advance()
+                ctype, ctoken = self.__current
+                list_item_stack.append(self._expression())
+
+        self._advance()
+
+        tree = OSListPairNode(head=list_item_stack.pop())
+
+        while len(list_item_stack) > 0:
+            item = list_item_stack.pop()
+            tree = OSListPairNode(head=item, tail=tree)
+
+        return tree
 
     def _multiplicative_expression(self):
         """Get a multiplicative expression node, if available.
@@ -132,7 +165,7 @@ class OSParser(object):
 
         if ctype == OSTokenType.symbol:
             if ctoken not in ["*", "/", "%"]:
-                raise OSParserError("Expected multiplicative operator here.")
+                raise OSParserError("Expected multiplicative operator here: %s" % (ctoken))
             oper = ctoken
             self._advance()
             ctype, ctoken = self.__current
@@ -160,7 +193,7 @@ class OSParser(object):
 
         if ctype == OSTokenType.symbol:
             if ctoken not in ["+", "-"]:
-                raise OSParserError("Expected additive operator here.")
+                raise OSParserError("Expected additive operator here: %s" % (ctoken))
 
             oper = ctoken
             self._advance()
@@ -194,7 +227,7 @@ class OSParser(object):
 
         if ctype == OSTokenType.symbol:
             if ctoken not in [">", "<"]:
-                raise OSParserError("Expected value operator here.")
+                raise OSParserError("Expected value operator here: %s" % (ctoken))
             oper = ctoken
             self._advance()
             ctype, ctoken = self.__current
@@ -228,13 +261,13 @@ class OSParser(object):
 
         if ctype == OSTokenType.symbol:
             if ctoken not in [">", "<"]:
-                raise OSParserError("Expected inequality operator here.")
+                raise OSParserError("Expected inequality operator here: %s" % (ctoken))
             oper = ctoken
             self._advance()
             ctype, ctoken = self.__current
 
             if ctype != OSTokenType.symbol and ctoken != "=":
-                raise OSParserError("Expected inequality operator here.")
+                raise OSParserError("Expected inequality operator here: %s" % (ctoken))
             oper += ctoken
             self._advance()
             ctype, ctoken = self.__current
@@ -263,13 +296,13 @@ class OSParser(object):
 
         if ctype == OSTokenType.symbol:
             if ctoken not in ["=", "!"]:
-                raise OSParserError("Expected expression operator here.")
+                raise OSParserError("Expected expression operator here: %s" % (ctoken))
 
             oper = ctoken
             self._advance()
             ctype, ctoken = self.__current
             if ctype != OSTokenType.symbol and ctoken != "=":
-                raise OSParserError("Expected expression operator here.")
+                raise OSParserError("Expected expression operator here: %s" % (ctoken))
 
             oper += ctoken
             self._advance()
@@ -332,7 +365,10 @@ class OSParser(object):
         ctype, ctoken = self.__current
 
         if ctype == OSTokenType.identifier:
-            return self._fn_return()
+            if ctoken in self.__newtypes:
+                return self._datatype_options
+            else:
+                return self._fn_return()
         else:
             lhs = self._boolean_expression()
 
@@ -361,7 +397,7 @@ class OSParser(object):
                 ctype, ctoken = self.__current
 
                 if ctype != OSTokenType.symbol and ctoken != ":":
-                    raise OSParserError("Expected false condition operator here.")
+                    raise OSParserError("Expected false condition operator here: %s" % (ctoken))
                 self._advance()
                 ctype, ctoken = self.__current
 
@@ -381,6 +417,13 @@ class OSParser(object):
         type or a type that was previously defined before.
         """
         ctype, ctoken = self.__current
+        is_list = False
+
+        if ctype == OSTokenType.symbol and ctoken == "[":
+            is_list = True
+            self._advance()
+            ctype, ctoken = self.__current
+
         if ctype != OSTokenType.identifier and ctype != OSTokenType.keyword:
             raise OSParserError("Expected an identifier or keyword here: %s" % ctoken)
         if ctoken not in self._standard_types and ctoken not in self.__newtypes:
@@ -393,6 +436,8 @@ class OSParser(object):
 
         if ctype == OSTokenType.symbol and ctoken == "?":
             return OSOptionalTypeNode(possible_value=None, possible_type=ctype)
+        elif ctype == OSTokenType.symbol and ctoken == "]" and is_list:
+            return OSListTypeReferenceNode(content_type=typename)
         else:
             return OSTypeNode(typename, typevalue=None)
 
@@ -521,6 +566,7 @@ class OSParser(object):
             self._revert()
             fn_signature = self._fn_signature()
 
+        self._advance()
         ctype, ctoken = self.__current
         if ctype == OSTokenType.docstring:
             fn_docstring = ctoken
@@ -618,6 +664,7 @@ class OSParser(object):
             self._advance()
             ctype, ctoken = self.__current
 
+        self.__newtypes.append(f_id)
         options.append(OSDatatypeOptionNode(f_id, f_types))
 
         self._advance()
@@ -643,6 +690,7 @@ class OSParser(object):
                     self._advance()
                     ctype, ctoken = self.__current
 
+                self.__newtypes.append(o_id)
                 options.append(OSDatatypeOptionNode(o_id, o_types))
 
         return options
@@ -682,6 +730,7 @@ class OSParser(object):
             raise OSParserError("Expected identifier for datatype option.")
 
         data_type_options = self._datatype_options()
+        self.__newtypes.append(data_type_name)
 
         return OSDatatypeDeclarationNode(data_type_name, None, data_type_options)
 

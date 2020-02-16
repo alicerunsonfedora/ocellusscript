@@ -266,6 +266,15 @@ class OSListTypeReferenceNode(OSTypeNode):
         """
         OSTypeNode.__init__(self, typename="List", typevalue=content_type)
 
+class OSListPairNode(_OSNode):
+    """An OcellusScript list pair node.
+
+    Lists are organized as a tree containing pairs, with the last item in the entire
+    tree resulting to `Nothing`.
+    """
+    def __init__(self, head, tail=OSNothingTypeNode()):
+        _OSNode.__init__(self, root="pair", lhs=head, rhs=tail)
+
 class OSExpressionNode(_OSNode):
     """An OcellusScript expression node.
 

@@ -23,3 +23,10 @@ example t = t > 5 ? t : 8
 
     myparse = OSParser(source)
     assert len(myparse.parse()) > 0
+
+def test_parser_file():
+    """Test that the lexer can parse an entire module file correctly."""
+    with open(getcwd() + "/examples/VillainDatabase.ocls", 'r') as file:
+        myparse = OSParser(file.read())
+
+    assert len(myparse.parse()) > 0
