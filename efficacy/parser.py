@@ -166,7 +166,18 @@ class OSParser(object):
 
                 if ctoken != "where" and ctype != OSTokenType.keyword:
                     raise OSParserError("Expected where keyword here: %s" % (ctoken))
+                ctype, ctoken = self._advance_token()
 
+        while ctype in [OSTokenType.identifier, OSTokenType.keyword]:
+            if ctype == OSTokenType.keyword:
+                if ctoken == "type":
+                    types.append(self._parse_custom_type())
+                elif ctoken == "datatype":
+                    datatypes.append(self._parse_custom_datatype())
+                else:
+                    raise OSParserError("Unexpected keyword here: %s" % (ctoken))
+            else:
+                functions.append(self._parse_function())
 
         return {
             "module": {
@@ -178,6 +189,48 @@ class OSParser(object):
                 "functions": functions
             }
         }
+
+    def _parse_custom_type(self):
+        raise NotImplementedError
+
+    def _parse_custom_datatype(self):
+        raise NotImplementedError
+
+    def _parse_function(self):
+        function_name = ""
+        function_signature = {}
+        function_docstring = ""
+        function_body = {}
+
+        ctype, ctoken = self.__current_token
+        function_name = ctoken
+
+        ltype, ltoken = self._lookahead()
+        if ltype == OSTokenType.keyword and ltoken == "takes":
+            function_signature = self._parse_signature()
+
+        ctype, ctoken = self._advance_token()
+
+        if ctype == OSTokenType.docstring:
+            function_docstring = ctoken
+            ctype, ctoken = self._advance_token()
+
+        function_body = self._parse_function_body()
+
+        return {
+            "function": {
+                "name": function_name,
+                "signature": function_signature,
+                "docstring": function_docstring,
+                "body": function_body
+            }
+        }
+
+    def _parse_signature(self):
+        raise NotImplementedError
+
+    def _parse_function_body(self):
+        raise NotImplementedError
 
 if __name__ == "__main__":
     EXAMPLE = """
