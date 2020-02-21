@@ -22,10 +22,9 @@ class OSParserError(Exception):
 class OSParser(object):
     """The parsing class for OcellusScript.
 
-    The parser is responsible for reading a list of tokens and converting
-    the them into a traversable abstract syntax treee that can be used to
-    compile into a program with LLVM or can be processed differently with
-    a Python script.
+    The parser is responsible for reading a list of tokens and converting the them into a
+    traversable abstract syntax tree that can be used to compile into a program with LLVM or can
+    be processed differently with a Python script.
     """
     _tokenizer = OSTokenizer("")
     __current_token = None, None
@@ -51,6 +50,18 @@ class OSParser(object):
         self.__tree = {}
         self.__current_token = self._advance_token()
 
+    def parse(self):
+        """Parse the list of tokens and return an abstract syntax tree.
+
+        Returns: A JSON-like dictionary containing all of the parsed functions, expressions,
+        and modules.
+
+        Raises: OSParserError if there's an error in the syntax of the current token being
+        processed.
+        """
+        self.__tree = self._parse_module()
+        return self.__tree
+
     def _has_more_tokens(self):
         """Return whether the parser's token list has more tokens."""
         return len(self.__tokens) > 0
@@ -65,3 +76,116 @@ class OSParser(object):
             self.__current_token = self.__tokens.pop(0)
             return self.__current_token
         return None
+
+    def _lookahead(self):
+        """Perform a lookahead on the list of tokens without popping it off the stack."""
+        if self._has_more_tokens():
+            return self.__tokens[0]
+        return None
+
+    def _parse_module(self):
+        """Create an OcellusScript module with a name, import statements, datatypes and custom
+        types, and its functions.
+
+        Returns: A JSON-like dictionary containing the data for the module.
+        """
+        module_name = "__ocls_" + str(randint(1, 999999999)).rjust(9, '0')
+        importable = False
+        imports = []
+        types = []
+        datatypes = []
+        functions = []
+
+        ctype, ctoken = self.__current_token
+        if ctype == OSTokenType.keyword:
+            if ctoken == "import":
+                while ctoken == "import":
+                    i_name = ""
+
+                    ctype, ctoken = self._advance_token()
+                    if ctype != OSTokenType.identifier:
+                        raise OSParserError("Expected identifier in import statement: " % (ctoken))
+                    i_name = ctoken
+
+                    ctype, ctoken = self._advance_token()
+                    if ctype == OSTokenType.keyword and ctoken in ["only", "except"]:
+                        if ctoken == "only":
+                            only = []
+                            ctype, ctoken = self._advance_token()
+                            if ctype != OSTokenType.identifier:
+                                raise OSParserError("Expected identifier in selective import: %s"
+                                                    % (ctoken))
+                            only.append(ctoken)
+
+                            ctype, ctoken = self._advance_token()
+
+                            while ctype == OSTokenType.symbol and ctoken == ",":
+                                ctype, ctoken = self._advance_token()
+                                if ctype != OSTokenType.identifier:
+                                    raise OSParserError("Expected identifier in \
+                                                        selective import: %s"
+                                                        % (ctoken))
+                                only.append(ctoken)
+                                ctype, ctoken = self._advance_token()
+
+                            imports += map(lambda a: "%s.%s" % (i_name, a), only)
+                        elif ctoken == "except":
+                            exceptions = []
+                            ctype, ctoken = self._advance_token()
+                            if ctype != OSTokenType.identifier:
+                                raise OSParserError("Expected identifier in \
+                                                    selective import: %s"
+                                                    % (ctoken))
+                            exceptions.append(ctoken)
+
+                            ctype, ctoken = self._advance_token()
+
+                            while ctype == OSTokenType.symbol and ctoken == ",":
+                                ctype, ctoken = self._advance_token()
+                                if ctype != OSTokenType.identifier:
+                                    raise OSParserError("Expected identifier in \
+                                                        selective import: %s"
+                                                        % (ctoken))
+                                exceptions.append(ctoken)
+                                self._advance_token()
+
+                            imports += map(lambda a: "%s!%s" % (i_name, a), exceptions)
+                    else:
+                        imports += [i_name + ".*"]
+
+            if ctoken == "module":
+                ctype, ctoken = self._advance_token()
+
+                if ctype != OSTokenType.identifier:
+                    raise OSParserError("Expected identifier in module definition: %s"
+                                        % (ctoken))
+
+                module_name = ctoken
+                importable = True
+                ctype, ctoken = self._advance_token()
+
+                if ctoken != "where" and ctype != OSTokenType.keyword:
+                    raise OSParserError("Expected where keyword here: %s" % (ctoken))
+
+
+        return {
+            "module": {
+                "name": module_name,
+                "importable": importable,
+                "depends": imports,
+                "types": types,
+                "datatypes": datatypes,
+                "functions": functions
+            }
+        }
+
+if __name__ == "__main__":
+    EXAMPLE = """
+import Hyperion except JackShit
+import Ocellus only map
+import Equestria
+
+module NoJackShitHere where
+
+square square = square * square"""
+    print(OSParser(script=EXAMPLE).parse())
