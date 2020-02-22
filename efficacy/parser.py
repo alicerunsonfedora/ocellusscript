@@ -75,13 +75,13 @@ class OSParser(object):
         if self._has_more_tokens():
             self.__current_token = self.__tokens.pop(0)
             return self.__current_token
-        return None
+        return None, None
 
     def _lookahead(self):
         """Perform a lookahead on the list of tokens without popping it off the stack."""
         if self._has_more_tokens():
             return self.__tokens[0]
-        return None
+        return None, None
 
     def _parse_module(self):
         """Create an OcellusScript module with a name, import statements, datatypes and custom
@@ -208,8 +208,7 @@ class OSParser(object):
         ltype, ltoken = self._lookahead()
         if ltype == OSTokenType.keyword and ltoken == "takes":
             function_signature = self._parse_signature()
-
-        ctype, ctoken = self._advance_token()
+            ctype, ctoken = self._advance_token()
 
         if ctype == OSTokenType.docstring:
             function_docstring = ctoken
@@ -230,15 +229,39 @@ class OSParser(object):
         raise NotImplementedError
 
     def _parse_function_body(self):
+        ctype, ctoken = self.__current_token
+        function_params = []
+        function_definition = []
+        if not ctype == OSTokenType.identifier:
+            raise OSParserError("Expected function identifier here: %s" % (ctoken))
+
+        ctype, ctoken = self._advance_token()
+        if ctype == OSTokenType.identifier:
+            while ctype == OSTokenType.identifier:
+                function_params.append(ctoken)
+                ctype, ctoken = self._advance_token()
+
+        if ctoken != "=" and ctype != OSTokenType.symbol:
+            raise OSParserError("Expected function definition assignment here: %s" % (ctoken))
+
+        ctype, ctoken = self._advance_token()
+
+        function_definition = self._parse_function_result()
+
+        return {
+            "params": function_params,
+            "result": function_definition
+        }
+
+    def _parse_function_result(self):
         raise NotImplementedError
 
 if __name__ == "__main__":
     EXAMPLE = """
-import Hyperion except JackShit
-import Ocellus only map
-import Equestria
+import All except Prelude
+import NewPrelude
 
-module NoJackShitHere where
+module Square where
 
 square square = square * square"""
     print(OSParser(script=EXAMPLE).parse())
