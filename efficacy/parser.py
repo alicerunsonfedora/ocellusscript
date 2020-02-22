@@ -178,6 +178,7 @@ class OSParser(object):
                     raise OSParserError("Unexpected keyword here: %s" % (ctoken))
             else:
                 functions.append(self._parse_function())
+            ctype, ctoken = self._advance_token()
 
         return {
             "module": {
@@ -191,7 +192,33 @@ class OSParser(object):
         }
 
     def _parse_custom_type(self):
-        raise NotImplementedError
+        ctype, ctoken = self.__current_token
+        type_name = ""
+        type_shadows = ""
+        if ctoken != "type" and ctype != OSTokenType.keyword:
+            raise OSParserError("Expected type keyword: %s" % (ctoken))
+        ctype, ctoken = self._advance_token()
+
+        if ctype != OSTokenType.identifier:
+            raise OSParserError("Expected type identifier: %s" % (ctoken))
+        type_name = ctoken
+        ctype, ctoken = self._advance_token()
+
+        if ctoken != "=" and ctype != OSTokenType.symbol:
+            raise OSParserError("Expected type assignment: %s" % (ctoken))
+        ctype, ctoken = self._advance_token()
+
+        if ctype not in [OSTokenType.identifier, OSTokenType.keyword]:
+            raise OSParserError("Expected type assignment identifier or keyword: %s"
+                                % (ctoken))
+        type_shadows = ctoken
+
+        return {
+            "type": {
+                "name": type_name,
+                "shadows": type_shadows
+            }
+        }
 
     def _parse_custom_datatype(self):
         raise NotImplementedError
@@ -263,5 +290,9 @@ import NewPrelude
 
 module Square where
 
-square square = square * square"""
+type Square = Float
+datatype HyperSquare = HyperS Square Square
+
+square square = square * square
+"""
     print(OSParser(script=EXAMPLE).parse())
