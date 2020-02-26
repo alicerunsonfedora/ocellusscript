@@ -276,11 +276,9 @@ class OSParser(object):
         ctype, ctoken = self.__current_token
         parameters = []
         return_type = []
-        fn_name = ""
 
         if not ctype == OSTokenType.identifier:
             raise OSParserError("Expected signature identifier here: %s" % (ctoken))
-        fn_name = ctoken
         ctype, ctoken = self._advance_token()
 
         if not ctoken == "takes" and ctype != OSTokenType.keyword:
@@ -306,8 +304,6 @@ class OSParser(object):
         else:
             parameters.append(ctoken)
         ctype, ctoken = self._advance_token()
-
-        print(ctype, ctoken)
 
         while ctoken == "and" and ctype == OSTokenType.keyword:
             token = ""
@@ -361,7 +357,6 @@ class OSParser(object):
             return_type.append(ctoken)
 
         return {
-            "name": fn_name,
             "parameter_types": parameters,
             "return": return_type
         }
