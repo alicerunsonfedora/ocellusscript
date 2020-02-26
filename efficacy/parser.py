@@ -86,14 +86,14 @@ class OSParser(object):
     def _is_primitive_type(self, keyword):
         """Check whether the keyword is a primitive type."""
         return keyword in ["Character",
-                             "String",
-                             "Integer",
-                             "Boolean",
-                             "Float",
-                             "Callable",
-                             "Anything",
-                             "Nothing",
-                             "Error"]
+                           "String",
+                           "Integer",
+                           "Boolean",
+                           "Float",
+                           "Callable",
+                           "Anything",
+                           "Nothing",
+                           "Error"]
 
     def _parse_module(self):
         """Create an OcellusScript module with a name, import statements, datatypes and custom
@@ -204,6 +204,9 @@ class OSParser(object):
         }
 
     def _parse_custom_type(self):
+        """Create an OcellusScript type definition with a name and the type it shadows.
+
+        Returns: JSON-like object with the type's name and its shadow type."""
         ctype, ctoken = self.__current_token
         type_name = ""
         type_shadows = ""
@@ -265,8 +268,14 @@ class OSParser(object):
         }
 
     def _parse_signature(self):
+        """Create an OcellusScript type signature with a name, parameters, and return
+        type.
+
+        Returns: JSON-like object containing the type signature's name, parameters, and
+        return type."""
         ctype, ctoken = self.__current_token
-        parameters = return_type = []
+        parameters = []
+        return_type = []
         fn_name = ""
 
         if not ctype == OSTokenType.identifier:
@@ -278,21 +287,78 @@ class OSParser(object):
             raise OSParserError("Expected 'takes' keyword here: %s" % (ctoken))
         ctype, ctoken = self._advance_token()
 
-        if ctype not in [OSTokenType.keyword, OSTokenType.identifier]:
+        if ctype not in [OSTokenType.keyword, OSTokenType.identifier, OSTokenType.symbol]:
             raise OSParserError("Expected at least one input type here: %s" % (ctoken))
         if ctype == OSTokenType.keyword and not self._is_primitive_type(ctoken):
             raise OSParserError("Expected type here: %s" % (ctoken))
-        parameters.append(ctoken)
+        if ctype == OSTokenType.symbol and ctoken in ["[", "("]:
+            token = ctoken
+            ctype, ctoken = self._advance_token()
+            while ctoken not in ["]", ")"] and ctype in \
+                [OSTokenType.identifier, OSTokenType.keyword, OSTokenType.symbol]:
+                token += " " + ctoken
+                ctype, ctoken = self._advance_token()
+            if ctype == OSTokenType.symbol and ctoken not in ["]", ")"]:
+                raise OSParserError("Expected closing brackets or parentheses: %s"
+                                    % (ctoken))
+            token += " " + ctoken
+            parameters.append(token)
+        else:
+            parameters.append(ctoken)
         ctype, ctoken = self._advance_token()
 
+        print(ctype, ctoken)
+
         while ctoken == "and" and ctype == OSTokenType.keyword:
+            token = ""
             ctype, ctoken = self._advance_token()
             if not ctype in [OSTokenType.identifier, OSTokenType.keyword, OSTokenType.symbol]:
                 raise OSParserError("Expected type here: %s" % (ctoken))
+            if ctype == OSTokenType.symbol and ctoken in ["[", "("]:
+                token = ctoken
+                ctype, ctoken = self._advance_token()
+                while ctoken not in ["]", ")"] and ctype in \
+                    [OSTokenType.identifier, OSTokenType.keyword, OSTokenType.symbol]:
+                    token += " " + ctoken
+                    ctype, ctoken = self._advance_token()
+                if ctype == OSTokenType.symbol and ctoken not in ["]", ")"]:
+                    raise OSParserError("Expected closing brackets or parentheses: %s"
+                                        % (ctoken))
+                token += " " + ctoken
+                parameters.append(token)
+                ctype, ctoken = self._advance_token()
+            elif ctype == OSTokenType.symbol:
+                raise OSParserError("Unexpected symbol here: %s" % (ctoken))
+            elif ctype == OSTokenType.identifier:
+                parameters.append(ctoken)
+            elif ctype == OSTokenType.keyword:
+                if not self._is_primitive_type(ctoken):
+                    raise OSParserError("Expected type: %s" % (ctoken))
+                parameters.append(ctoken)
+
 
         if ctoken != "returns" and ctype != OSTokenType.keyword:
             raise OSParserError("Expected 'returns' keyword here: %s" % (ctoken))
         ctype, ctoken = self._advance_token()
+
+        if ctype not in [OSTokenType.keyword, OSTokenType.identifier, OSTokenType.symbol]:
+            raise OSParserError("Expected at least one return type here: %s" % (ctoken))
+        if ctype == OSTokenType.keyword and not self._is_primitive_type(ctoken):
+            raise OSParserError("Expected type here: %s" % (ctoken))
+        if ctype == OSTokenType.symbol and ctoken in ["[", "("]:
+            token = ctoken
+            ctype, ctoken = self._advance_token()
+            while ctoken not in ["]", ")"] and ctype in \
+                [OSTokenType.identifier, OSTokenType.keyword, OSTokenType.symbol]:
+                token += " " + ctoken
+                ctype, ctoken = self._advance_token()
+            if ctype == OSTokenType.symbol and ctoken not in ["]", ")"]:
+                raise OSParserError("Expected closing brackets or parentheses: %s"
+                                    % (ctoken))
+            token += " " + ctoken
+            return_type.append(token)
+        else:
+            return_type.append(ctoken)
 
         return {
             "name": fn_name,
@@ -301,6 +367,10 @@ class OSParser(object):
         }
 
     def _parse_function_body(self):
+        """Create an OcellusScript function body with its parameters and return expression.
+
+        Returns: JSON-like object containing the parameters, and resulting expression
+        of the function."""
         ctype, ctoken = self.__current_token
         function_params = []
         function_definition = []
@@ -318,7 +388,7 @@ class OSParser(object):
 
         ctype, ctoken = self._advance_token()
 
-        function_definition = self._parse_function_result()
+        # function_definition = self._parse_function_result()
 
         return {
             "params": function_params,
@@ -327,17 +397,3 @@ class OSParser(object):
 
     def _parse_function_result(self):
         raise NotImplementedError
-
-if __name__ == "__main__":
-    EXAMPLE = """
-import All except Prelude
-import NewPrelude
-
-module Square where
-
-type Square = Float
-
-square takes Integer returns Integer
-square square = square * square
-"""
-    print(OSParser(script=EXAMPLE).parse())

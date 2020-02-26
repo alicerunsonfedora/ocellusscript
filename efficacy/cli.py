@@ -17,6 +17,7 @@ import sys
 import os
 import json
 from efficacy.lexer import OSTokenizer
+from efficacy.parser import OSParser, OSParserError
 
 def _generate_args():
     """Generate an argument parser based on the arguments needed for the
@@ -32,6 +33,9 @@ def _generate_args():
     parser.add_argument("-oT", "--output-tokens",
                         nargs=1, metavar="out.json",
                         help="the path to the JSON token file")
+    parser.add_argument("-oA", "--output-abstract-tree",
+                        nargs=1, metavar="out.json",
+                        help="the path to the JSON abstract syntax tree file")
     parser.add_argument("-v", "--version",
                         nargs='?',
                         const=True,
@@ -74,6 +78,37 @@ def _make_token_file(ifile="", ofile=""):
 
     return
 
+def _make_parser_file(ifile="", ofile=""):
+    """Generate an AST JSON file that contains the abstract syntax tree of the given
+    input file.
+
+    Arguments:
+        ifile: The path to the input file to parse.
+        ofile: The path to the JSON file to write the tree to.
+    """
+    source = ""
+    tree = {}
+
+    # Exit if we aren't dealing with an OcellusScript file.
+    if not ifile.endswith(".ocls"):
+        print("%s is not an OcellusScript file. Aborting." % (ifile))
+        return
+
+    with open(ifile, "r") as srcfile:
+        source = srcfile.read()
+
+    parser = OSParser(script=source)
+
+    try:
+        tree = parser.parse()
+    except OSParserError as err:
+        print("Failed to parse %s.\nException: %s" % (ifile, err))
+        sys.exit(1)
+
+    # Write the file to JSON.
+    with open(ofile, "w+") as out:
+        out.writelines(json.dumps(tree, indent=4))
+
 def run_cli(with_args=None):
     """Start the main process for the CLI application.
 
@@ -101,6 +136,14 @@ def run_cli(with_args=None):
             for i, j in zip(args.input, args.output_tokens):
                 _make_token_file(ifile=os.path.join(os.getcwd(), i),
                                  ofile=os.path.join(os.getcwd(), j))
+            return
+
+        # If the input and tree output are specified, run the parser
+        # generator.
+        if args.input and args.output_abstract_tree:
+            for i, j in zip(args.input, args.output_abstract_tree):
+                _make_parser_file(ifile=os.path.join(os.getcwd(), i),
+                                  ofile=os.path.join(os.getcwd(), j))
             return
 
     # If no arguments have been supplied, run the interactive environment.
