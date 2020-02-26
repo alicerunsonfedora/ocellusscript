@@ -83,6 +83,18 @@ class OSParser(object):
             return self.__tokens[0]
         return None, None
 
+    def _is_primitive_type(self, keyword):
+        """Check whether the keyword is a primitive type."""
+        return keyword in ["Character",
+                             "String",
+                             "Integer",
+                             "Boolean",
+                             "Float",
+                             "Callable",
+                             "Anything",
+                             "Nothing",
+                             "Error"]
+
     def _parse_module(self):
         """Create an OcellusScript module with a name, import statements, datatypes and custom
         types, and its functions.
@@ -253,7 +265,40 @@ class OSParser(object):
         }
 
     def _parse_signature(self):
-        raise NotImplementedError
+        ctype, ctoken = self.__current_token
+        parameters = return_type = []
+        fn_name = ""
+
+        if not ctype == OSTokenType.identifier:
+            raise OSParserError("Expected signature identifier here: %s" % (ctoken))
+        fn_name = ctoken
+        ctype, ctoken = self._advance_token()
+
+        if not ctoken == "takes" and ctype != OSTokenType.keyword:
+            raise OSParserError("Expected 'takes' keyword here: %s" % (ctoken))
+        ctype, ctoken = self._advance_token()
+
+        if ctype not in [OSTokenType.keyword, OSTokenType.identifier]:
+            raise OSParserError("Expected at least one input type here: %s" % (ctoken))
+        if ctype == OSTokenType.keyword and not self._is_primitive_type(ctoken):
+            raise OSParserError("Expected type here: %s" % (ctoken))
+        parameters.append(ctoken)
+        ctype, ctoken = self._advance_token()
+
+        while ctoken == "and" and ctype == OSTokenType.keyword:
+            ctype, ctoken = self._advance_token()
+            if not ctype in [OSTokenType.identifier, OSTokenType.keyword, OSTokenType.symbol]:
+                raise OSParserError("Expected type here: %s" % (ctoken))
+
+        if ctoken != "returns" and ctype != OSTokenType.keyword:
+            raise OSParserError("Expected 'returns' keyword here: %s" % (ctoken))
+        ctype, ctoken = self._advance_token()
+
+        return {
+            "name": fn_name,
+            "parameter_types": parameters,
+            "return": return_type
+        }
 
     def _parse_function_body(self):
         ctype, ctoken = self.__current_token
@@ -291,8 +336,8 @@ import NewPrelude
 module Square where
 
 type Square = Float
-datatype HyperSquare = HyperS Square Square
 
+square takes Integer returns Integer
 square square = square * square
 """
     print(OSParser(script=EXAMPLE).parse())
