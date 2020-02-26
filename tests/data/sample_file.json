@@ -324,7 +324,7 @@
         "Symbol": ")"
     },
     {
-        "Identifier": "and"
+        "Keyword": "and"
     },
     {
         "Symbol": "["
@@ -522,7 +522,7 @@
         "Symbol": ")"
     },
     {
-        "Identifier": "and"
+        "Keyword": "and"
     },
     {
         "Symbol": "["
@@ -771,7 +771,7 @@
         "Keyword": "Anything"
     },
     {
-        "Identifier": "and"
+        "Keyword": "and"
     },
     {
         "Keyword": "Anything"
@@ -786,7 +786,7 @@
         "Symbol": ")"
     },
     {
-        "Identifier": "and"
+        "Keyword": "and"
     },
     {
         "Symbol": "["
@@ -798,7 +798,7 @@
         "Symbol": "]"
     },
     {
-        "Identifier": "and"
+        "Keyword": "and"
     },
     {
         "Keyword": "Anything"
@@ -993,7 +993,7 @@
         "Keyword": "Integer"
     },
     {
-        "Identifier": "and"
+        "Keyword": "and"
     },
     {
         "Keyword": "Integer"
@@ -1524,13 +1524,13 @@
         "Keyword": "Anything"
     },
     {
-        "Identifier": "and"
+        "Keyword": "and"
     },
     {
         "Keyword": "Anything"
     },
     {
-        "Identifier": "and"
+        "Keyword": "and"
     },
     {
         "Symbol": "("
@@ -1944,7 +1944,7 @@
         "Identifier": "Side"
     },
     {
-        "Identifier": "or"
+        "Keyword": "or"
     },
     {
         "Identifier": "Ellipse"
@@ -2124,7 +2124,7 @@
         "Identifier": "IntegerTree"
     },
     {
-        "Identifier": "or"
+        "Keyword": "or"
     },
     {
         "Identifier": "IntegerLeaf"
