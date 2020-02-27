@@ -9,16 +9,19 @@ type Side = Float
 type Radius = Float
 ```
 
-Where `Side` and `Radius` is a type that is inherited from the `Float` type. 
+Where `Side` and `Radius` is a type that is inherited from the `Float` type.
 
 Likewise, defining custom data types is accomplished with the `datatype` function:
 
 ```ocellusscript
-datatype Shape = Rectangle Side Side 
+datatype Shape = Rectangle Side Side
                     or Ellipse Radius Radius
 ```
 
 Where `Shape` can now either be a data type of `Rectangle` with parameters `Side` and `Side` or a data type of `Ellipse` with parameters `Radius` and `Radius`.
+
+!!! note "Naming Types"
+    Custom types and datatype structures **must** always be named in Pascal case (`PascalCase`) to avoid confusion with other functions and keywords.
 
 OcellusScript will work with custom types and data types as standard types in functions, which is useful in pattern matching cases. The following `area` function matches across different type patterns to calculate a shape's area:
 
@@ -47,7 +50,7 @@ Note that in the pattern `collapseTree (Branch n x y)`, the function calls upon 
 
 ## Optional Types
 
-OcellusScript also support types that may contain a specific type of value or `Nothing`. These types, known as `optionals`, are often used in cases where the type of data being returned is unclear. Optional types are denoted by `?` at the end of the type. For instance, the following function `getDefaultHealth` will return an integer or a default value if `Nothing` is received.
+OcellusScript also support types that may contain a specific type of value or `Nothing`. These types, known as _optionals_, are often used in cases where the type of data being returned is unclear. Optional types are denoted by `?` at the end of the type. For instance, the following function `getDefaultHealth` will return an integer or a default value if `Nothing` is received.
 
 ```ocellusscript
 getDefaultHealth takes Integer? returns Integer

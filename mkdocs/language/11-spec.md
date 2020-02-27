@@ -2,6 +2,8 @@
 
 The following page contains technical information about OcellusScript. This information is useful for those wishing to write a custom compiler or interpreter for OcellusScript.
 
+OcellusScript is currently a statically strong-typed programming language with optional type parameters.
+
 ## Lexical Elements
 
 During the tokenization process, OcellusScript will create tokens of the following types:
@@ -71,7 +73,7 @@ The declaration grammars handle defining type and datatype declarations.
 
 ### Modules
 
-The module grammar handles defining modules. If a file does _not_ contain a module, a new module should be created with a random name.
+The module grammar handles defining modules. If a file does _not_ contain a module, a new module should be created with a random name (example: `__ocls_719472658`).
 
 | Grammar | Corresponding Tokens |
 | ------- | -------------------- |

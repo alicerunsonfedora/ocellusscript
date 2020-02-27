@@ -14,6 +14,7 @@ compilation or additional processing.
 #
 
 from random import randint
+from string import ascii_uppercase
 from efficacy.lexer import OSTokenType, OSTokenizer
 
 class OSParserError(Exception):
@@ -187,10 +188,10 @@ class OSParser(object):
                 elif ctoken == "datatype":
                     datatypes.append(self._parse_custom_datatype())
                 else:
-                    raise OSParserError("Unexpected keyword here: %s" % (ctoken))
+                    raise OSParserError("Unexpected floating keyword here: %s" % (ctoken))
             else:
                 functions.append(self._parse_function())
-            ctype, ctoken = self._advance_token()
+            ctype, ctoken = self.__current_token
 
         return {
             "module": {
@@ -227,6 +228,7 @@ class OSParser(object):
             raise OSParserError("Expected type assignment identifier or keyword: %s"
                                 % (ctoken))
         type_shadows = ctoken
+        self._advance_token()
 
         return {
             "type": {
@@ -236,7 +238,51 @@ class OSParser(object):
         }
 
     def _parse_custom_datatype(self):
-        raise NotImplementedError
+        """Create an OcellusScript datatype definition with its identifier
+        and structural outputs.
+
+        Returns: JSON-like object with the information on the datatype."""
+        ctype, ctoken = self.__current_token
+        dtype_name = ""
+        dtype_formats = []
+
+        if ctoken != "datatype" and ctype != OSTokenType.keyword:
+            raise OSParserError("Expected datatype declaration keyword here: %s"
+                                % (ctoken))
+        ctype, ctoken = self._advance_token()
+
+        if ctype != OSTokenType.identifier or ctoken[0] not in ascii_uppercase:
+            raise OSParserError("Expected datatype identifier here: %s"
+                                % (ctoken))
+
+        dtype_name = ctoken
+        ctype, ctoken = self._advance_token()
+
+        if ctoken != "=" and ctype != OSTokenType.symbol:
+            raise OSParserError("Expected datatype assignment operator here: %s"
+                                % (ctoken))
+        ctype, ctoken = self._advance_token()
+
+        option = "("
+        while ctoken[0] in ascii_uppercase:
+            if ctype == OSTokenType.keyword and not self._is_primitive_type(ctoken):
+                raise OSParserError("Unexpected keyword in datatype declaration: %s"
+                                    % (ctoken))
+            elif ctype != OSTokenType.identifier:
+                raise OSParserError("Expected type varaible in declaration: %s"
+                                    % (ctoken))
+            option += " " + ctoken
+            ctype, ctoken = self._advance_token()
+        option += " )"
+        dtype_formats.append(option)
+
+        return {
+            "datatype": {
+                "name": dtype_name,
+                "structures": dtype_formats
+            }
+        }
+
 
     def _parse_function(self):
         function_name = ""
@@ -257,6 +303,7 @@ class OSParser(object):
             ctype, ctoken = self._advance_token()
 
         function_body = self._parse_function_body()
+        self._advance_token()
 
         return {
             "function": {
@@ -373,8 +420,15 @@ class OSParser(object):
             raise OSParserError("Expected function identifier here: %s" % (ctoken))
 
         ctype, ctoken = self._advance_token()
-        if ctype == OSTokenType.identifier:
-            while ctype == OSTokenType.identifier:
+        if ctype in [OSTokenType.identifier, OSTokenType.symbol]:
+            if ctype == OSTokenType.symbol and ctoken == "(":
+                parameter = "("
+                ctype, ctoken = self._advance_token()
+                while ctype != OSTokenType.symbol and ctoken != ")":
+                    parameter += " " + ctoken
+                    ctype, ctoken = self._advance_token()
+                function_params.append(parameter + " )")
+            if ctype == OSTokenType.identifier:
                 function_params.append(ctoken)
                 ctype, ctoken = self._advance_token()
 
@@ -391,4 +445,6 @@ class OSParser(object):
         }
 
     def _parse_function_result(self):
+        """Create the result of a function, usually either an expression
+        or a function call."""
         raise NotImplementedError

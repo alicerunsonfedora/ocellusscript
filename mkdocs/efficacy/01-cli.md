@@ -28,4 +28,4 @@ Efficacy supports creating a JSON file containing the tokens it discovered while
 
 This token file is useful when comparing a lexer's ability to tokenize an OcellusScript file to Efficacy's lexer, `OSTokenizer`.
 
-[^1]: The `input` argument is required when compiling files or preparing a tokenized JSON file.
+[^1]: The `input` argument is required when compiling files or preparing a tokenized or parsed JSON file.

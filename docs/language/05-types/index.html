@@ -679,13 +679,17 @@
 type Radius = Float
 </code></pre></div>
 
-<p>Where <code>Side</code> and <code>Radius</code> is a type that is inherited from the <code>Float</code> type. </p>
+<p>Where <code>Side</code> and <code>Radius</code> is a type that is inherited from the <code>Float</code> type.</p>
 <p>Likewise, defining custom data types is accomplished with the <code>datatype</code> function:</p>
-<div class="codehilite"><pre><span></span><code>datatype Shape = Rectangle Side Side 
+<div class="codehilite"><pre><span></span><code>datatype Shape = Rectangle Side Side
                     or Ellipse Radius Radius
 </code></pre></div>
 
 <p>Where <code>Shape</code> can now either be a data type of <code>Rectangle</code> with parameters <code>Side</code> and <code>Side</code> or a data type of <code>Ellipse</code> with parameters <code>Radius</code> and <code>Radius</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Naming Types</p>
+<p>Custom types and datatype structures <strong>must</strong> always be named in Pascal case (<code>PascalCase</code>) to avoid confusion with other functions and keywords.</p>
+</div>
 <p>OcellusScript will work with custom types and data types as standard types in functions, which is useful in pattern matching cases. The following <code>area</code> function matches across different type patterns to calculate a shape's area:</p>
 <div class="codehilite"><pre><span></span><code>area takes Shape returns Float
 area (Rectangle x y) = x * y
@@ -707,7 +711,7 @@ collapsedSample = collapseTree sampleTree
 
 <p>Note that in the pattern <code>collapseTree (Branch n x y)</code>, the function calls upon itself to collapse the subtrees <code>x</code> and <code>y</code>. OcellusScript support different types of recursion and allows for this kind of behavior.</p>
 <h2 id="optional-types">Optional Types<a class="headerlink" href="#optional-types" title="Permanent link">&para;</a></h2>
-<p>OcellusScript also support types that may contain a specific type of value or <code>Nothing</code>. These types, known as <code>optionals</code>, are often used in cases where the type of data being returned is unclear. Optional types are denoted by <code>?</code> at the end of the type. For instance, the following function <code>getDefaultHealth</code> will return an integer or a default value if <code>Nothing</code> is received.</p>
+<p>OcellusScript also support types that may contain a specific type of value or <code>Nothing</code>. These types, known as <em>optionals</em>, are often used in cases where the type of data being returned is unclear. Optional types are denoted by <code>?</code> at the end of the type. For instance, the following function <code>getDefaultHealth</code> will return an integer or a default value if <code>Nothing</code> is received.</p>
 <div class="codehilite"><pre><span></span><code>getDefaultHealth takes Integer? returns Integer
 getDefaultHealth health = health ?? 100
 </code></pre></div>
