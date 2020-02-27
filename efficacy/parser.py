@@ -31,6 +31,14 @@ class OSParser(object):
     __current_token = None, None
     __tokens = []
     __tree = {}
+    __operators = {
+        "bool": ["and", "or", "not"],
+        "equality": ["==", "!="],
+        "higherInequality": [">=", "<="],
+        "lowerInequality": [">", "<"],
+        "additive": ["+", "-"],
+        "multiplicative": ["*", "/", "%"]
+    }
 
     def __init__(self, **kwargs):
         """Initialize the OcellusScript Parser object.
@@ -437,7 +445,7 @@ class OSParser(object):
 
         ctype, ctoken = self._advance_token()
 
-        # function_definition = self._parse_function_result()
+        function_definition = self._parse_function_result()
 
         return {
             "params": function_params,
@@ -447,4 +455,98 @@ class OSParser(object):
     def _parse_function_result(self):
         """Create the result of a function, usually either an expression
         or a function call."""
-        raise NotImplementedError
+        return self._parse_root_expression()
+
+    def _parse_root_expression(self):
+        left = None
+        right = None
+        ctype, ctoken = self.__current_token
+
+        left = self._parse_root_expression()
+        ctype, ctoken = self._advance_token()
+
+        right = self._parse_root_expression()
+        ctype, ctoken = self.__current_token()
+
+        return {
+            "expression": {
+                "left": left,
+                "right": right
+            }
+        }
+
+    def _parse_basic_expression(self):
+        constant = None
+        root = {}
+        ctype, ctoken = self.__current_token
+        if ctype == OSTokenType.string:
+            constant = "string_constant"
+        elif ctype == OSTokenType.num_integer:
+            constant = "int_constant"
+        elif ctype == OSTokenType.num_float:
+            constant = "float_constant"
+        elif ctype == OSTokenType.keyword:
+            constant = None
+            root = self._parse_keyword_constant()
+        elif ctype == OSTokenType.symbol:
+            constant = None
+            if ctoken == "[":
+                root = self._parse_list_constant()
+            elif ctoken == "(":
+                root = self._parse_root_expression()
+            else:
+                raise OSParserError("Unexpected symbol in term: %s"
+                                    % (ctoken))
+
+        if constant:
+            root = {
+                constant: ctoken
+            }
+        return root
+
+    def _parse_list_constant(self):
+        list_tree = {}
+        real_list = []
+        ctype, ctoken = self.__current_token
+        if ctoken != "[" and ctype != OSTokenType.symbol:
+            raise OSParserError("Expected list opening: %s" % (ctoken))
+        ctype, ctoken = self._advance_token()
+        if ctype == OSTokenType.symbol:
+            if ctoken == "(":
+                real_list.append(self._parse_root_expression())
+            elif ctoken == "[":
+                real_list.append(self._parse_list_constant())
+            else:
+                raise OSParserError("Unexpected symbol in list: %s" % (ctoken))
+        else:
+            real_list.append(self._parse_root_expression())
+        ctype, ctoken = self._advance_token()
+
+        while ctoken == "," and ctype == OSTokenType.symbol:
+            ctype, ctoken = self._advance_token()
+            if ctype == OSTokenType.symbol:
+                if ctoken == "(":
+                    real_list.append(self._parse_root_expression())
+                elif ctoken == "[":
+                    real_list.append(self._parse_list_constant())
+                else:
+                    raise OSParserError("Unexpected symbol in list: %s" % (ctoken))
+            else:
+                real_list.append(self._parse_root_expression())
+        return list_tree
+
+    def _parse_keyword_constant(self):
+        """Create an OcellusScript keyword constant.
+
+        Returns: JSON-like object with the keyword constant.
+        """
+        ctype, ctoken = self.__current_token
+        if ctype != OSTokenType.keyword:
+            raise OSParserError("Expected keyword constant here: %s"
+                                % (ctoken))
+        if ctoken not in ["true", "false", "Anything", "Nothing"]:
+            raise OSParserError("Found invalid keyword constant: %s"
+                                % (ctoken))
+        return {
+            "keyword_constant": ctoken
+        }
