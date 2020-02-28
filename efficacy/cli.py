@@ -107,7 +107,7 @@ def _make_parser_file(ifile="", ofile=""):
 
     # Write the file to JSON.
     with open(ofile, "w+") as out:
-        out.writelines(json.dumps(tree, indent=4))
+        out.writelines(json.dumps(tree, indent=2))
 
 def run_cli(with_args=None):
     """Start the main process for the CLI application.

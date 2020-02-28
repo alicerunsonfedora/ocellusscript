@@ -461,7 +461,7 @@ class OSParser(object):
         left = "Nothing"
         right = "Nothing"
 
-        left = self._parse_basic_expression()
+        left = self._parse_bool_expression()
         ctype, ctoken = self._advance_token()
 
         # right = self._parse_basic_expression()
@@ -469,6 +469,39 @@ class OSParser(object):
 
         return {
             "expression": {
+                "left": left,
+                "right": right
+            }
+        }
+
+    def _parse_bool_expression(self):
+        """Create an OcellusScript boolean expression node.
+
+        Returns: JSON-like object that contains the left and right sides of the expression,
+        as well as the operator. For expressions that are no actual boolean expressions,
+        operation is set to None.
+        """
+        left = "Nothing"
+        operation = None
+        right = "Nothing"
+        ctype, ctoken = self.__current_token
+
+        if ctype == OSTokenType.keyword and ctoken == "not":
+            operation = ctoken
+            ctype, ctoken = self._advance_token()
+
+        left = self._parse_basic_expression()
+        ctype, ctoken = self.__current_token
+
+        if ctype == OSTokenType.keyword and ctoken in self.__operators["bool"]:
+            operation = ctoken
+            ctype, ctoken = self._advance_token()
+
+            right = self._parse_basic_expression()
+
+        return {
+            "bool_expression": {
+                "operation": operation,
                 "left": left,
                 "right": right
             }
