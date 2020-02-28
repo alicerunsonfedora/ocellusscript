@@ -18,7 +18,8 @@ def test_parser_basic():
     source = """
 module Test where
 
-example t = (t > 5) ? t : 8
+example takes Nothing returns [Integer]
+example = [1, 2, 3]
     """
 
     myparse = OSParser(script=source)
