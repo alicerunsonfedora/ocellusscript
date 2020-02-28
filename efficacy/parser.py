@@ -33,9 +33,9 @@ class OSParser(object):
     __tree = {}
     __operators = {
         "bool": ["and", "or", "not"],
-        "equality": ["==", "!="],
-        "higherInequality": [">=", "<="],
-        "lowerInequality": [">", "<"],
+        "equality": ["=", "!"],
+        "lowerInequality": [">", "<", "="],
+        "higherInequality": [">", "<"],
         "additive": ["+", "-"],
         "multiplicative": ["*", "/", "%"]
     }
@@ -432,11 +432,15 @@ class OSParser(object):
             if ctype == OSTokenType.symbol and ctoken == "(":
                 parameter = "("
                 ctype, ctoken = self._advance_token()
-                while ctype != OSTokenType.symbol and ctoken != ")":
-                    parameter += " " + ctoken
+                while ctoken != ")":
+                    if ctype == OSTokenType.string:
+                        parameter += " \"" + ctoken + "\""
+                    else:
+                        parameter += " " + ctoken
                     ctype, ctoken = self._advance_token()
                 function_params.append(parameter + " )")
-            if ctype == OSTokenType.identifier:
+                ctype, ctoken = self._advance_token()
+            elif ctype == OSTokenType.identifier:
                 function_params.append(ctoken)
                 ctype, ctoken = self._advance_token()
 
@@ -458,20 +462,17 @@ class OSParser(object):
         return self._parse_root_expression()
 
     def _parse_root_expression(self):
-        left = "Nothing"
-        right = "Nothing"
+        expr = "Nothing"
+        ctype, ctoken = self.__current_token
 
-        left = self._parse_bool_expression()
+        if ctype == OSTokenType.symbol and ctoken == "(":
+            ctype, ctoken = self._advance_token()
+
+        expr = self._parse_bool_expression()
         ctype, ctoken = self._advance_token()
 
-        # right = self._parse_basic_expression()
-        # ctype, ctoken = self._advance_token()
-
         return {
-            "expression": {
-                "left": left,
-                "right": right
-            }
+            "expression": expr
         }
 
     def _parse_bool_expression(self):
@@ -490,14 +491,14 @@ class OSParser(object):
             operation = ctoken
             ctype, ctoken = self._advance_token()
 
-        left = self._parse_basic_expression()
+        left = self._parse_equality_expression()
         ctype, ctoken = self.__current_token
 
         if ctype == OSTokenType.keyword and ctoken in self.__operators["bool"]:
             operation = ctoken
             ctype, ctoken = self._advance_token()
 
-            right = self._parse_basic_expression()
+            right = self._parse_equality_expression()
 
         return {
             "bool_expression": {
@@ -507,10 +508,167 @@ class OSParser(object):
             }
         }
 
+    def _parse_equality_expression(self):
+        """Create an OcellusScript equality expression node.
+
+        Returns: JSON-like object that contains the left and right sides of the expression,
+        as well as the operator. For expressions that are no actual equality expressions,
+        operation is set to None.
+        """
+        left = "Nothing"
+        operation = None
+        right = "Nothing"
+        ctype, ctoken = self.__current_token
+
+        left = self._parse_lower_inequality_expression()
+        ctype, ctoken = self._advance_token()
+
+        if ctype == OSTokenType.symbol and ctoken in self.__operators["equality"]:
+            operation = ctoken
+            ctype, ctoken = self._advance_token()
+            if ctoken not in self.__operators["equality"] and ctype != OSTokenType.symbol:
+                raise OSParserError("Unexpected token found here: %s" % (ctoken))
+            operation += ctoken
+            ctype, ctoken = self._advance_token()
+            right = self._parse_lower_inequality_expression()
+
+        return {
+            "equal_expression": {
+                "operation": operation,
+                "left": left,
+                "right": right
+            }
+        }
+
+    def _parse_lower_inequality_expression(self):
+        """Create an OcellusScript "lower" inequality expression node (>= or <=).
+
+        Returns: JSON-like object that contains the left and right sides of the expression,
+        as well as the operator. For expressions that are no actual inequality expressions,
+        operation is set to None.
+        """
+        left = "Nothing"
+        operation = None
+        right = "Nothing"
+        ctype, ctoken = self.__current_token
+
+        left = self._parse_higher_inequality_expression()
+        ctype, ctoken = self._advance_token()
+
+        if ctype == OSTokenType.symbol and ctoken in self.__operators["lowerInequality"]:
+            operation = ctoken
+            ctype, ctoken = self._advance_token()
+            if ctoken not in self.__operators["lowerInequality"] and ctype != OSTokenType.symbol:
+                raise OSParserError("Unexpected token found here: %s" % (ctoken))
+            operation += ctoken
+            ctype, ctoken = self._advance_token()
+            right = self._parse_higher_inequality_expression()
+
+        return {
+            "low_inequal_expression": {
+                "operation": operation,
+                "left": left,
+                "right": right
+            }
+        }
+
+    def _parse_higher_inequality_expression(self):
+        """Create an OcellusScript "higher" inequality expression node (> or <).
+
+        Returns: JSON-like object that contains the left and right sides of the expression,
+        as well as the operator. For expressions that are no actual inequality expressions,
+        operation is set to None.
+        """
+        left = "Nothing"
+        operation = None
+        right = "Nothing"
+        ctype, ctoken = self.__current_token
+
+        left = self._parse_additive_expression()
+        ctype, ctoken = self._advance_token()
+
+        if ctype == OSTokenType.symbol and ctoken in self.__operators["higherInequality"]:
+            operation = ctoken
+            ctype, ctoken = self._advance_token()
+
+            right = self._parse_additive_expression()
+
+        return {
+            "high_inequal_expression": {
+                "operation": operation,
+                "left": left,
+                "right": right
+            }
+        }
+
+    def _parse_additive_expression(self):
+        """Create an OcellusScript additive expression node.
+
+        Returns: JSON-like object that contains the left and right sides of the expression,
+        as well as the operator. For expressions that are no actual additive expressions,
+        operation is set to None.
+        """
+        left = "Nothing"
+        operation = None
+        right = "Nothing"
+        ctype, ctoken = self.__current_token
+
+        left = self._parse_multiplicative_expression()
+        ctype, ctoken = self.__current_token
+
+        if ctype == OSTokenType.symbol and ctoken in self.__operators["additive"]:
+            operation = ctoken
+            ctype, ctoken = self._advance_token()
+
+            right = self._parse_multiplicative_expression()
+
+        return {
+            "additive_expression": {
+                "operation": operation,
+                "left": left,
+                "right": right
+            }
+        }
+
+    def _parse_multiplicative_expression(self):
+        """Create an OcellusScript multiplicative expression node.
+
+        Returns: JSON-like object that contains the left and right sides of the expression,
+        as well as the operator. For expressions that are no actual multiplicative expressions,
+        operation is set to None.
+        """
+        left = "Nothing"
+        operation = None
+        right = "Nothing"
+        ctype, ctoken = self.__current_token
+
+        left = self._parse_basic_expression()
+        ctype, ctoken = self._advance_token()
+
+        if ctype == OSTokenType.symbol and ctoken in self.__operators["multiplicative"]:
+            operation = ctoken
+            ctype, ctoken = self._advance_token()
+
+            right = self._parse_basic_expression()
+
+        return {
+            "multiplicative_expression": {
+                "operation": operation,
+                "left": left,
+                "right": right
+            }
+        }
+
     def _parse_basic_expression(self):
+        """Create an OcellusScript basic expression node.
+
+        Returns: JSON-like object that defines the base expression, either a constant or a
+        parenthetical expression.
+        """
         constant = None
         root = {}
         ctype, ctoken = self.__current_token
+
         if ctype == OSTokenType.string:
             constant = "string_constant"
         elif ctype == OSTokenType.num_integer:
@@ -527,12 +685,29 @@ class OSParser(object):
             if ctoken == "[":
                 root = self._parse_list_constant()
             elif ctoken == "(":
+                ntype, ntoken = self._lookahead()
+                if ntype == OSTokenType.identifier and ntoken[0] in ascii_uppercase:
+                    constant = "type_var_constant"
+                    token = ctoken
+                    ctype, ctoken = self._advance_token()
+
+                    while ctoken != ")":
+                        if ctype == OSTokenType.string:
+                            token += " \"" + ctoken + "\""
+                        else:
+                            token += " " + ctoken
+                        ctype, ctoken = self._advance_token()
+
+                    ctype, ctoken = self._advance_token()
+                    token += ")"
+                    root = {constant: token}
+
                 root = self._parse_root_expression()
             else:
                 raise OSParserError("Unexpected symbol in term: %s"
                                     % (ctoken))
 
-        if constant:
+        if constant and not root:
             root = {
                 constant: ctoken
             }
