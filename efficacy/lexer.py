@@ -222,6 +222,12 @@ class OSTokenizer(object):
                         self._unread(char)
                     else:
                         token += char
+                elif token_type == OSTokenType.num_float:
+                    if char not in digits:
+                        state = _OSTokenState.end
+                        self._unread(char)
+                    else:
+                        token += char
                 elif token_type == OSTokenType.string:
                     if char == "\"":
                         state = _OSTokenState.end
@@ -250,6 +256,11 @@ class OSTokenizer(object):
         # the type if necessary.
         if token_type == OSTokenType.identifier and self.is_keyword(token):
             token_type = OSTokenType.keyword
+
+        # If the token is a number that isn't a float, correctly label it as
+        # an integer.
+        if token_type == OSTokenType.number and "." not in token:
+            token_type = OSTokenType.num_integer
 
         # Finally, return the tuple.
         return token_type, token
