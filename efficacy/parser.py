@@ -444,7 +444,6 @@ class OSParser(object):
             raise OSParserError("Expected function definition assignment here: %s" % (ctoken))
 
         ctype, ctoken = self._advance_token()
-
         function_definition = self._parse_function_result()
 
         return {
@@ -455,18 +454,18 @@ class OSParser(object):
     def _parse_function_result(self):
         """Create the result of a function, usually either an expression
         or a function call."""
+
         return self._parse_root_expression()
 
     def _parse_root_expression(self):
-        left = None
-        right = None
-        ctype, ctoken = self.__current_token
+        left = "Nothing"
+        right = "Nothing"
 
-        left = self._parse_root_expression()
+        left = self._parse_basic_expression()
         ctype, ctoken = self._advance_token()
 
-        right = self._parse_root_expression()
-        ctype, ctoken = self.__current_token()
+        # right = self._parse_basic_expression()
+        # ctype, ctoken = self._advance_token()
 
         return {
             "expression": {
@@ -485,6 +484,8 @@ class OSParser(object):
             constant = "int_constant"
         elif ctype == OSTokenType.num_float:
             constant = "float_constant"
+        elif ctype == OSTokenType.identifier:
+            constant = "identifier"
         elif ctype == OSTokenType.keyword:
             constant = None
             root = self._parse_keyword_constant()
@@ -505,7 +506,12 @@ class OSParser(object):
         return root
 
     def _parse_list_constant(self):
-        list_tree = {}
+        """Create an OcellusScript list definition.
+
+        Returns: JSON-like object that create a nested pair from a list with
+        head and tail values. The tail of the innermost node is set to "Nothing".
+        """
+        list_tree = {"keyword_constant": "Nothing"}
         real_list = []
         ctype, ctoken = self.__current_token
         if ctoken != "[" and ctype != OSTokenType.symbol:
@@ -519,7 +525,7 @@ class OSParser(object):
             else:
                 raise OSParserError("Unexpected symbol in list: %s" % (ctoken))
         else:
-            real_list.append(self._parse_root_expression())
+            real_list.append(self._parse_basic_expression())
         ctype, ctoken = self._advance_token()
 
         while ctoken == "," and ctype == OSTokenType.symbol:
@@ -532,8 +538,20 @@ class OSParser(object):
                 else:
                     raise OSParserError("Unexpected symbol in list: %s" % (ctoken))
             else:
-                real_list.append(self._parse_root_expression())
-        return list_tree
+                real_list.append(self._parse_basic_expression())
+            ctype, ctoken = self._advance_token()
+
+        real_list = list(reversed(real_list))
+
+        while real_list:
+            list_tree = {
+                "head": real_list.pop(0),
+                "tail": list_tree
+            }
+
+        return {
+            "list_constant": list_tree
+        }
 
     def _parse_keyword_constant(self):
         """Create an OcellusScript keyword constant.
