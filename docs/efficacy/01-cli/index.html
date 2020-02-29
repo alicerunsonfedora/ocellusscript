@@ -391,6 +391,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#creating-an-abstract-syntax-tree-file" class="md-nav__link">
+    Creating an Abstract Syntax Tree File
+  </a>
+  
+</li>
+      
       
       
       
@@ -453,6 +460,18 @@
   <li class="md-nav__item">
     <a href="../module/01-lexer/" title="Lexer" class="md-nav__link">
       Lexer
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../module/02-parser/" title="Parser" class="md-nav__link">
+      Parser
     </a>
   </li>
 
@@ -669,6 +688,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#creating-an-abstract-syntax-tree-file" class="md-nav__link">
+    Creating an Abstract Syntax Tree File
+  </a>
+  
+</li>
+      
       
       
       
@@ -687,7 +713,7 @@
                 
                 
                 <h1 id="using-efficacy-cli">Using Efficacy CLI<a class="headerlink" href="#using-efficacy-cli" title="Permanent link">&para;</a></h1>
-<p>The Efficacy compiler and interactive environment can be called from the terminal by running <code>efficacy.</code></p>
+<p>The Efficacy compiler and interactive environment can be called from the terminal by running <code>efficacy</code>.</p>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <p>The following are arguments that can be passed to Efficacy to specify details. Running Efficacy without any arguments opens the interactive mode.</p>
 <table>
@@ -718,10 +744,18 @@
 <td>No</td>
 <td>The path to where the token file will be placed</td>
 </tr>
+<tr>
+<td><code>-oA</code></td>
+<td><code>--output-abstract-tree</code></td>
+<td>No</td>
+<td>The path to where the abstract tree file will be placed</td>
+</tr>
 </tbody>
 </table>
 <h2 id="creating-a-token-file">Creating a Token File<a class="headerlink" href="#creating-a-token-file" title="Permanent link">&para;</a></h2>
-<p>Efficacy supports creating a JSON file containing the tokens it discovered while tokenizing the input file. It mainly contains a list of objects with the token type (see <a href="../../language/11-spec/#lexical-elements">Lexical Elements</a>) and the token itself:</p>
+<p>Efficacy supports creating a JSON file containing the tokens it discovered while tokenizing the input file. It mainly contains a list of objects with the token type (see <a href="../../language/11-spec/#lexical-elements">Lexical Elements</a>) and the token itself. This token file is useful when comparing a lexer's ability to tokenize an OcellusScript file to Efficacy's lexer, <code>OSTokenizer</code>.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
 <div class="codehilite"><pre><span></span><code><span class="p">[</span>
     <span class="p">{</span> <span class="nt">&quot;Identifier&quot;</span><span class="p">:</span> <span class="s2">&quot;x&quot;</span> <span class="p">},</span>
     <span class="p">{</span> <span class="nt">&quot;Symbol&quot;</span><span class="p">:</span> <span class="s2">&quot;=&quot;</span> <span class="p">},</span>
@@ -731,7 +765,42 @@
 <span class="p">]</span>
 </code></pre></div>
 
-<p>This token file is useful when comparing a lexer's ability to tokenize an OcellusScript file to Efficacy's lexer, <code>OSTokenizer</code>.</p>
+</div>
+<h2 id="creating-an-abstract-syntax-tree-file">Creating an Abstract Syntax Tree File<a class="headerlink" href="#creating-an-abstract-syntax-tree-file" title="Permanent link">&para;</a></h2>
+<p>Efficacy also supports creating a JSON file that represents the parsed abstract syntax tree from the input file. This contains a tree structure as described in the <a href="../../language/11-spec/#syntax-tree">language specification</a>, which may be useful for comparing a custom parser with Efficacy's <code>OSParser</code>.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">&quot;module&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Example&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;importable&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;depends&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Hive.*&quot;</span><span class="p">],</span>
+        <span class="nt">&quot;types&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;datatypes&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;functions&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;function&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;signature&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="nt">&quot;docstring&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;body&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="nt">&quot;params&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                            <span class="nt">&quot;result&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="nt">&quot;expression&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                    <span class="err">...</span>
+                                <span class="p">}</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+</div>
 <div class="footnote">
 <hr />
 <ol>

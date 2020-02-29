@@ -6,3 +6,4 @@ Efficacy can be used in Python scripts and projects as an importable module. The
 
 1. [CLI](./00-cli.md)
 2. [Lexer](./01-lexer.md)
+3. [Parser](./02-parser.md)
