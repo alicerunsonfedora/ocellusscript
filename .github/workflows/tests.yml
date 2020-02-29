@@ -6,6 +6,7 @@ jobs:
     name: CI Tests
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         pyversions:
           - '2.7.17'
