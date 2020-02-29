@@ -816,6 +816,3 @@ class OSParser(object):
             "keyword_constant": ctoken
         }
 
-if __name__ == "__main__":
-    from efficacy.cli import run_cli
-    run_cli(["-i", "tmp/mod.ocls", "-oA", "shout.json"])
