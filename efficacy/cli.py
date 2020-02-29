@@ -120,7 +120,7 @@ def run_cli(with_args=None):
     args = parser.parse_args(with_args) if with_args else []
 
     # Parse any arguments from the CLI when run.
-    if sys.argv[1:]:
+    if sys.argv[1:] and not args:
         args = parser.parse_args(sys.argv[1:])
 
     # Process the arguments if we have any.

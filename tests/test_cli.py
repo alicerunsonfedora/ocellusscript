@@ -28,7 +28,7 @@ def test_write_tokens():
 
     with open("tmp/sample.ocls", "w+") as sample:
         sample.write("example t = t > 6.0 ? t + 5.3 : t")
-    run_cli(["-i", "tmp/sample.ocls", "-oT", "tmp/basic.json"])
+    run_cli(with_args=["-i", "tmp/sample.ocls", "-oT", "tmp/basic.json"])
 
     with open("tmp/basic.json", "r") as curr:
         current_tokens = json.loads(curr.read())
