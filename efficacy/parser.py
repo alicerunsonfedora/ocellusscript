@@ -83,8 +83,9 @@ class OSParser(object):
         """
         if self._has_more_tokens():
             self.__current_token = self.__tokens.pop(0)
-            return self.__current_token
-        return None, None
+        else:
+            self.__current_token = None, None
+        return self.__current_token
 
     def _lookahead(self):
         """Perform a lookahead on the list of tokens without popping it off the stack."""
@@ -276,13 +277,32 @@ class OSParser(object):
             if ctype == OSTokenType.keyword and not self._is_primitive_type(ctoken):
                 raise OSParserError("Unexpected keyword in datatype declaration: %s"
                                     % (ctoken))
-            elif ctype != OSTokenType.identifier:
-                raise OSParserError("Expected type varaible in declaration: %s"
+
+            if ctype not in [OSTokenType.identifier, OSTokenType.keyword]:
+                raise OSParserError("Expected type variable in declaration: %s"
                                     % (ctoken))
+
             option += " " + ctoken
             ctype, ctoken = self._advance_token()
         option += " )"
         dtype_formats.append(option)
+
+        while ctype == OSTokenType.keyword and ctoken == "or":
+            option = "("
+            ctype, ctoken = self._advance_token()
+            while ctoken[0] in ascii_uppercase:
+                if ctype == OSTokenType.keyword and not self._is_primitive_type(ctoken):
+                    raise OSParserError("Unexpected keyword in datatype declaration: %s"
+                                        % (ctoken))
+
+                if ctype not in [OSTokenType.identifier, OSTokenType.keyword]:
+                    raise OSParserError("Expected type variable in declaration: %s"
+                                        % (ctoken))
+
+                option += " " + ctoken
+                ctype, ctoken = self._advance_token()
+            option += " )"
+            dtype_formats.append(option)
 
         return {
             "datatype": {
@@ -293,10 +313,15 @@ class OSParser(object):
 
 
     def _parse_function(self):
+        """Create an OcellusScript function definition.
+
+        Returns: JSON-like object that contains the function's name, signature, docstring,
+        and body.
+        """
         function_name = ""
         function_signature = {}
         function_docstring = ""
-        function_body = {}
+        function_body = []
 
         ctype, ctoken = self.__current_token
         function_name = ctoken
@@ -304,14 +329,17 @@ class OSParser(object):
         ltype, ltoken = self._lookahead()
         if ltype == OSTokenType.keyword and ltoken == "takes":
             function_signature = self._parse_signature()
-            ctype, ctoken = self._advance_token()
+            ctype, ctoken = self.__current_token
 
         if ctype == OSTokenType.docstring:
             function_docstring = ctoken
             ctype, ctoken = self._advance_token()
 
-        function_body = self._parse_function_body()
-        self._advance_token()
+        while ctoken == function_name:
+            function_body.append(self._parse_function_body())
+            ctype, ctoken = self.__current_token
+
+        # self._advance_token()
 
         return {
             "function": {
@@ -357,8 +385,14 @@ class OSParser(object):
             token += " " + ctoken
             parameters.append(token)
         else:
-            parameters.append(ctoken)
-        ctype, ctoken = self._advance_token()
+            token = ctoken
+            ctype, ctoken = self._advance_token()
+
+            if ctoken == "?" and ctype == OSTokenType.symbol:
+                token += ctoken
+                ctype, ctoken = self._advance_token()
+
+            parameters.append(token)
 
         while ctoken == "and" and ctype == OSTokenType.keyword:
             token = ""
@@ -381,12 +415,20 @@ class OSParser(object):
             elif ctype == OSTokenType.symbol:
                 raise OSParserError("Unexpected symbol here: %s" % (ctoken))
             elif ctype == OSTokenType.identifier:
-                parameters.append(ctoken)
+                token = ctoken
             elif ctype == OSTokenType.keyword:
                 if not self._is_primitive_type(ctoken):
                     raise OSParserError("Expected type: %s" % (ctoken))
-                parameters.append(ctoken)
+                token = ctoken
 
+            token = ctoken
+            ctype, ctoken = self._advance_token()
+
+            if ctoken == "?" and ctype == OSTokenType.symbol:
+                token += ctoken
+                ctype, ctoken = self._advance_token()
+
+            parameters.append(ctoken)
 
         if ctoken != "returns" and ctype != OSTokenType.keyword:
             raise OSParserError("Expected 'returns' keyword here: %s" % (ctoken))
@@ -409,7 +451,14 @@ class OSParser(object):
             token += " " + ctoken
             return_type.append(token)
         else:
-            return_type.append(ctoken)
+            token = ctoken
+            ctype, ctoken = self._advance_token()
+
+            if ctoken == "?" and ctype == OSTokenType.symbol:
+                token += ctoken
+                ctype, ctoken = self._advance_token()
+
+            return_type.append(token)
 
         return {
             "parameter_types": parameters,
@@ -428,7 +477,7 @@ class OSParser(object):
             raise OSParserError("Expected function identifier here: %s" % (ctoken))
 
         ctype, ctoken = self._advance_token()
-        if ctype in [OSTokenType.identifier, OSTokenType.symbol]:
+        if ctype in [OSTokenType.identifier, OSTokenType.keyword, OSTokenType.symbol]:
             if ctype == OSTokenType.symbol and ctoken == "(":
                 parameter = "("
                 ctype, ctoken = self._advance_token()
@@ -439,6 +488,11 @@ class OSParser(object):
                         parameter += " " + ctoken
                     ctype, ctoken = self._advance_token()
                 function_params.append(parameter + " )")
+                ctype, ctoken = self._advance_token()
+            elif ctype == OSTokenType.keyword:
+                if not self._is_primitive_type(ctoken):
+                    raise OSParserError("Unexpected keyword in parameter here: %s" % (ctoken))
+                function_params.append(ctoken)
                 ctype, ctoken = self._advance_token()
             elif ctype == OSTokenType.identifier:
                 function_params.append(ctoken)
@@ -470,6 +524,9 @@ class OSParser(object):
 
         expr = self._parse_bool_expression()
         ctype, ctoken = self._advance_token()
+
+        if ctype == OSTokenType.symbol and ctoken == ")":
+            ctype, ctoken = self._advance_token()
 
         return {
             "expression": expr
@@ -521,7 +578,7 @@ class OSParser(object):
         ctype, ctoken = self.__current_token
 
         left = self._parse_lower_inequality_expression()
-        ctype, ctoken = self._advance_token()
+        ctype, ctoken = self.__current_token
 
         if ctype == OSTokenType.symbol and ctoken in self.__operators["equality"]:
             operation = ctoken
@@ -553,7 +610,7 @@ class OSParser(object):
         ctype, ctoken = self.__current_token
 
         left = self._parse_higher_inequality_expression()
-        ctype, ctoken = self._advance_token()
+        ctype, ctoken = self.__current_token
 
         if ctype == OSTokenType.symbol and ctoken in self.__operators["lowerInequality"]:
             operation = ctoken
@@ -585,7 +642,7 @@ class OSParser(object):
         ctype, ctoken = self.__current_token
 
         left = self._parse_additive_expression()
-        ctype, ctoken = self._advance_token()
+        ctype, ctoken = self.__current_token
 
         if ctype == OSTokenType.symbol and ctoken in self.__operators["higherInequality"]:
             operation = ctoken
@@ -685,28 +742,10 @@ class OSParser(object):
             if ctoken == "[":
                 root = self._parse_list_constant()
             elif ctoken == "(":
-                ntype, ntoken = self._lookahead()
-                if ntype == OSTokenType.identifier and ntoken[0] in ascii_uppercase:
-                    constant = "type_var_constant"
-                    token = ctoken
-                    ctype, ctoken = self._advance_token()
-
-                    while ctoken != ")":
-                        if ctype == OSTokenType.string:
-                            token += " \"" + ctoken + "\""
-                        else:
-                            token += " " + ctoken
-                        ctype, ctoken = self._advance_token()
-
-                    ctype, ctoken = self._advance_token()
-                    token += ")"
-                    root = {constant: token}
-
                 root = self._parse_root_expression()
             else:
                 raise OSParserError("Unexpected symbol in term: %s"
                                     % (ctoken))
-
         if constant and not root:
             root = {
                 constant: ctoken
@@ -776,3 +815,7 @@ class OSParser(object):
         return {
             "keyword_constant": ctoken
         }
+
+if __name__ == "__main__":
+    from efficacy.cli import run_cli
+    run_cli(["-i", "tmp/mod.ocls", "-oA", "shout.json"])
