@@ -1,9 +1,51 @@
 [
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Keyword": "import"
     },
     {
         "Identifier": "Main"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Keyword": "module"
@@ -13,6 +55,24 @@
     },
     {
         "Keyword": "where"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "helloWorld"
@@ -30,7 +90,13 @@
         "Keyword": "String"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Give a simple Hello, world!"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "helloWorld"
@@ -40,6 +106,12 @@
     },
     {
         "StringConstant": "Hello, world!"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "quickMaths"
@@ -57,7 +129,13 @@
         "Keyword": "Integer"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Show simple mathematical operations in a func."
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "quickMaths"
@@ -75,6 +153,12 @@
         "IntConstant": "2"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "testBool"
     },
     {
@@ -90,7 +174,13 @@
         "Keyword": "Boolean"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Store the false value"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "testBool"
@@ -100,6 +190,18 @@
     },
     {
         "Keyword": "false"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "square"
@@ -117,7 +219,13 @@
         "Keyword": "Integer"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Take an integer and multiply it by itself.\n\nArguments:\n    x: The number to square.\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "square"
@@ -138,6 +246,12 @@
         "Identifier": "x"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "reverse"
     },
     {
@@ -153,7 +267,13 @@
         "Keyword": "String"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Reverses the string.\n\nArguments:\n    x: The string to reverse.\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "reverse"
@@ -177,6 +297,9 @@
         "Keyword": "where"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "helper"
     },
     {
@@ -190,6 +313,9 @@
     },
     {
         "Identifier": "string"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "helper"
@@ -211,6 +337,9 @@
     },
     {
         "Identifier": "x"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "helper"
@@ -250,6 +379,12 @@
     },
     {
         "Symbol": ")"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "testNothing"
@@ -270,7 +405,13 @@
         "Symbol": "?"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Stores an optional boolean value when assigned 0."
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "testNothing"
@@ -285,6 +426,9 @@
         "Keyword": "true"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "testNothing"
     },
     {
@@ -295,6 +439,24 @@
     },
     {
         "Keyword": "Nothing"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "map"
@@ -348,7 +510,13 @@
         "Symbol": "]"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Generate a list with an applied function.\n\nArguments:\n    func: The function to run over every item in the list\n    x: The list to run the function on its items\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "map"
@@ -381,6 +549,9 @@
         "Keyword": "where"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "helper"
     },
     {
@@ -400,6 +571,9 @@
     },
     {
         "Identifier": "list"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "helper"
@@ -433,6 +607,9 @@
     },
     {
         "Symbol": "]"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "helper"
@@ -493,6 +670,12 @@
     },
     {
         "Symbol": ")"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "filter"
@@ -546,7 +729,13 @@
         "Symbol": "]"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Generate a list given a condition and an existing list.\n\nArguments:\n    f: The function to mark items as true or false\n    x: The list to run the function on its items\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "filter"
@@ -579,6 +768,9 @@
         "Keyword": "where"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "helper"
     },
     {
@@ -598,6 +790,9 @@
     },
     {
         "Identifier": "list"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "helper"
@@ -633,6 +828,9 @@
         "Symbol": ")"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Symbol": "?"
     },
     {
@@ -654,6 +852,9 @@
         "Symbol": "]"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Symbol": ":"
     },
     {
@@ -661,6 +862,9 @@
     },
     {
         "Symbol": "]"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "helper"
@@ -720,6 +924,9 @@
         "Symbol": ")"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Symbol": "?"
     },
     {
@@ -741,6 +948,9 @@
         "Symbol": "]"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Symbol": ":"
     },
     {
@@ -751,6 +961,12 @@
     },
     {
         "Symbol": ")"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "reduce"
@@ -807,13 +1023,22 @@
         "Symbol": "\\"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Keyword": "returns"
     },
     {
         "Keyword": "Anything"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Generate a single value from a list with a method of combination.\n\nArguments:\n    f: The function to combine values\n    x: The list to reduce to a single value\n    s: The starting value\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "reduce"
@@ -846,6 +1071,9 @@
         "Keyword": "where"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "helper"
     },
     {
@@ -867,6 +1095,9 @@
         "Identifier": "s"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "helper"
     },
     {
@@ -889,6 +1120,9 @@
     },
     {
         "Identifier": "s"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "helper"
@@ -942,6 +1176,27 @@
         "Symbol": ")"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "health"
     },
     {
@@ -960,7 +1215,13 @@
         "Keyword": "Integer"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Assign the current health. If no value is provided, 100 is used.\n\nArguments:\n    default: The value to set the health to. Optional.\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "health"
@@ -982,6 +1243,15 @@
     },
     {
         "IntConstant": "100"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "takeDamage"
@@ -1008,7 +1278,13 @@
         "Keyword": "Integer"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Subtract a health amount, either randomly or by a set amount.\n\nArguments:\n    curr: The current health to subtract from.\n    by: The health to subtract by, if any. Optional.\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "takeDamage"
@@ -1033,6 +1309,9 @@
     },
     {
         "Keyword": "where"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "helper"
@@ -1068,6 +1347,9 @@
         "Symbol": ")"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "helper"
     },
     {
@@ -1089,6 +1371,15 @@
         "Identifier": "a"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "expressions"
     },
     {
@@ -1108,6 +1399,9 @@
     },
     {
         "Symbol": "]"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "expressions"
@@ -1143,6 +1437,12 @@
         "Symbol": "]"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "ohYeah"
     },
     {
@@ -1173,7 +1473,13 @@
         "Symbol": "]"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Apply a 'yeah' to each string.\n\nArguments:\n    list: The list of expressions to add 'yeah' to\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "ohYeah"
@@ -1224,6 +1530,30 @@
         "Identifier": "list"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "lastDigit"
     },
     {
@@ -1239,7 +1569,13 @@
         "Keyword": "Integer"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Get the last digit of a number."
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "lastDigit"
@@ -1260,6 +1596,12 @@
         "IntConstant": "10"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "butLastDigit"
     },
     {
@@ -1275,7 +1617,13 @@
         "Keyword": "Integer"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Get everything but the last digit of the number."
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "butLastDigit"
@@ -1296,6 +1644,12 @@
         "IntConstant": "10"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "getDigitSum"
     },
     {
@@ -1311,7 +1665,13 @@
         "Keyword": "Integer"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Gets the sum of the digits of a number.\n\nArguments:\n    number: The number to get the digit sum of.\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "getDigitSum"
@@ -1335,6 +1695,9 @@
         "Keyword": "where"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "helper"
     },
     {
@@ -1359,10 +1722,16 @@
         "IntConstant": "0"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Symbol": "?"
     },
     {
         "Identifier": "result"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Symbol": ":"
@@ -1407,6 +1776,12 @@
         "Symbol": ")"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "getLifePathNumber"
     },
     {
@@ -1440,7 +1815,13 @@
         "Keyword": "Integer"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Gets the life path number by adding the digits of a tuple with\na birthdate.\n\nArguments:\n    birthdate: The birthdate to get the life path number of\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "getLifePathNumber"
@@ -1485,6 +1866,9 @@
         "Symbol": "+"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Symbol": "("
     },
     {
@@ -1500,6 +1884,9 @@
         "Symbol": "+"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Symbol": "("
     },
     {
@@ -1513,6 +1900,24 @@
     },
     {
         "Symbol": ")"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "for"
@@ -1566,7 +1971,13 @@
         "Keyword": "Nothing"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Iterate over a range and perform a task at each step.\n\nArguments:\n    start: The starting value.\n    end: The ending value.\n    task: The task to perform.\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "for"
@@ -1602,6 +2013,9 @@
         "Keyword": "where"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "forHelper"
     },
     {
@@ -1632,10 +2046,16 @@
         "Identifier": "n"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Symbol": "?"
     },
     {
         "Identifier": "t"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Symbol": ":"
@@ -1680,6 +2100,18 @@
         "Identifier": "t"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Keyword": "private"
     },
     {
@@ -1710,6 +2142,12 @@
         "Symbol": "]"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "warnOfVillains"
     },
     {
@@ -1729,6 +2167,9 @@
     },
     {
         "Keyword": "Nothing"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "warnOfVillains"
@@ -1779,6 +2220,9 @@
         "Keyword": "where"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "task"
     },
     {
@@ -1804,6 +2248,9 @@
     },
     {
         "Identifier": "villains"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Symbol": "?"
@@ -1836,6 +2283,9 @@
         "Symbol": ")"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Symbol": ":"
     },
     {
@@ -1843,6 +2293,12 @@
     },
     {
         "StringConstant": "Safe!"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "countToTen"
@@ -1858,6 +2314,9 @@
     },
     {
         "Keyword": "Nothing"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "countToTen"
@@ -1890,6 +2349,9 @@
         "Keyword": "where"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "task"
     },
     {
@@ -1900,6 +2362,21 @@
     },
     {
         "Identifier": "i"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Keyword": "type"
@@ -1914,6 +2391,9 @@
         "Keyword": "Float"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Keyword": "type"
     },
     {
@@ -1924,6 +2404,15 @@
     },
     {
         "Keyword": "Float"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Keyword": "datatype"
@@ -1944,6 +2433,9 @@
         "Identifier": "Side"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Keyword": "or"
     },
     {
@@ -1954,6 +2446,15 @@
     },
     {
         "Identifier": "Radius"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "area"
@@ -1971,7 +2472,13 @@
         "Keyword": "Float"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Get the area of a Shape\n\nArguments:\n    shape: The shape to get the area of.\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "area"
@@ -1990,6 +2497,9 @@
     },
     {
         "Keyword": "where"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "area"
@@ -2020,6 +2530,9 @@
     },
     {
         "Identifier": "y"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "area"
@@ -2064,6 +2577,15 @@
         "Identifier": "pi"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "squareFactory"
     },
     {
@@ -2079,7 +2601,13 @@
         "Identifier": "Shape"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Generate a Rectangle shape with equal width and height."
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "squareFactory"
@@ -2098,6 +2626,18 @@
     },
     {
         "Identifier": "side"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Keyword": "datatype"
@@ -2124,6 +2664,9 @@
         "Identifier": "IntegerTree"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Keyword": "or"
     },
     {
@@ -2134,6 +2677,12 @@
     },
     {
         "Symbol": "?"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "addlapseTree"
@@ -2151,7 +2700,13 @@
         "Keyword": "Integer"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "DocstringConstant": "Traverses the IntegerTree and adds up all of the values.\n\nAny values that are Nothing will be substituted with 0.\n\nArguments:\n    tree: The tree to traverse.\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "addlapseTree"
@@ -2170,6 +2725,9 @@
     },
     {
         "Keyword": "where"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "collapseHelper"
@@ -2203,6 +2761,9 @@
     },
     {
         "IntConstant": "0"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "collapseHelper"
@@ -2256,6 +2817,9 @@
         "Symbol": ")"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Symbol": "+"
     },
     {
@@ -2272,6 +2836,9 @@
     },
     {
         "Symbol": ")"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Symbol": "+"

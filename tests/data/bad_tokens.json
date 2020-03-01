@@ -1,5 +1,11 @@
 [
     {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
         "Keyword": "module"
     },
     {
@@ -7,6 +13,12 @@
     },
     {
         "Keyword": "where"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
     },
     {
         "Identifier": "sampleString"
@@ -24,24 +36,15 @@
         "Keyword": "String"
     },
     {
+        "LineReturn": "\n"
+    },
+    {
         "Identifier": "sampleString"
     },
     {
         "Symbol": "="
     },
     {
-        "StringConstant": "This will be left open!"
-    },
-    {
-        "Identifier": "main"
-    },
-    {
-        "Identifier": "args"
-    },
-    {
-        "Symbol": "="
-    },
-    {
-        "Identifier": "sampleString"
+        "StringConstant": "This will be left open!\n\nmain args = sampleString"
     }
 ]

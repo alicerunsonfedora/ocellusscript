@@ -18,6 +18,7 @@ This enumeration class is used to differentiate between the different types of t
 | `num_integer` | IntConstant |
 | `num_float` | FloatConstant |
 | `operator` | Operator |
+| `newline` | LineReturn |
 
 ## `OSTokenizer`
 The tokenizing class for OcellusScript.
@@ -29,7 +30,7 @@ The tokenizer is responsible for converting a stream of characters into OcellusS
 
     ```python
     from efficacy.lexer import OSTokenizer
-    
+
     lexer = OSTokenizer(script="example x = x > 5 ? x + 6 : x + 8\n")
     tokens = lexer.tokenize()
     print(tokens[0]) # (<OSTokenType: OSTokenType.identifier>, "example")
@@ -43,7 +44,7 @@ The tokenizer is responsible for converting a stream of characters into OcellusS
 
 #### `__init__`
 Initialize the tokenizer.
-        
+
 **Arguments**
 
 - `script`: The script string to tokenize

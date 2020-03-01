@@ -38,6 +38,10 @@ Initialize the OcellusScript Parser object.
 #### `parse`
 Parse the list of tokens and return an abstract syntax tree.
 
+**Arguments**
+
+- `skip_new_line`: Whether to skip the newline token (`LineReturn`). Defaults to `True`.
+
 **Returns**: A JSON-like dictionary containing all of the parsed functions, expression, and modules.
 
 **Raises**: OSParserError if there's an error in the syntax of the current token being processed.

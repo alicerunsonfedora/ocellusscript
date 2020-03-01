@@ -14,6 +14,7 @@ During the tokenization process, OcellusScript will create tokens of the followi
 - `Symbol` refers to any non-alphanumeric characters.
 - `IntConstant` refers to any integers that do not contain a decimal point.
 - `FloatConstant` refers to a number that contains a single decimal point.
+- `LineReturn` refers to a newline character (`\n`).
 
 Below are the lists containing valid keywords, symbols, operators, etc.
 

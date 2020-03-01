@@ -75,14 +75,21 @@ class OSParser(object):
         """Return whether the parser's token list has more tokens."""
         return len(self.__tokens) > 0
 
-    def _advance_token(self):
+    def _advance_token(self, skip_new_line=True):
         """Get the next available token.
 
         Dequeues the first token from the tokens list and returns it if there are more tokens.
         Otherwise, this will return None.
+
+        Arguments:
+            skip_new_line: Whether to skip the newline token. Defaults to True.
         """
         if self._has_more_tokens():
             self.__current_token = self.__tokens.pop(0)
+
+            if skip_new_line:
+                while self.__current_token == (OSTokenType.newline, "\n"):
+                    self.__current_token = self.__tokens.pop(0)
         else:
             self.__current_token = None, None
         return self.__current_token

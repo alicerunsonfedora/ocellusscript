@@ -795,6 +795,10 @@
 - <code>tokens</code>: The pre-processed list of tokens to use for parsing.</p>
 <h4 id="parse"><code>parse</code><a class="headerlink" href="#parse" title="Permanent link">&para;</a></h4>
 <p>Parse the list of tokens and return an abstract syntax tree.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>skip_new_line</code>: Whether to skip the newline token (<code>LineReturn</code>). Defaults to <code>True</code>.</li>
+</ul>
 <p><strong>Returns</strong>: A JSON-like dictionary containing all of the parsed functions, expression, and modules.</p>
 <p><strong>Raises</strong>: OSParserError if there's an error in the syntax of the current token being processed.</p>
                 

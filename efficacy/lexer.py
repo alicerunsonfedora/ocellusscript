@@ -48,6 +48,7 @@ class OSTokenType(Enum):
     num_float = "FloatConstant"
     operator = "Operator"
     number = "NumConstant"
+    newline = "LineReturn"
 
 class OSTokenizer(object):
     """The tokenizing class for OcellusScript.
@@ -183,6 +184,8 @@ class OSTokenizer(object):
                     token_type = OSTokenType.comment
                 elif char == "`":
                     token_type = OSTokenType.docstring
+                elif char == "\n":
+                    token_type = OSTokenType.newline
                 elif self.is_symbol(char):
                     token_type = OSTokenType.symbol
                 else:
@@ -244,6 +247,9 @@ class OSTokenizer(object):
                         state = _OSTokenState.end
                     else:
                         token += char
+                elif token_type == OSTokenType.newline:
+                    state = _OSTokenState.end
+                    self._unread(char)
                 elif token_type == OSTokenType.symbol:
                     state = _OSTokenState.end
                     self._unread(char)
