@@ -32,15 +32,12 @@ The parser is responsible for reading a list of tokens and converting the them i
 Initialize the OcellusScript Parser object.
 
 **Keyword Arguments**
+
 - `script`: The string containing the code to parse. The parser will tokenize this script before parsing it.
 - `tokens`: The pre-processed list of tokens to use for parsing.
 
 #### `parse`
 Parse the list of tokens and return an abstract syntax tree.
-
-**Arguments**
-
-- `skip_new_line`: Whether to skip the newline token (`LineReturn`). Defaults to `True`.
 
 **Returns**: A JSON-like dictionary containing all of the parsed functions, expression, and modules.
 

@@ -790,15 +790,13 @@
 <h3 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h3>
 <h4 id="__init__"><code>__init__</code><a class="headerlink" href="#__init__" title="Permanent link">&para;</a></h4>
 <p>Initialize the OcellusScript Parser object.</p>
-<p><strong>Keyword Arguments</strong>
-- <code>script</code>: The string containing the code to parse. The parser will tokenize this script before parsing it.
-- <code>tokens</code>: The pre-processed list of tokens to use for parsing.</p>
+<p><strong>Keyword Arguments</strong></p>
+<ul>
+<li><code>script</code>: The string containing the code to parse. The parser will tokenize this script before parsing it.</li>
+<li><code>tokens</code>: The pre-processed list of tokens to use for parsing.</li>
+</ul>
 <h4 id="parse"><code>parse</code><a class="headerlink" href="#parse" title="Permanent link">&para;</a></h4>
 <p>Parse the list of tokens and return an abstract syntax tree.</p>
-<p><strong>Arguments</strong></p>
-<ul>
-<li><code>skip_new_line</code>: Whether to skip the newline token (<code>LineReturn</code>). Defaults to <code>True</code>.</li>
-</ul>
 <p><strong>Returns</strong>: A JSON-like dictionary containing all of the parsed functions, expression, and modules.</p>
 <p><strong>Raises</strong>: OSParserError if there's an error in the syntax of the current token being processed.</p>
                 
