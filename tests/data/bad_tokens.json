@@ -45,6 +45,24 @@
         "Symbol": "="
     },
     {
-        "StringConstant": "This will be left open!\n\nmain args = sampleString"
+        "StringConstant": "This will be left open!"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "LineReturn": "\n"
+    },
+    {
+        "Identifier": "main"
+    },
+    {
+        "Identifier": "args"
+    },
+    {
+        "Symbol": "="
+    },
+    {
+        "Identifier": "sampleString"
     }
 ]
