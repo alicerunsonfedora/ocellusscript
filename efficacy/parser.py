@@ -342,7 +342,7 @@ class OSParser(object):
             function_docstring = ctoken
             ctype, ctoken = self._advance_token()
 
-        while ctoken == function_name:
+        while ctoken == function_name or ctype == OSTokenType.newline:
             function_body.append(self._parse_function_body())
             ctype, ctoken = self.__current_token
 
@@ -707,7 +707,7 @@ class OSParser(object):
         ctype, ctoken = self.__current_token
 
         left = self._parse_basic_expression()
-        ctype, ctoken = self._advance_token()
+        ctype, ctoken = self._advance_token(skip_new_line=False)
 
         if ctype == OSTokenType.symbol and ctoken in self.__operators["multiplicative"]:
             operation = ctoken
