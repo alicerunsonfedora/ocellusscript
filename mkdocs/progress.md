@@ -20,9 +20,9 @@ The language specification checklist contains all of the necessary information o
 
 ## Efficacy
 
-Efficacy is the official lexer, parser, compiler and interpreter for OcellusScript.
+Efficacy is the official tokenizer, parser, compiler and interpreter for OcellusScript.
 
-- [X] Lexer
+- [X] Tokenizer
 - [ ] Parser
     - [X] Modules
     - [X] Custom types
@@ -31,6 +31,8 @@ Efficacy is the official lexer, parser, compiler and interpreter for OcellusScri
     - [ ] Function calls
     - [ ] Conditional and null expressions
     - [X] Function definitions
+    - [X] Pattern matching
+    - [ ] Lambda expressions
 - [ ] Compiler
 - [ ] Command Line
     - [X] Reading input files
@@ -38,3 +40,5 @@ Efficacy is the official lexer, parser, compiler and interpreter for OcellusScri
     - [X] Creating abstract syntax tree JSON files
     - [ ] Creating compiled files
     - [ ] Interactive environment
+- [ ] Modules
+    - [ ] Hive

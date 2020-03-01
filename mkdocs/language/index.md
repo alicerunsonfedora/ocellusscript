@@ -19,3 +19,4 @@ OcellusScript is a functional programming language, originally designed to work 
 9. [Modules and Main Execution](./09-modules.md)
 10. [Stylebook](./10-style.md)
 11. [Specification](./11-spec.md)
+12. [The Hive Module](./12-hive.md)

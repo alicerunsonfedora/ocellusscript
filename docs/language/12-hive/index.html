@@ -40,7 +40,7 @@
     
     
       
-        <title>Higher-order Functions and Lambda Expressions - OcellusScript Documentation</title>
+        <title>The Hive Module - OcellusScript Documentation</title>
       
     
     
@@ -93,7 +93,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#higher-order-functions-and-lambda-expressions" tabindex="0" class="md-skip">
+      <a href="#the-hive-module" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -119,7 +119,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Higher-order Functions and Lambda Expressions
+                The Hive Module
               
             </span>
           
@@ -541,77 +541,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Higher-order Functions and Lambda Expressions
-      </label>
-    
-    <a href="./" title="Higher-order Functions and Lambda Expressions" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../07-hoc/" title="Higher-order Functions and Lambda Expressions" class="md-nav__link">
       Higher-order Functions and Lambda Expressions
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#for" class="md-nav__link">
-    for
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#map" class="md-nav__link">
-    map
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#filter" class="md-nav__link">
-    filter
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#reduce" class="md-nav__link">
-    reduce
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#lambda-functions" class="md-nav__link">
-    Lambda Functions
-  </a>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -667,11 +601,20 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../12-hive/" title="The Hive Module" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" title="The Hive Module" class="md-nav__link md-nav__link--active">
       The Hive Module
     </a>
+    
   </li>
 
         
@@ -697,50 +640,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#for" class="md-nav__link">
-    for
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#map" class="md-nav__link">
-    map
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#filter" class="md-nav__link">
-    filter
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#reduce" class="md-nav__link">
-    reduce
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#lambda-functions" class="md-nav__link">
-    Lambda Functions
-  </a>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -752,97 +651,12 @@
               
                 
                 
-                <h1 id="higher-order-functions-and-lambda-expressions">Higher-order Functions and Lambda Expressions<a class="headerlink" href="#higher-order-functions-and-lambda-expressions" title="Permanent link">&para;</a></h1>
-<p>OcellusScript supports writing functions that will accept functions as parameters. These functions, called higher-order functions, will usually take a function as one of its inputs or return a function as its output. OcellusScript comes with some built-in higher-order functions for use with iteration and lists.</p>
-<h2 id="for"><code>for</code><a class="headerlink" href="#for" title="Permanent link">&para;</a></h2>
-<p>The <code>for</code> function takes three inputs: a starting value, and ending value, and a callable function to run. The callable function can be written by any means and supports the <code>where</code> expression. An example of the <code>for</code> function is provided with the <code>countToTen</code> example where a number is logged through each iteration.</p>
-<div class="codehilite"><pre><span></span><code>countToTen takes Nothing returns Nothing
-countToTen = for 0 10 task where
-                task i = log i
-</code></pre></div>
-
-<p>It important to note that the <code>for</code> function will automatically take care of increasing the start value and decreasing the end value.</p>
-<p>The following is an implementation of the <code>for</code> function:
-<div class="codehilite"><pre><span></span><code>for takes Integer and Integer and \
-    (Callable takes Anything? returns Anything?) returns Nothing
-for start end task = forHelper start start end task where
-                        forHelper i n j t = j == n
-                                            ? t
-                                            : forHelper (i + 1) n (j - 1) t
-</code></pre></div></p>
-<h2 id="map"><code>map</code><a class="headerlink" href="#map" title="Permanent link">&para;</a></h2>
-<p>The <code>map</code> function is a utility function that returns a list with a function applied to its elements. It accepts two parameters: the callable function to run on each element, and the list of items to run the callable function on. The following <code>mapIfTwo</code> function makes use of <code>map</code> to change a list of numbers into a list of booleans based on their divisibility:</p>
-<div class="codehilite"><pre><span></span><code>divisibleByTwo takes Integer returns Boolean
-divisibleByTwo num = num % 2 == 0
-
-mapIfTwo takes [Integer] returns [Boolean]
-mapIfTwo list = map divisibleByTwo list
-</code></pre></div>
-
-<p>Note that the <code>divisibleByTwo</code> function does <em>not</em> get called in the <code>mapIfTwo</code> definition as <code>map</code> will automatically handle this.</p>
-<p>Below is the implementation for <code>map</code>:</p>
-<div class="codehilite"><pre><span></span><code>map takes (Callable takes Anything returns Anything) and [Anything] \
-    returns [Anything]
-map func x = helper func x [] where
-                helper func [] list = list
-                helper func i list = list + [func i]
-                helper func (i:j) list = helper func j (list + [func i])
-</code></pre></div>
-
-<h2 id="filter"><code>filter</code><a class="headerlink" href="#filter" title="Permanent link">&para;</a></h2>
-<p>The <code>filter</code> function is a utility function that returns a list of items that obey a following condition. It accepts two parameters: the callable function that determines whether an item will be in the new list, and the list to filter. The following <code>containsBan</code> function makes use of <code>filter</code> to filter out any words in the list that do not contain the letters b, a, or n:</p>
-<div class="codehilite"><pre><span></span><code>banHelper takes String returns Boolean
-banHelper [] = true
-banHelper x = member x &quot;ban&quot;
-banHelper (x : xs) = (member x &quot;ban&quot;) and (banHelper xs)
-
-containsBan takes [String] returns [String]
-containsBan list = filter banHelper list
-</code></pre></div>
-
-<p>Again, note that <code>banHelper</code> does <em>not</em> get called in <code>containsBan</code> as <code>filter</code> handles this automatically.</p>
-<p>Below is the implementation for <code>filter</code>:
-<div class="codehilite"><pre><span></span><code>filter takes (Callable takes Anything returns Boolean) and [Anything] \
-    returns [Anything]
-filter f x = helper f x [] where
-                helper func [] list = list
-                helper func i list = (func i) 
-                                            ? list + [i] 
-                                            : list
-                helper func (i:j) list = helper func j (func i)
-                                                        ? list + [i] 
-                                                        : list)
-</code></pre></div></p>
-<h2 id="reduce"><code>reduce</code><a class="headerlink" href="#reduce" title="Permanent link">&para;</a></h2>
-<p>The <code>reduce</code> function is a utility function that returns a single value of type <code>Anything</code> based on a method of reduction. It accepts three parameters: the callable function that dictates how values will be combined, the list to combine into a single value, and the starting value. The starting value will dictate what type the <code>reduce</code> function returns. The following <code>smartAdd</code> functions makes uses of <code>reduce</code> to add according to a specific set of rules:</p>
-<div class="codehilite"><pre><span></span><code>smartAdditionHelper takes Integer and Integer returns Integer
-smartAdditionHelper x y = y % 3 == 0
-                            ? x + (y * 4)
-                            : x + y
-
-smartAdd takes [Integer] returns Integer
-smartAdd list = reduce smartAdditionHelper list 0
-</code></pre></div>
-
-<p>Again, note that <code>smartAdditionHelper</code> is <em>not</em> called inside of the <code>smartAdd</code> function as <code>reduce</code> calls this automatically when running.</p>
-<p>Below is the implementation for <code>reduce</code>:
-<div class="codehilite"><pre><span></span><code>reduce takes (Callable takes Anything and Anything returns Anything) \
-    and [Anything] and Anything returns Anything
-reduce f x s = helper f x s where
-                helper combinator [] s = s
-                helper combinator i s = combinator i s
-                helper combinator (i:j) s = helper combinator j (combinator i s)
-</code></pre></div></p>
-<h2 id="lambda-functions">Lambda Functions<a class="headerlink" href="#lambda-functions" title="Permanent link">&para;</a></h2>
-<p>Sometimes it doesn't make sense to write a separate function to pass into a higher-order function like <code>map</code>. The <code>lambda</code> function is an in-line function that returns a function that evaluates a single expression from a select amount of parameters. The following example reduces the amount of code in <code>mapIfTwo</code> to use a lambda:</p>
-<div class="codehilite"><pre><span></span><code>mapIfTwo takes [Integer] returns [Boolean]
-mapIfTwo list = map (lambda x -&gt; x % 2 == 0) list
-</code></pre></div>
-
-<p>This can also be used in cases like the <code>for</code> function:</p>
-<div class="codehilite"><pre><span></span><code>countToFive takes Nothing returns Nothing
-countToFive = for 0 5 (lambda x -&gt; log x)
-</code></pre></div>
+                <h1 id="the-hive-module">The Hive Module<a class="headerlink" href="#the-hive-module" title="Permanent link">&para;</a></h1>
+<p>The Hive module is a standard library module that can be imported into OcellusScript scripts and modules with the <code>import</code> statement. The Hive module contains several useful functions, datatypes, and types.</p>
+<div class="admonition warning">
+<p class="admonition-title">This document is incomplete</p>
+<p>The following document is incomplete and is currently being worked on.</p>
+</div>
                 
                   
                 
@@ -864,7 +678,7 @@ countToFive = for 0 5 (lambda x -&gt; log x)
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../06-recursion/" title="Recursion" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../11-spec/" title="Specification" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -873,25 +687,11 @@ countToFive = for 0 5 (lambda x -&gt; log x)
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Recursion
+                Specification
               </span>
             </div>
           </a>
         
-        
-          <a href="../08-error/" title="Error Handling" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
-              <span class="md-flex__ellipsis">
-                <span class="md-footer-nav__direction">
-                  Next
-                </span>
-                Error Handling
-              </span>
-            </div>
-            <div class="md-flex__cell md-flex__cell--shrink">
-              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
-            </div>
-          </a>
         
       </nav>
     </div>
