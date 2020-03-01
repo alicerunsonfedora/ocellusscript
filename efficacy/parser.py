@@ -34,7 +34,7 @@ class OSParser(object):
     __operators = {
         "bool": ["and", "or", "not"],
         "equality": ["=", "!"],
-        "lowerInequality": [">", "<", "="],
+        "lowerInequality": [">", "<"],
         "higherInequality": [">", "<"],
         "additive": ["+", "-"],
         "multiplicative": ["*", "/", "%"]
@@ -622,7 +622,7 @@ class OSParser(object):
         if ctype == OSTokenType.symbol and ctoken in self.__operators["lowerInequality"]:
             operation = ctoken
             ctype, ctoken = self._advance_token()
-            if ctoken not in self.__operators["lowerInequality"] and ctype != OSTokenType.symbol:
+            if ctoken != "=" and ctype != OSTokenType.symbol:
                 raise OSParserError("Unexpected token found here: %s" % (ctoken))
             operation += ctoken
             ctype, ctoken = self._advance_token()
@@ -822,4 +822,3 @@ class OSParser(object):
         return {
             "keyword_constant": ctoken
         }
-
