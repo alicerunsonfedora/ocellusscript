@@ -1,0 +1,108 @@
+#
+# The Hive Standard Library
+# (C) 2020 Marquis Kurt.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#
+
+module Hive where
+
+# List Utilities
+length takes [Anything] returns Integer
+`Get the length of a list.
+
+Arguments:
+    list: The list to gather the length of.
+
+Returns: Integer value containing the length of the list, or 0 if the list is
+empty.
+`
+length list = lengthHelper list 0 where
+                lengthHelper [] value = value
+                lengthHelper (x:xs) value = lengthHelper xs (value + 1)
+
+atPosition takes [Anything] and Integer returns Anything
+`Grab an item from the list at a specified position.
+
+Arguments:
+    list: The list to iterate through
+    position: The index of the item to return, if possible.
+
+Returns: The item at the specified position, or Nothing.
+`
+atPosition list position = (position > (length list))
+                                ? error "Index is out of range."
+                                : atPosHelper list position (length list) where
+                                atPosHelper [] p m = Nothing
+                                atPosHelper (x:xs) p m =
+                                    (p == m)
+                                        ? x
+                                        : atPosHelper xs (p + 1) m
+
+member takes Anything and [Anything] returns Boolean
+`Determine whether an item is a member of a specified list.
+
+Arguments:
+    item: The item to search for in the list
+    list: The list to search for the member
+
+Returns: Boolean value indicating whether the item is in the list.
+`
+member item [] = false
+member item (x:xs) = x == item ? true : member item xs
+
+for takes Integer and Integer (Callable takes Anything? returns Anything?) returns Nothing
+`Perform a task over a range.
+
+Arguments:
+    start: The starting iteration value.
+    end: The ending iteration value.
+    task: The task to perform on each iteration.
+`
+for start end task = forHelper start start end task where
+                        forHelper i n j t = (j == n)
+                                                ? t
+                                                : forHelper i (n + 1) j t
+
+map takes (Callable takes Anything returns Anything) and [Anything] returns [Anything]
+`Create a list with a function applied to a set of elements.
+
+Arguments:
+    fn: The function to apply to each element
+    list: The list to apply the function to
+
+Returns: A list with elements applied by the function
+`
+map fn list = mapHelper fn list [] where
+                mapHelper f [] result = result
+                mapHelper f (h:t) result = mapHelper f t (result + [(f h)])
+
+filter takes (Callable takes Anything returns Boolean) and [Anything] returns [Anything]
+`Create a list given a specific condition.
+
+Arguments:
+    fn: The function to determine what items are inserted into the list
+    list: The list to filter
+
+Returns: A list filtered by the function
+`
+filter fn list = filterHelper fn list [] where
+                    filterHelper f [] result = result
+                    filterHelper f (h:t) result =
+                        filterHelper f t ((f h) ? result + [h] : result)
+
+reduce takes (Callable takes Anything and Anything returns Anything) and [Anything] and Anything\
+    returns Anything
+`Combine a list into a single value.
+
+Arguments:
+    fn: The function to determine how values are combined in the list
+    list: The list to reduce into a single value
+    value: The starting value
+
+Returns: A single value from all of the combined values
+`
+reduce fn [] value = value
+reduce fn (x:xs) value = reduce fn xs (fn value x)

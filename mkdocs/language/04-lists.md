@@ -40,7 +40,7 @@ OcellusScript comes with some utility functions that work with lists to make thi
 - `filter func list` will return a list of `[Anything]` based on if the items meet the condition defined in `func`.
 - `reduce func list startingValue` will return a single value of type `Anything` based on a function `func` and staring with value `startingValue`.
 
-The functions `map`, `filter`, and `reduce` are discussed in great detail in the [Higher-order Functions](./07-hoc.md) section.
+The functions `map`, `filter`, and `reduce` are discussed in great detail in the [Higher-order Functions](./07-hoc.md) section, as well as the [Hive module documentation](./12-hive.md#list-utilities).
 
 Lists can also be added/concatenated using the standard `+` operator, and `-` will remove the first instance of an element:
 
