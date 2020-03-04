@@ -2,12 +2,12 @@
 # Ocellus
 # A Haskell-inspired functional programming language
 # (C) 2020 Marquis Kurt. All rights reserved.
-# 
+#
 
-# Premise: Ocellus is a functional programming language designed to work hand-in-hand with 
+# Premise: Ocellus is a functional programming language designed to work hand-in-hand with
 # Unscripted and its minigame. It mainly takes inspiration from Haskell, Swift, ES5, and Python.
 # Ocellus aims to be easy to use and understand while powerful enough to make task automation
-# easier. Ocellus include features like pattern matching, optional types, ternary operators, 
+# easier. Ocellus include features like pattern matching, optional types, ternary operators,
 # and docstrings.
 
 import Main
@@ -56,55 +56,11 @@ testNothing takes Integer returns Boolean?
 testNothing 0 = true
 testNothing x = Nothing
 
-# Section 3: Higher-order Functions
-# The following are Ocellus-implemented variations of the common map, filter, and reduce
-# functions.
-
-map takes (Callable takes Anything returns Anything) and [Anything] returns [Anything]
-`Generate a list with an applied function.
-
-Arguments:
-    func: The function to run over every item in the list
-    x: The list to run the function on its items
-`
-map func x = helper func x [] where
-                helper func [] list = list
-                helper func i list = list + [func i]
-                helper func (i:j) list = helper func j (list + [func i])
-
-filter takes (Callable takes Anything returns Boolean) and [Anything] returns [Anything]
-`Generate a list given a condition and an existing list.
-
-Arguments:
-    f: The function to mark items as true or false
-    x: The list to run the function on its items
-`
-filter f x = helper f x [] where
-                helper func [] list = list
-                helper func i list = list + (func i) 
-                                            ? [(func i)] 
-                                            : []
-                helper func (i:j) list = helper func j (list + (func i) 
-                                                        ? [(func i)] 
-                                                        : [])
-
-reduce takes (Callable takes Anything and Anything returns Anything) and [Anything] and Anything \ 
-    returns Anything
-`Generate a single value from a list with a method of combination.
-
-Arguments:
-    f: The function to combine values
-    x: The list to reduce to a single value
-    s: The starting value
-`
-reduce f x s = helper f x s where
-                helper combinator [] s = s
-                helper combinator i s = combinator i s
-                helper combinator (i:j) s = helper combinator j (combinator i s)
-
+# Section 3: Higher-Order Functions
+# See modules/Hive.ocls.
 
 # Section 4: Optional Values
-# Ocellus should be able to support optional values where something could be stored as a specific 
+# Ocellus should be able to support optional values where something could be stored as a specific
 # type or as Nothing.
 
 health takes Integer? returns Integer
@@ -160,9 +116,9 @@ Arguments:
     number: The number to get the digit sum of.
 `
 getDigitSum number = helper number 0 where
-                        helper num result = number == 0 
+                        helper num result = number == 0
                             ? result
-                            : helper (butLastDigit num) (result + (lastDigit num)) 
+                            : helper (butLastDigit num) (result + (lastDigit num))
 
 getLifePathNumber takes (Integer, Integer, Integer) returns Integer
 `Gets the life path number by adding the digits of a tuple with
@@ -213,7 +169,7 @@ type Side = Float
 type Radius = Float
 
 # Data types can be defined as types of types in this manner.
-datatype Shape = Rectangle Side Side 
+datatype Shape = Rectangle Side Side
                     or Ellipse Radius Radius
 
 # Functions can make use of custom types.
@@ -234,7 +190,7 @@ squareFactory side = Rectangle side side
 
 # Likewise, this can be used to generate trees.
 
-datatype IntegerTree = IntegerBranch IntegerNode? IntegerTree IntegerTree 
+datatype IntegerTree = IntegerBranch IntegerNode? IntegerTree IntegerTree
                         or IntegerLeaf Integer?
 
 addlapseTree takes IntegerTree returns Integer

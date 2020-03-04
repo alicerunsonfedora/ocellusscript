@@ -759,6 +759,48 @@ class OSParser(object):
             }
         return root
 
+    def _parse_lambda_expression(self):
+        """Create an OcellusScript lambda expression definition.
+
+        Returns: JSON-like object that creates information about a lambda expression and what it
+        returns.
+        """
+        linput = []
+        returns = {}
+        ctype, ctoken = self.__current_token
+
+        if ctoken != "lambda" and ctype != OSTokenType.keyword:
+            raise OSParserError("Expected lambda keyword here: %s" % (ctoken))
+        ctype, ctoken = self._advance_token()
+
+        if ctype != OSTokenType.identifier:
+            raise OSParserError("Expected lambda parameter identifier here: %s" % (ctoken))
+        linput = [ctoken]
+        ctype, ctoken = self._advance_token()
+
+        while ctype == OSTokenType.symbol and ctoken == ",":
+            ctype, ctoken = self._advance_token()
+            if ctype != OSTokenType.identifier:
+                raise OSParserError("Expected lambda parameter identifier here: %s" % (ctoken))
+            linput.append(ctoken)
+            ctype, ctoken = self._advance_token()
+
+        if ctype != OSTokenType.symbol and ctoken != "-":
+            raise OSParserError("Expected lambda assignment operator here: %s" % (ctoken))
+        ctype, ctoken = self._advance_token()
+        if ctype != OSTokenType.symbol and ctoken != ">":
+            raise OSParserError("Unexpected symbol in lambda assignment here: %s" % (ctoken))
+        ctype, ctoken = self._advance_token()
+
+        returns = self._parse_root_expression()
+
+        return {
+            "lambda": {
+                "input": linput,
+                "return": returns
+            }
+        }
+
     def _parse_list_constant(self):
         """Create an OcellusScript list definition.
 
