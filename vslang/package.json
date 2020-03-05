@@ -1,0 +1,26 @@
+{
+    "name": "ocellusscript",
+    "displayName": "OcellusScript",
+    "description": "Language support for OcellusScript programming language",
+    "author": "Marquis Kurt <software@marquiskurt.net>",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.42.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "ocls",
+            "aliases": ["OcellusScript", "ocls"],
+            "extensions": [".ocls"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "ocls",
+            "scopeName": "source.ocls",
+            "path": "./syntaxes/ocls.tmLanguage.json"
+        }]
+    }
+}
