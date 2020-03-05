@@ -1,8 +1,0 @@
-# This is a sample file that has an incorrect tokens.
-
-module Incorrect where
-
-sampleString takes Nothing returns String
-sampleString = "This will be left open!
-
-main args = sampleString
