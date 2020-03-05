@@ -1,5 +1,5 @@
 /**
- * OcellusScript Tokenizer States
+ * OcellusScript Tokenizer
  * (C) 2020 Marquis Kurt.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -7,6 +7,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-enum class TokenizerState {
-    START, IN_ID, FINISH, ERROR
+public class OSTokenizer(script: String) {
+
 }

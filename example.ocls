@@ -1,0 +1,52 @@
+#
+# Example.ocls
+# (C) 2020 Marquis Kurt
+#
+# This source code is intended to show off the main features of OcellusScript (Reborn).
+#
+
+import Hive.*;
+
+module Example;
+
+# Example types and datatypes
+shadowtype Name = String;
+shadowtype Age = Integer;
+
+type Human = { Person: (Name, Age) };
+
+# Example of using OcellusScript functionally
+func makeHuman takes Name and Age returns Human;
+func makeHuman = (n, a) => { (Person: n, a) };
+
+# Example of pattern matching
+func getAge takes Human? returns Integer;
+func getAge = (human) => matchTo {
+    Nothing: 0,
+    (Person: (_, a)): a
+};
+
+# Example of higher-order functions
+func allPlusOne takes List(Integer) returns List(Integer);
+func allPlusOne = (nums) => map((lambda a: a + 1;), nums);
+
+# Example class
+class Greeter = {
+    ```Create a greeter that greets a user.```
+    private var name = "Joe";
+
+    func init takes Name returns Greeter;
+    func init = (name) => {
+        self.name = name;
+        return self;
+    };
+
+    func greetUser takes Greeter returns String;
+    func greetUser = (self) => {
+        return "Hello, " + self.name;
+    };
+};
+
+# Example main execution
+func main takes [String]? returns Nothing;
+func main = (args) => print(Greeter(args ? args[1] : "John Smith").greetUser());
