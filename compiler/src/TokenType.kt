@@ -1,5 +1,5 @@
 /**
- * OcellusScript Tokenizer
+ * OcellusScript Tokenizer Types
  * (C) 2020 Marquis Kurt.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -7,11 +7,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-public class OSTokenizer(var script: String) {
-
-    // var tokens: List<Pair> = arrayListOf()
-
-    fun tokenize() {
-        var chars = this.script.asIterable()
-    }
+public enum class TokenType {
+    STR_CONST,
+    INT_CONST,
+    FLO_CONST,
+    COMMENT,
+    DOCSTRING,
+    SYMBOL,
+    IDENTIFIER
 }

@@ -17,14 +17,23 @@ type Human = { Person: (Name, Age) };
 
 # Example of using OcellusScript functionally
 func makeHuman takes Name and Age returns Human;
-func makeHuman = (n, a) => { (Person: n, a) };
+func makeHuman = (n, a) => { (Person: (n, a)) };
 
-# Example of pattern matching
+# Example of pattern matching. This also covers switch
+# cases.
 func getAge takes Human? returns Integer;
-func getAge = (human) => matchTo {
-    Nothing: 0,
-    (Person: (_, a)): a
+func getAge = (human) => match(human) {
+    (Nothing) => return 0;
+    ((Person: (_, a)) => return a;
 };
+
+# Example of basic condition checking.
+func isProbablyReal takes Integer returns Boolean;
+func isProbablyReal = (num) => {
+    return num > 0
+        ? true
+        : false;
+}
 
 # Example of higher-order functions
 func allPlusOne takes List(Integer) returns List(Integer);
@@ -33,18 +42,26 @@ func allPlusOne = (nums) => map((lambda a: a + 1;), nums);
 # Example class
 class Greeter = {
     ```Create a greeter that greets a user.```
+
     private var name = "Joe";
 
     func init takes Name returns Greeter;
+    ```Construct the Greeter.
+
+    Arguments:
+        name: The name to use when greeting.
+    ```
     func init = (name) => {
         self.name = name;
         return self;
     };
 
     func greetUser takes Greeter returns String;
+    ```Send a custom greeting.```
     func greetUser = (self) => {
         return "Hello, " + self.name;
     };
+
 };
 
 # Example main execution
