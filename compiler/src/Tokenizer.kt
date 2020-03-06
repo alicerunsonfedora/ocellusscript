@@ -57,6 +57,18 @@ public class OSTokenizer(var script: String) {
         var tokenType: TokenType? = null
         var token = ""
         var curr = this.getNextChar()
+
+        while (state != TokenizerState.FINISH && state != TokenizerState.ERROR) {
+            when (state) {
+                TokenizerState.START -> {
+                }
+                TokenizerState.IN_ID -> {
+                }
+                else {
+
+                }
+            }
+        }
     }
 
 }
