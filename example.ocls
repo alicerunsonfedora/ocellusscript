@@ -19,12 +19,16 @@ type Human = { Person: (Name, Age) };
 func makeHuman takes Name and Age returns Human;
 func makeHuman = (n, a) => { (Person: (n, a)) };
 
+func mult takes Integer and Integer returns Integer;
+```Multiply two numbers together.```
+func mult = (x, y) => (x * y);
+
 # Example of pattern matching. This also covers switch
 # cases.
 func getAge takes Human? returns Integer;
 func getAge = (human) => match(human) {
-    (Nothing) => return 0;
-    ((Person: (_, a)) => return a;
+    Nothing => return 0;
+    Person: (_, a) => return a;
 };
 
 # Example of basic condition checking.

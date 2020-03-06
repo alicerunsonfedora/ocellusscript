@@ -2,8 +2,14 @@
     "name": "ocellusscript",
     "displayName": "OcellusScript",
     "description": "Language support for OcellusScript programming language",
+    "publisher": "marquiskurt",
     "author": "Marquis Kurt <software@marquiskurt.net>",
     "version": "0.0.1",
+    "icon": "icon.png",
+    "repository": {
+		"type": "git",
+		"url": "https://github.com/alicerunsonfedora/ocellusscript.git"
+	},
     "engines": {
         "vscode": "^1.42.0"
     },
