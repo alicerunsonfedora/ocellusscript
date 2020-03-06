@@ -18,6 +18,7 @@ public class OSTokenizer(var script: String) {
     var symbol: Char = '\n'
     var comment: String = ""
     var docstring: String = ""
+    var keyword: TokenKeyword? = null
 
     /**
      * Determine whether there are more characters to process.
@@ -50,6 +51,22 @@ public class OSTokenizer(var script: String) {
     }
 
     /**
+     * Determine whether a character is a symbol
+     *
+     * @param char The character to look up in the symbols
+     * @return Boolean indicating if the character is a valid symbol
+     */
+    fun isSymbol(char: Char): Boolean {
+        val symbols: String = "+-/%*?:,.;<>=`_()[]{}"
+        return symbols.contains(char)
+    }
+
+    // fun isKeyword(identifier: String): Boolean {
+    //     val keywords = TokenKeyword.values().apply { $it.toString() }
+    //     return keywords.contains(identifier)
+    // }
+
+    /**
      * Generate the next token, when ready.
      */
     fun advance() {
@@ -61,10 +78,23 @@ public class OSTokenizer(var script: String) {
         while (state != TokenizerState.FINISH && state != TokenizerState.ERROR) {
             when (state) {
                 TokenizerState.START -> {
+                    when {
+                        curr.isLetter() -> {
+                            tokenType = TokenType.IDENTIFIER
+                            state = TokenizerState.IN_ID
+                        }
+                        curr.isDigit() -> {
+                            tokenType = TokenType.INT_CONST
+                            state = TokenizerState.IN_ID
+                        }
+                        this.isSymbol(curr) -> {
+
+                        }
+                    }
                 }
                 TokenizerState.IN_ID -> {
                 }
-                else {
+                else -> {
 
                 }
             }
