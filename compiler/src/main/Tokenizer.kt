@@ -141,13 +141,14 @@ public class OSTokenizer(var script: String) {
     }
 
     /**
-     * Generate the next token, when ready.
+     * Advance and generate a single token.
      */
     fun advance() {
         var state = TokenizerState.START
         var tokenType: TokenType? = null
-        var token = ""
-        var curr = '\n'
+        var token: String = ""
+        var curr: Char = '\n'
+        var docstate: Int = 0
 
         while (state != TokenizerState.FINISH && state != TokenizerState.ERROR) {
 
@@ -173,7 +174,8 @@ public class OSTokenizer(var script: String) {
                                 }
                                 '`' -> {
                                     tokenType = TokenType.SYMBOL
-                                    state = TokenizerState.MAYBE_DOCSTRING
+                                    state = TokenizerState.MAYBE_DOCSTRING_START
+                                    docstate += 1
                                 }
                                 else -> {
                                     tokenType = TokenType.SYMBOL
@@ -189,16 +191,83 @@ public class OSTokenizer(var script: String) {
                 }
                 TokenizerState.IN_ID -> {
                     when (tokenType) {
+                        TokenType.IDENTIFIER -> {
+                            if (!curr.isLetter() && curr != '_') {
+                                state = TokenizerState.FINISH
+                                this.unread()
+                            } else { token += curr }
+                        }
                         TokenType.STR_CONST -> {
-                            if (curr == '"') { state = TokenizerState.FINISH; this.unread() }
+                            if (curr == '"') {
+                                state = TokenizerState.FINISH;
+                                this.unread()
+                            }
                             else { token += curr }
                         }
                         TokenType.INT_CONST -> {
-                            if (!curr.isDigit() && curr != '.') { state = TokenizerState.FINISH; this.unread() }
+                            if (!curr.isDigit() && curr != '.') {
+                                state = TokenizerState.FINISH
+                                this.unread()
+                            } else {
+                                if (curr == '.') { tokenType = TokenType.FLO_CONST }
+                                token += curr
+                            }
                         }
+                        TokenType.FLO_CONST -> {
+                            if (!curr.isDigit()) {
+                                state = TokenizerState.FINISH
+                                this.unread()
+                            } else { token += curr }
+                        }
+                        TokenType.COMMENT -> {
+                            if (curr == '\n') {
+                                state = TokenizerState.FINISH
+                                this.unread()
+                            }
+                        }
+                        TokenType.SYMBOL -> {
+                            state = TokenizerState.FINISH
+                            this.unread()
+                        }
+                        TokenType.DOCSTRING -> {
+                            if (curr == '`') {
+                                state = TokenizerState.MAYBE_DOCSTRING_END
+                                docstate += 1
+                            }
+                            token += curr
+                        }
+                        else -> {}
                     }
                 }
-                else -> {}
+                TokenizerState.MAYBE_DOCSTRING_START -> {
+                    if (curr != '`') {
+                        state = TokenizerState.IN_ID
+                        this.unread()
+                    } else {
+                        if (docstate == 3) {
+                            state = TokenizerState.IN_ID
+                            tokenType = TokenType.DOCSTRING
+                            docstate = 0
+                        }
+                        else { docstate += 1 }
+                        token += curr
+                    }
+                }
+                TokenizerState.MAYBE_DOCSTRING_END -> {
+                    if (curr != '`') {
+                        state = TokenizerState.IN_ID
+                    } else {
+                        if (docstate == 3) {
+                            state = TokenizerState.FINISH
+                            docstate = 0
+                        }
+                        else { docstate += 1 }
+                    }
+                    token += curr
+                }
+                else -> {
+                    state = TokenizerState.ERROR
+                }
             }
         }
 

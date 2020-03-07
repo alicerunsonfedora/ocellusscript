@@ -10,7 +10,8 @@
 enum class TokenizerState {
     START,
     IN_ID,
-    MAYBE_DOCSTRING,
+    MAYBE_DOCSTRING_START,
+    MAYBE_DOCSTRING_END,
     FINISH,
     ERROR
 }
