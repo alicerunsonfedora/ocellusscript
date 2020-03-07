@@ -4,11 +4,12 @@
     "description": "Language support for OcellusScript programming language",
     "publisher": "marquiskurt",
     "author": "Marquis Kurt <software@marquiskurt.net>",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "icon": "icon.png",
+    "license": "LICENSE.txt",
     "repository": {
 		"type": "git",
-		"url": "https://github.com/alicerunsonfedora/ocellusscript.git"
+		"url": "https://github.com/alicerunsonfedora/ocellusscript/tree/master/vslang"
 	},
     "engines": {
         "vscode": "^1.42.0"
