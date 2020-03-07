@@ -226,8 +226,3 @@ public class OSTokenizer(var script: String) {
     }
 
 }
-
-fun main() {
-    var cele = OSTokenizer("E")
-    cele.isKeyword("cheese")
-}
