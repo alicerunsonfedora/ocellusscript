@@ -21,6 +21,7 @@ public class OSTokenizer(var script: String) {
     var keyword: TokenKeyword? = null
     var integer: Int = 0
     var float: Double = 0.0
+    var currentChar: Char = '\n'
 
     /**
      * Determine whether there are more characters to process.
@@ -38,7 +39,16 @@ public class OSTokenizer(var script: String) {
         if (!hasMoreChars()) {
             throw NoSuchElementException("There are no more characters to process.")
         }
-        return this.chars.first()
+        this.currentChar = this.chars.first()
+        this.chars = this.chars.drop(1)
+        return this.currentChar
+    }
+
+    /**
+     * Unread the current character.
+     */
+    fun unread() {
+        this.chars = listOf(this.currentChar).asIterable() + this.chars
     }
 
     /**
@@ -137,9 +147,13 @@ public class OSTokenizer(var script: String) {
         var state = TokenizerState.START
         var tokenType: TokenType? = null
         var token = ""
-        var curr = this.getNextChar()
+        var curr = '\n'
 
         while (state != TokenizerState.FINISH && state != TokenizerState.ERROR) {
+
+            if (!this.hasMoreChars()) { return }
+            curr = this.getNextChar()
+
             when (state) {
                 TokenizerState.START -> {
                     when {
@@ -161,7 +175,7 @@ public class OSTokenizer(var script: String) {
                                     tokenType = TokenType.SYMBOL
                                     state = TokenizerState.MAYBE_DOCSTRING
                                 }
-                                else {
+                                else -> {
                                     tokenType = TokenType.SYMBOL
                                     state = TokenizerState.IN_ID
                                 }
@@ -169,16 +183,23 @@ public class OSTokenizer(var script: String) {
                         }
                     }
 
-                    if (this.tokenType != null) {
+                    if (tokenType != null && tokenType != TokenType.STR_CONST) {
                         token += curr
                     }
                 }
                 TokenizerState.IN_ID -> {
+                    when (tokenType) {
+                        TokenType.STR_CONST -> {
+                            if (curr == '"') { state = TokenizerState.FINISH; this.unread() }
+                            else { token += curr }
+                        }
+                        TokenType.INT_CONST -> {
+                            if (!curr.isDigit() && curr != '.') { state = TokenizerState.FINISH; this.unread() }
+                        }
+                    }
                 }
                 else -> {}
             }
-
-            curr = this.getNextChar()
         }
 
         if (state != TokenizerState.ERROR) {
