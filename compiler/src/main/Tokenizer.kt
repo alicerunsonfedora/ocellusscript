@@ -294,4 +294,29 @@ public class OSTokenizer(var script: String) {
         }
     }
 
+    /**
+     * Tokenize the entire character list, rather than just advancing over a single token.
+     */
+    fun tokenizeAll(): List<Pair<TokenType?, String>?> {
+        var tokens: List<Pair<TokenType?, String>?> = listOf(null)
+
+        while (hasMoreChars() && this.tokenType != null) {
+            this.resetToken()
+            this.advance()
+            when (this.tokenType) {
+                TokenType.STR_CONST -> { tokens += listOf(Pair(this.tokenType, this.identifier)) }
+                TokenType.INT_CONST -> { tokens += listOf(Pair(this.tokenType, this.integer.toString()))}
+                TokenType.FLO_CONST -> { tokens += listOf(Pair(this.tokenType, this.float.toString()))}
+                TokenType.COMMENT -> { tokens += listOf(Pair(this.tokenType, this.comment)) }
+                TokenType.DOCSTRING -> { tokens += listOf(Pair(this.tokenType, this.docstring)) }
+                TokenType.SYMBOL -> { tokens += listOf(Pair(this.tokenType, this.symbol.toString()))}
+                TokenType.IDENTIFIER -> { tokens += listOf(Pair(this.tokenType, this.identifier))}
+                TokenType.KEYWORD -> { tokens += listOf(Pair(this.tokenType, this.identifier))}
+                else -> {}
+            }
+        }
+
+        return tokens
+    }
+
 }
