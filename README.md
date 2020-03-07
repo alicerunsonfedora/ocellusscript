@@ -35,3 +35,7 @@ class Example = {
     func hello = (self) => "Hello, " + self.test + "!";
 }
 ```
+
+## Submit a proposal
+
+If you wish to make a proposal to add a feature to OcellusScript, feel free to write one on YouTrack. [Submit a proposal &rsaquo;](https://youtrack.marquiskurt.net/youtrack/newIssue?project=OCLS)
