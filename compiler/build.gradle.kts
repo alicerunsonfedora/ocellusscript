@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     // Apply the Kotlin Multiplatform plugin to add support for Kotlin.
     kotlin("multiplatform") version "1.3.70"
+    id("org.jetbrains.dokka") version "0.10.0"
 }
 
 repositories {
@@ -30,6 +31,7 @@ kotlin.sourceSets["commonMain"].dependencies {
 kotlin.sourceSets["jvmMain"].dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("stdlib-common"))
+    implementation("com.xenomachina:kotlin-argparser:2.0.7")
 }
 
 kotlin.sourceSets["jvmMain"].dependencies {

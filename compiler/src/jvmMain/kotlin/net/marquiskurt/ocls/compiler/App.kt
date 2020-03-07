@@ -4,18 +4,28 @@
 
 package net.marquiskurt.ocls.compiler
 
+import java.io.File
+import com.xenomachina.argparser.ArgParser
+
+
 import OSTokenizer
+import TokenType
 
 
-class App {
-    val greeting: String
-        get() {
-            return "Hello world."
-        }
+class NOC(val files: List<File>?) {
+
+    private var script = ""
+    private var tokenizer = OSTokenizer(this.script)
+
+    @ExperimentalStdlibApi
+    fun tokenize(): List<Pair<TokenType?, String?>?> {
+        return this.tokenizer.tokenizeAll()
+    }
+
 }
 
+// TODO: Process a directory or files with arguments
 @ExperimentalStdlibApi
-fun main() {
-    val x = OSTokenizer("import this;")
-    println(x.tokenizeAll())
+fun main(args: Array<String>) {
+    println("TODO: Get this to make token files!")
 }
