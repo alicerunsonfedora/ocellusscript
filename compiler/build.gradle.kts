@@ -65,8 +65,3 @@ val run by tasks.creating(JavaExec::class) {
     ///disable app icon on macOS
     systemProperty("java.awt.headless", "true")
 }
-
-tasks.dokka {
-    outputFormat = "html"
-    outputDirectory = "$buildDir/javadoc"
-}
