@@ -5,34 +5,44 @@
  */
 
 plugins {
-    // Apply the Kotlin JVM plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "1.3.70"
-
-    // Apply the application plugin to add support for building a CLI application.
-    application
+    // Apply the Kotlin Multiplatform plugin to add support for Kotlin.
+    kotlin("multiplatform") version "1.3.70"
 }
 
 repositories {
-    // Use jcenter for resolving dependencies.
-    // You can declare any Maven/Ivy/file repository here.
     jcenter()
+    mavenCentral()
 }
 
-dependencies {
-    // Align versions of all Kotlin components
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-
-    // Use the Kotlin JDK 8 standard library.
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
-    // Use the Kotlin test library.
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-
-    // Use the Kotlin JUnit integration.
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+kotlin {
+    jvm()
+    js()
+    wasm32()
 }
 
-application {
-    // Define the main class for the application.
-    mainClassName = "ocls.AppKt"
+kotlin.sourceSets["jvmMain"].dependencies {
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib-common"))
+}
+
+kotlin.sourceSets["jvmMain"].dependencies {
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib-common"))
+    implementation(kotlin("test-common"))
+    implementation(kotlin("test-annotations-common"))
+}
+
+val run by tasks.creating(JavaExec::class) {
+  group = "application"
+  main = "net.marquiskurt.ocls.compiler.AppKt"
+  kotlin {
+    val main = targets["jvm"].compilations["main"]
+    dependsOn(main.compileAllTaskName)
+    classpath(
+            { main.output.allOutputs.files },
+            { configurations["jvmRuntimeClasspath"] }
+    )
+  }
+  ///disable app icon on macOS
+  systemProperty("java.awt.headless", "true")
 }
