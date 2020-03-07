@@ -12,12 +12,11 @@ package net.marquiskurt.ocls.compiler
 import java.io.File
 import com.xenomachina.argparser.ArgParser
 
-
 import OSTokenizer
 import TokenType
+import NOCArgs
 
-
-class NOC(val files: List<File>?) {
+class NOCAppJVM(val files: List<File>?) {
 
     private var script = ""
     private var tokenizer = OSTokenizer(this.script)
@@ -32,5 +31,7 @@ class NOC(val files: List<File>?) {
 // TODO: Process a directory or files with arguments
 @ExperimentalStdlibApi
 fun main(args: Array<String>) {
-    println("TODO: Get this to make token files!")
+    ArgParser(args).parseInto(::NOCArgs).run {
+        println("coolio! ${source}")
+    }
 }

@@ -34,7 +34,17 @@ kotlin.sourceSets["jvmMain"].dependencies {
     implementation("com.xenomachina:kotlin-argparser:2.0.7")
 }
 
-kotlin.sourceSets["jvmMain"].dependencies {
+kotlin.sourceSets["jsMain"].dependencies {
+    implementation(kotlin("stdlib-js"))
+    implementation(kotlin("stdlib-common"))
+}
+
+kotlin.sourceSets["wasm32Main"].dependencies {
+    implementation(kotlin("stdlib-js"))
+    implementation(kotlin("stdlib-common"))
+}
+
+kotlin.sourceSets["jvmTest"].dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("stdlib-common"))
     implementation(kotlin("test-common"))
@@ -42,16 +52,21 @@ kotlin.sourceSets["jvmMain"].dependencies {
 }
 
 val run by tasks.creating(JavaExec::class) {
-  group = "application"
-  main = "net.marquiskurt.ocls.compiler.AppKt"
-  kotlin {
-    val main = targets["jvm"].compilations["main"]
-    dependsOn(main.compileAllTaskName)
-    classpath(
-            { main.output.allOutputs.files },
-            { configurations["jvmRuntimeClasspath"] }
-    )
-  }
-  ///disable app icon on macOS
-  systemProperty("java.awt.headless", "true")
+    group = "application"
+    main = "net.marquiskurt.ocls.compiler.NOCAppJVMKt"
+    kotlin {
+        val main = targets["jvm"].compilations["main"]
+        dependsOn(main.compileAllTaskName)
+        classpath(
+                { main.output.allOutputs.files },
+                { configurations["jvmRuntimeClasspath"] }
+        )
+    }
+    ///disable app icon on macOS
+    systemProperty("java.awt.headless", "true")
+}
+
+tasks.dokka {
+    outputFormat = "html"
+    outputDirectory = "$buildDir/javadoc"
 }
