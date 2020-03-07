@@ -14,7 +14,8 @@ class App {
         }
 }
 
-fun main(args: Array<String>) {
-    val x = OSTokenizer("E")
+@ExperimentalStdlibApi
+fun main() {
+    val x = OSTokenizer("import this;")
     println(x.tokenizeAll())
 }

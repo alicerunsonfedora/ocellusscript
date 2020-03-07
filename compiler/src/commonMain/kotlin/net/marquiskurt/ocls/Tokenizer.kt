@@ -7,12 +7,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import TokenType
-import TokenizerState
+fun Char.isLetter(): Boolean {
+    return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".contains(this)
+}
+
+fun Char.isDigit(): Boolean {
+    return "0123456789".contains(this)
+}
 
 public class OSTokenizer(var script: String) {
 
-    private var chars: Iterable<Char> = this.script.asIterable()
+    @ExperimentalStdlibApi
+    private var chars: CharArray = this.script.toCharArray()
+
     var tokenType: TokenType? = null
     var identifier: String = ""
     var symbol: Char = '\n'
@@ -28,6 +35,7 @@ public class OSTokenizer(var script: String) {
      *
      * @return Boolean of whether chars is not empty
      */
+    @ExperimentalStdlibApi
     fun hasMoreChars(): Boolean {
         return this.chars.count() > 0
     }
@@ -35,20 +43,22 @@ public class OSTokenizer(var script: String) {
     /**
      * Grab the next character if it exists.
      */
+    @ExperimentalStdlibApi
     fun getNextChar(): Char {
         if (!hasMoreChars()) {
             throw NoSuchElementException("There are no more characters to process.")
         }
         this.currentChar = this.chars.first()
-        this.chars = this.chars.drop(1)
+        this.chars = this.chars.drop(1).toCharArray()
         return this.currentChar
     }
 
     /**
      * Unread the current character.
      */
+    @ExperimentalStdlibApi
     fun unread() {
-        this.chars = listOf(this.currentChar).asIterable() + this.chars
+        this.chars = listOf(this.currentChar).toCharArray() + this.chars
     }
 
     /**
@@ -143,12 +153,13 @@ public class OSTokenizer(var script: String) {
     /**
      * Advance and generate a single token.
      */
+    @ExperimentalStdlibApi
     fun advance() {
         var state = TokenizerState.START
         var tokenType: TokenType? = null
-        var token: String = ""
-        var curr: Char = '\n'
-        var docstate: Int = 0
+        var token = ""
+        var curr: Char
+        var docstate = 0
 
         while (state != TokenizerState.FINISH && state != TokenizerState.ERROR) {
 
@@ -297,10 +308,11 @@ public class OSTokenizer(var script: String) {
     /**
      * Tokenize the entire character list, rather than just advancing over a single token.
      */
+    @ExperimentalStdlibApi
     fun tokenizeAll(): List<Pair<TokenType?, String>?> {
-        var tokens: List<Pair<TokenType?, String>?> = listOf(null)
+        val tokens: MutableList<Pair<TokenType?, String>?> = mutableListOf(null)
 
-        while (hasMoreChars() && this.tokenType != null) {
+        while (this.hasMoreChars() || this.tokenType != null) {
             this.resetToken()
             this.advance()
             when (this.tokenType) {
@@ -315,7 +327,7 @@ public class OSTokenizer(var script: String) {
                 else -> {}
             }
         }
-
+        if (tokens.first() == null) { tokens.remove(null) }
         return tokens
     }
 
