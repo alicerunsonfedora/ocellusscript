@@ -10,8 +10,8 @@ OcellusScript is a simple multi-paradigm programming language modeled after Java
 
 ## Quick Links
 
-- [Compiler](./compiler/README.md)
-- [Visual Studio Code Extension](./vslang/README.md)
+- [Compiler](./compiler/)
+- [Visual Studio Code Extension](./vslang/)
 
 ## Example Code
 
