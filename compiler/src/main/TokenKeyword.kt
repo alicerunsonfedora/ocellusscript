@@ -13,6 +13,7 @@ public enum class TokenKeyword {
     LAMBDA,
     TAKES,
     RETURNS,
+    RETURN,
     STRING,
     CHAR,
     INTEGER,

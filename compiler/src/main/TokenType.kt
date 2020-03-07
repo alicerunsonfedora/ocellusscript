@@ -14,5 +14,6 @@ public enum class TokenType {
     COMMENT,
     DOCSTRING,
     SYMBOL,
-    IDENTIFIER
+    IDENTIFIER,
+    KEYWORD
 }

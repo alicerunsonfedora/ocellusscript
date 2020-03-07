@@ -8,5 +8,9 @@
  */
 
 enum class TokenizerState {
-    START, IN_ID, FINISH, ERROR
+    START,
+    IN_ID,
+    MAYBE_DOCSTRING,
+    FINISH,
+    ERROR
 }
