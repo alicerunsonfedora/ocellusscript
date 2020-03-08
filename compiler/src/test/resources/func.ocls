@@ -1,0 +1,2 @@
+func addThree takes Integer returns Integer;
+func addThree = (x) => x + 3;

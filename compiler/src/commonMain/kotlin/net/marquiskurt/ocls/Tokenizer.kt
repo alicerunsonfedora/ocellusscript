@@ -80,7 +80,7 @@ public class OSTokenizer(var script: String) {
      * @return Boolean indicating if the character is a valid symbol
      */
     fun isSymbol(char: Char): Boolean {
-        val symbols: String = "+-/%*?:,.;<>=`_()[]{}"
+        val symbols: String = "+-/%*?:,.;<>=`_()[]{}#"
         return symbols.contains(char)
     }
 
@@ -234,6 +234,8 @@ public class OSTokenizer(var script: String) {
                             if (curr == '\n') {
                                 state = TokenizerState.FINISH
                                 this.unread()
+                            } else {
+                                token += curr
                             }
                         }
                         TokenType.SYMBOL -> {
