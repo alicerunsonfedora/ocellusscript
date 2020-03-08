@@ -11,7 +11,7 @@ import java.io.File
 
 import TokenType
 
-class NOCAppTokenWriter(tokens: List<Pair<TokenType?, String>?>) {
+class NOCAppTokenWriter(val tokens: List<Pair<TokenType?, String>?>) {
 
     /**
      * Write the token file.
@@ -19,7 +19,16 @@ class NOCAppTokenWriter(tokens: List<Pair<TokenType?, String>?>) {
      * @param destinationPath The destination path and filename.
      */
     fun writeFile(destinationPath: String) {
-        var fileObj = File(destinationPath)
-    }
+        var fileObj = if (File(destinationPath).isDirectory) { File("$destinationPath/tokens.noct") }
+            else { File(destinationPath) }
 
+        var writer = fileObj.writer()
+
+        for (token in this.tokens) {
+            if (token != null) {
+                writer.write("${token.first} ${token.second}\n")
+            }
+        }
+        writer.close()
+    }
 }

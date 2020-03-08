@@ -15,7 +15,9 @@ import java.io.FileNotFoundException
 
 import OSTokenizer
 import TokenType
-import NOCArgs
+import NOCAppArgs
+import NOCAppTokenWriter
+
 
 /**
  * The primary app class for the NOC.
@@ -98,7 +100,25 @@ fun main(args: Array<String>) {
         // Initialize the app.
         val app = NOCAppJVM(files)
 
-        // Print out the list of token lists.
-        println(app.tokenizeDir())
+        // Store our token lists.
+        val tokens = app.tokenizeDir()
+
+        // Write our token files if the token file parameter is passed.
+        if (exportTokens) {
+            if (File(destination).isDirectory) {
+                val tokenFiles = files.map { file -> file.name.replace(".ocls", ".noct") }
+                for (pair in tokenFiles.zip(tokens)) {
+                    val fileWriter = NOCAppTokenWriter(pair.second)
+                    fileWriter.writeFile("$destination/${pair.first}")
+                }
+            }
+            else {
+                for (token in tokens) {
+                    val fileWriter = NOCAppTokenWriter(token)
+                    fileWriter.writeFile("$destination")
+                }
+            }
+        }
+
     }
 }
