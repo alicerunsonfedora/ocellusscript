@@ -12,7 +12,7 @@ import com.xenomachina.argparser.ArgParser
 /**
  * The base class containing all of the arguments for NOC.
  */
-class NOCArgs(parser: ArgParser) {
+class NOCAppArgs(parser: ArgParser) {
     /**
      * Whether the program should run in verbose mode.
      */

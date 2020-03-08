@@ -85,7 +85,7 @@ class NOCAppJVM(private var files: Array<File>?) {
 
 @ExperimentalStdlibApi
 fun main(args: Array<String>) {
-    ArgParser(args).parseInto(::NOCArgs).run {
+    ArgParser(args).parseInto(::NOCAppArgs).run {
         // Create the file object from the source folder.
         val sObj = File(source)
 
