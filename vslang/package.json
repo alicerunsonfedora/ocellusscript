@@ -5,8 +5,10 @@
     "publisher": "marquiskurt",
     "author": "Marquis Kurt <software@marquiskurt.net>",
     "version": "0.1.0",
+    "preview": true,
     "icon": "icon.png",
-    "license": "LICENSE.txt",
+    "license": "SEE LICENSE IN LICENSE.txt",
+    "readme": "README-VS.md",
     "repository": {
 		"type": "git",
 		"url": "https://github.com/alicerunsonfedora/ocellusscript/tree/master/vslang"
