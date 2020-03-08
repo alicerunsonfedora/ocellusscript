@@ -16,3 +16,6 @@ buildNumber.properties
 
 # Ignore Gradle build output directory
 compiler/build/**
+
+# Ignore IntelliJ folders
+**/.idea/**
