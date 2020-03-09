@@ -14,9 +14,12 @@ import com.xenomachina.argparser.ArgParser
 import java.io.FileNotFoundException
 
 import NOCTokenizer
+import NOCParser
 import TokenType
 import NOCAppArgs
+import NOCAppParseTreeWriter
 import NOCAppTokenWriter
+import NOCModule
 
 
 /**
@@ -37,6 +40,13 @@ class NOCAppJVM(private var files: Array<File>?) {
      * This field is usually instantiated by methods such as `tokenizeFile`.
      */
     private lateinit var tokenizer: NOCTokenizer
+
+    /**
+     * The parser to perform parsing operations on.
+     *
+     * This field is usually instantiated by methods such as `parseFile`.
+     */
+    private lateinit var parser: NOCParser
 
     /**
      * Tokenize the contents of a single file in the directory.
@@ -83,6 +93,48 @@ class NOCAppJVM(private var files: Array<File>?) {
         return this.files!!.map { file -> this.tokenizeFile(file) }
     }
 
+    /**
+     * Parse the contents of a single file.
+     *
+     * @param index The index of the file in the file list to parse.
+     * @return The parsed module tree from the file.
+     */
+    @ExperimentalStdlibApi
+    fun parseFile(index: Int): NOCModule {
+        if (this.files == null) {
+            throw FileNotFoundException("Cannot tokenize an empty directory.")
+        } else {
+            this.script = this.files?.get(index)?.readText() ?: ""
+        }
+        this.parser = NOCParser(null, fromScript = this.script)
+        return this.parser.parse()
+    }
+
+    /**
+     * Parse the contents of a file.
+     *
+     * @param file The file object to read and parse from.
+     * @return The parsed module tree from the file.
+     */
+    @ExperimentalStdlibApi
+    fun parseFile(file: File): NOCModule {
+        if (file == null) { throw FileNotFoundException("Cannot tokenize an empty file.") }
+        this.script = file.readText()
+        this.parser = NOCParser(null, fromScript = this.script)
+        return this.parser.parse()
+    }
+
+    /**
+     * Parse the contents of a directory.
+     *
+     * @return A list of parsed tree modules.
+     */
+    @ExperimentalStdlibApi
+    fun parseDir(): List<NOCModule> {
+        if (this.files == null) { throw FileNotFoundException("Cannot parse an empty directory.") }
+        return this.files!!.map { file -> this.parseFile(file) }
+    }
+
 }
 
 @ExperimentalStdlibApi
@@ -104,21 +156,28 @@ fun main(args: Array<String>) {
         // Initialize the app.
         val app = NOCAppJVM(files)
 
-        // Store our token lists.
-        val tokens = app.tokenizeDir()
+        // Store our trees.
+        val trees = app.parseDir()
 
         // Write our token files if the token file parameter is passed.
         if (exportTokens) {
+            // Store our token lists.
+            val tokens = app.tokenizeDir()
+
+            // Write multiple files that match the directory if we're looking at a dir.
             if (File(destination).isDirectory) {
                 val tokenFiles = files.map { file -> file.name.replace(".ocls", ".noct") }
                 for (pair in tokenFiles.zip(tokens)) {
                     val fileWriter = NOCAppTokenWriter(pair.second)
                     if (verbose) {
-                        println("Writing token file ${pair.first} from ${pair.first.replace(".noct", ".ocls")}...")
+                        println("Writing token file ${pair.first} " +
+                                "from ${pair.first.replace(".noct", ".ocls")}...")
                     }
                     fileWriter.writeFile("$destination/${pair.first}", pair.first)
                 }
             }
+
+            // Otherwise, treat it regularly.
             else {
                 for (token in tokens) {
                     val fileWriter = NOCAppTokenWriter(token)
@@ -126,6 +185,34 @@ fun main(args: Array<String>) {
                         println("Writing token file to $destination...")
                     }
                     fileWriter.writeFile("$destination", destination)
+                }
+            }
+        }
+
+        // If we need to export our trees, write the XML versions of those trees.
+        if (exportTree) {
+
+            // Write over every tree in the directory.
+            if (File(destination).isDirectory) {
+                val treeFiles = files.map { file -> file.name.replace(".ocls", ".xml") }
+                for (pair in treeFiles.zip(trees)) {
+                    val fileWriter = NOCAppParseTreeWriter(pair.second)
+                    if (verbose) {
+                        println("Writing pared XML file ${pair.first} " +
+                                "from ${pair.first.replace(".xml", ".ocls")}...")
+                    }
+                    fileWriter.writeFile(pair.first)
+                }
+            }
+
+            // Otherwise, treat it as a single file.
+            else {
+                for (tree in trees) {
+                    val fileWriter = NOCAppParseTreeWriter(tree)
+                    if (verbose) {
+                        println("Writing parsed XML file to $destination...")
+                    }
+                    fileWriter.writeFile(destination)
                 }
             }
         }

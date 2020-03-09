@@ -7,11 +7,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import NOCModule
-import NOCClass
-import NOCShadowType
-import NOCType
-import NOCTokenizer
 import kotlin.random.Random
 
 /**
@@ -19,7 +14,8 @@ import kotlin.random.Random
  *
  * The parser is responsible for reading a list of tokens and creating an abstract syntax tree.
  */
-class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null, private var fromScript: String? = null) {
+class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
+                private var fromScript: String? = null) {
 
     /**
      * A tokenizer to generate tokens from, if necessary.
@@ -94,12 +90,13 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null, pri
      *
      * @return NOCModule containing all of the code from the module.
      */
+    @ExperimentalStdlibApi
     private fun parseModule(): NOCModule {
 
         // Create an empty module state. Since we don't know if this module has a name, we'll assign
         // a temporary one first.
         var name = this.createModuleName()
-        var imports: List<String>? = null
+        var imports: MutableList<String>? = null
         var datatypes: List<NOCType>? = null
         var shadowtypes: List<NOCShadowType>? = null
         var variables: List<NOCVariableDeclaration>? = null
@@ -107,11 +104,58 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null, pri
         var funcs: List<NOCFunction>? = null
 
         // Look for any import statements and construct those imports.
-        if (this.token == Pair(TokenType.KEYWORD, "import")) {
+        while (this.token == Pair(TokenType.KEYWORD, "import")) {
+            this.advanceToken()
+            var importName = ""
+            if (this.token.first != TokenType.IDENTIFIER) {
+                throw Exception("Expected import name identifier here: ${this.token.second}")
+            }
 
+            importName += this.token.second
+            this.advanceToken()
+
+            if (this.token.first == TokenType.SYMBOL) {
+                if (!".!*".contains(this.token.second.toCharArray()[0])) {
+                    throw Exception("Unexpected symbol in import statement: ${this.token.second}")
+                }
+                importName += this.token.second
+                this.advanceToken();
+                if (this.token.first != TokenType.SYMBOL && this.token.first != TokenType.IDENTIFIER) {
+                    throw Exception("Unexpected ${this.token.first.toString()} " +
+                            "found in import name: ${this.token.second}")
+                }
+
+                if (this.token.first == TokenType.SYMBOL && this.token.second != "*") {
+                    throw Exception("Unexpected symbol in import name: ${this.token.second}")
+                }
+
+                importName += this.token.second
+                this.advanceToken()
+
+                if (this.token != Pair(TokenType.SYMBOL, ";")) { throw Exception("Expected end of import statement.") }
+                this.advanceToken()
+
+                if (imports == null) { imports = mutableListOf(importName) }
+                else { imports.add(importName) }
+            }
         }
 
-        // Finally, this state will get returned.
+        // If there's an actual name for this module, change our state.
+        if (this.token == Pair(TokenType.KEYWORD, "module")) {
+            this.advanceToken()
+
+            if (this.token.first != TokenType.IDENTIFIER) { throw Exception("Expected module name identifier here: " +
+                    this.token.second)}
+            name = this.token.second
+            this.advanceToken()
+
+            if (this.token != Pair(TokenType.SYMBOL, ";")) { throw Exception("Expected end of module statement.") }
+            this.advanceToken()
+        }
+
+        // TODO: Add stuff for parsing variables, classes, functions, etc., here.
+
+        // Finally, put the state together and return the module.
         return NOCModule(name, imports, datatypes, shadowtypes, variables, classes, funcs)
     }
 
