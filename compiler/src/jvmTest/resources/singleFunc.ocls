@@ -1,0 +1,7 @@
+#
+# Single Function Test
+# (C) 2020 Marquis Kurt.
+#
+
+func mult takes Integer and Integer returns Integer;
+func mult = (x, y) => x * y;

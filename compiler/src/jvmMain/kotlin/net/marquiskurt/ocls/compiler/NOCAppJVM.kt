@@ -91,6 +91,10 @@ fun main(args: Array<String>) {
         // Create the file object from the source folder.
         val sObj = File(source)
 
+        if (verbose && sObj.isDirectory) {
+            println("INFO: ${sObj.absolutePath} is a directory.\nApplying operations to all files in this directory...")
+        }
+
         // Create a list of files, either from the directory or a single file.
         // In the case of the directory, only read the files that are OcellusScript
         // files (i.e., files with the 'ocls' extension).
@@ -109,12 +113,18 @@ fun main(args: Array<String>) {
                 val tokenFiles = files.map { file -> file.name.replace(".ocls", ".noct") }
                 for (pair in tokenFiles.zip(tokens)) {
                     val fileWriter = NOCAppTokenWriter(pair.second)
+                    if (verbose) {
+                        println("Writing token file ${pair.first} from ${pair.first.replace(".noct", ".ocls")}...")
+                    }
                     fileWriter.writeFile("$destination/${pair.first}", pair.first)
                 }
             }
             else {
                 for (token in tokens) {
                     val fileWriter = NOCAppTokenWriter(token)
+                    if (verbose) {
+                        println("Writing token file to $destination...")
+                    }
                     fileWriter.writeFile("$destination", destination)
                 }
             }

@@ -14,7 +14,6 @@ repositories {
 
 kotlin {
     jvm()
-    js()
     wasm32()
 
     sourceSets {
@@ -31,12 +30,7 @@ kotlin {
                 implementation("com.xenomachina:kotlin-argparser:2.0.7")
             }
         }
-        val jsMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib-js"))
-                implementation(kotlin("stdlib-common"))
-            }
-        }
+
         val wasm32Main by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))

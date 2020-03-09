@@ -1,0 +1,6 @@
+#
+# Single Class Test
+# (C) 2020 Marquis Kurt
+#
+
+class EmptyClass = {};
