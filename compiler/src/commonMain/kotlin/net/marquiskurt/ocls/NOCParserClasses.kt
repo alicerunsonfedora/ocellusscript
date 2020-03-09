@@ -15,7 +15,8 @@ data class NOCModule(val name: String,
                      val datatypes: List<NOCType>?,
                      val types: List<NOCShadowType>?,
                      val vars: List<NOCVariableDeclaration>?,
-                     val classes: List<NOCClass>?)
+                     val classes: List<NOCClass>?,
+                     val functions: List<NOCFunction>?)
 
 /**
  * A data representation of an OcellusScript shadow type.
@@ -30,7 +31,10 @@ data class NOCType(val name: String, val options: List<String>)
 /**
  * A data representation of an OcellusScript var declaration.
  */
-data class NOCVariableDeclaration(val name: String, val type: String, val value: String?)
+data class NOCVariableDeclaration(val name: String,
+                                  val type: String,
+                                  val value: NOCExpression,
+                                  val const: Boolean = false)
 
 /**
  * A data representation of an OcellusScript function signature.
@@ -48,6 +52,50 @@ data class NOCExpression(val operation: String, val left: NOCExpression?, val ri
 data class NOCFunctionReturn(val funcCallName: String, val params: List<NOCExpression>?)
 
 /**
+ * A data representation of an OcellusScript `let` statement.
+ */
+data class NOCLetStatement(val declare: NOCVariableDeclaration)
+
+/**
+ * A data representation of an OcellusScript `var` statement.
+ */
+data class NOCVarStatement(val declare: NOCVariableDeclaration)
+
+/**
+ * A data representation of an OcellusScript `while` statement.
+ */
+data class NOCWhileStatement(val iterateOver: NOCExpression, val statements: List<Any>?)
+
+/**
+ * A data class representation of an OcellusScript `for` statement.
+ */
+data class NOCForStatement(val iter: String, val range: NOCExpression, val statements: List<Any>?)
+
+/**
+ * A data representation of an OcellusScript `return` statement.
+ */
+data class NOCReturnStatement(val result: NOCExpression?)
+
+/**
+ * A data representation of a match case.
+ */
+data class NOCMatchCase(val case: NOCExpression, val expression: NOCExpression?, val statements: List<Any>?)
+
+/**
+ * A data representation of an OcellusScript `match` statement.
+ */
+data class NOCMatch(val over: NOCExpression, val cases: List<NOCMatchCase>)
+
+/**
+ * A data representation of an OcellusScript function.
+ */
+data class NOCFunction(val name: String,
+                       val signature: NOCFunctionSignature?,
+                       val docstring: String?,
+                       val statements: List<Any>?,
+                       val result: NOCExpression?)
+
+/**
  * A data representation of an OcellusScript class.
  */
-data class NOCClass(val name: String, val fields: List<NOCVariableDeclaration>?)
+data class NOCClass(val name: String, val fields: List<NOCVariableDeclaration>?, val methods: List<NOCFunction>?)
