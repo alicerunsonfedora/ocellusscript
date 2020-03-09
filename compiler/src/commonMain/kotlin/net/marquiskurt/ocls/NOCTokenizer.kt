@@ -167,39 +167,65 @@ class NOCTokenizer(private var script: String) {
      */
     @ExperimentalStdlibApi
     fun advance() {
+
+        // Create an empty state with default values.
         var state = TokenizerState.START
         var tokenType: TokenType? = null
         var token = ""
         var curr: Char
         var docstate = 0
 
+        // Loop while the state is unfinished.
         while (state != TokenizerState.FINISH && state != TokenizerState.ERROR) {
 
+            // Exit out of this loop if there are no more characters.
             if (!this.hasMoreChars()) { break }
+
+            // Pop the current character off the queue.
             curr = this.getNextChar()
 
             when (state) {
+
+                // Determine the type of token at the beginning stages.
                 TokenizerState.START -> {
                     when {
+
+                        // If the character is a letter, choose identifier.
                         curr.isLetter() -> {
                             tokenType = TokenType.IDENTIFIER
                             state = TokenizerState.IN_ID
                         }
+
+                        // If a digit, mark as an integer.
                         curr.isDigit() -> {
                             tokenType = TokenType.INT_CONST
                             state = TokenizerState.IN_ID
                         }
+
+                        // More special cases for symbols.
                         this.isSymbol(curr) -> {
                             when (curr) {
+
+                                // Mark as a comment.
                                 '#' -> {
                                     tokenType = TokenType.COMMENT
                                     state = TokenizerState.IN_ID
                                 }
+
+                                // Mark as a possible docstring.
                                 '`' -> {
                                     tokenType = TokenType.SYMBOL
                                     state = TokenizerState.MAYBE_DOCSTRING_START
                                     docstate += 1
                                 }
+
+                                // Mark as a string.
+                                '"' -> {
+                                    tokenType = TokenType.STR_CONST
+                                    state = TokenizerState.IN_ID
+                                }
+
+                                // Otherwise, treat as a regular symbol.
                                 else -> {
                                     tokenType = TokenType.SYMBOL
                                     state = TokenizerState.IN_ID
@@ -208,18 +234,25 @@ class NOCTokenizer(private var script: String) {
                         }
                     }
 
+                    // After defining the token type, if the type isn't a string, add the character to our token.
                     if (tokenType != null && tokenType != TokenType.STR_CONST) {
                         token += curr
                     }
                 }
+
+                // Determine when to stop processing the token (or when to add the current character to the token).
                 TokenizerState.IN_ID -> {
                     when (tokenType) {
+
+                        // If an identifier and the character isn't a letter or an underscore, exit.
                         TokenType.IDENTIFIER -> {
                             if (!curr.isLetter() && curr != '_') {
                                 state = TokenizerState.FINISH
                                 this.unread()
                             } else { token += curr }
                         }
+
+                        // If a string and we find the end quote, exit.
                         TokenType.STR_CONST -> {
                             if (curr == '"') {
                                 state = TokenizerState.FINISH;
@@ -227,6 +260,10 @@ class NOCTokenizer(private var script: String) {
                             }
                             else { token += curr }
                         }
+
+                        // If an integer and the character isn't a period or a number, exit.
+                        // If the character IS a period, change the type to a float and keep
+                        // processing.
                         TokenType.INT_CONST -> {
                             if (!curr.isDigit() && curr != '.') {
                                 state = TokenizerState.FINISH
@@ -236,24 +273,30 @@ class NOCTokenizer(private var script: String) {
                                 token += curr
                             }
                         }
+
+                        // If a float and the character isn't a number, exit.
                         TokenType.FLO_CONST -> {
                             if (!curr.isDigit()) {
                                 state = TokenizerState.FINISH
                                 this.unread()
                             } else { token += curr }
                         }
+
+                        // If a comment and the character is a newline character, exit.
                         TokenType.COMMENT -> {
                             if (curr == '\n') {
                                 state = TokenizerState.FINISH
                                 this.unread()
-                            } else {
-                                token += curr
-                            }
+                            } else { token += curr }
                         }
+
+                        // If a symbol, exit.
                         TokenType.SYMBOL -> {
                             state = TokenizerState.FINISH
                             this.unread()
                         }
+
+                        // If a docstring and the character is the docstring backtick, change the state.
                         TokenType.DOCSTRING -> {
                             if (curr == '`') {
                                 state = TokenizerState.MAYBE_DOCSTRING_END
@@ -261,9 +304,14 @@ class NOCTokenizer(private var script: String) {
                             }
                             token += curr
                         }
+
+                        // Ignore any other types.
                         else -> {}
                     }
                 }
+
+                // Keep checking for new characters that match the backtick. When we've determined there are three
+                // backticks in a row, assume that we're looking at a docstring and change the state.
                 TokenizerState.MAYBE_DOCSTRING_START -> {
                     if (curr != '`') {
                         state = TokenizerState.IN_ID
@@ -278,6 +326,9 @@ class NOCTokenizer(private var script: String) {
                         token += curr
                     }
                 }
+
+                // Keep checking for new characters that match the backtick. When we've determined there are three
+                // backticks in a row, assume that we've found the end of the docstring and exit the state.
                 TokenizerState.MAYBE_DOCSTRING_END -> {
                     if (curr != '`') {
                         state = TokenizerState.IN_ID
@@ -290,17 +341,19 @@ class NOCTokenizer(private var script: String) {
                     }
                     token += curr
                 }
-                else -> {
-                    state = TokenizerState.ERROR
-                }
+
+                // Other states will result in error.
+                else -> { state = TokenizerState.ERROR }
             }
         }
 
+        // If the state has NOT errored in the process, finalize the token and set the proper attributes of this class.
         if (state != TokenizerState.ERROR) {
-            if (this.isKeyword(token)) {
-                tokenType = TokenType.KEYWORD
-            }
 
+            // Look for a keyword.
+            if (this.isKeyword(token)) { tokenType = TokenType.KEYWORD }
+
+            // Set the different fields of this class based on the current token type.
             when (tokenType) {
                 TokenType.KEYWORD -> {
                     this.keyword = this.getKeyword(token)
@@ -315,6 +368,7 @@ class NOCTokenizer(private var script: String) {
                 TokenType.FLO_CONST -> { this.float = token.toDouble() }
             }
 
+            // Set the type of the token to the class's attribute.
             this.tokenType = tokenType
         }
     }
