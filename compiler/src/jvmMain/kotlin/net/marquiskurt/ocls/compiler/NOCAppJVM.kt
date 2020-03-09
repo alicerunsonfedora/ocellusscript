@@ -196,23 +196,23 @@ fun main(args: Array<String>) {
             if (File(destination).isDirectory) {
                 val treeFiles = files.map { file -> file.name.replace(".ocls", ".xml") }
                 for (pair in treeFiles.zip(trees)) {
-                    val fileWriter = NOCAppParseTreeWriter(pair.second)
+                    val fileWriter = NOCAppParseTreeWriter(pair.second, pair.first)
                     if (verbose) {
                         println("Writing pared XML file ${pair.first} " +
                                 "from ${pair.first.replace(".xml", ".ocls")}...")
                     }
-                    fileWriter.writeFile(pair.first)
+                    fileWriter.writeFile()
                 }
             }
 
             // Otherwise, treat it as a single file.
             else {
                 for (tree in trees) {
-                    val fileWriter = NOCAppParseTreeWriter(tree)
+                    val fileWriter = NOCAppParseTreeWriter(tree, destination)
                     if (verbose) {
                         println("Writing parsed XML file to $destination...")
                     }
-                    fileWriter.writeFile(destination)
+                    fileWriter.writeFile()
                 }
             }
         }
