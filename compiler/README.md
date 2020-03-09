@@ -10,6 +10,8 @@ The **NOC** is the official OcellusScript compiler. NOC is a Kotlin-implemented 
 ### Requirements
 
 - JDK v1.8
+- Gradle
+- IDE that supports Kotlin
 
 After cloning the OcellusScript repository, navigate to the `compiler` directory and then run `gradlew.bat build` if on Windows or `gradlew build` on macOS/Linux.
 
@@ -23,6 +25,13 @@ This is the current roadmap for NOC:
 - [ ] Parser
 - [ ] Symbol table generator
 - [ ] JVM command line
+    - [X] Arguments
+    - [X] Creating token files
+    - [ ] Creating parse files
+    - [ ] Creating compiled bytecode files
+    - [ ] Creating an executable JAR in Gradle
+- [ ] Java libraries
+- [ ] Web assembly libraries
 
 ## Found an issue?
 
