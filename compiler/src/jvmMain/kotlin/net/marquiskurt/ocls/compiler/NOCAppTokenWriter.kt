@@ -9,26 +9,28 @@
 
 import java.io.File
 
-import TokenType
-
+/**
+ * The NOC token file writer.
+ */
 class NOCAppTokenWriter(val tokens: List<Pair<TokenType?, String>?>) {
 
     /**
-     * Write the token file.
+     * Create an NOC token file.
      *
      * @param destinationPath The destination path and filename.
+     * @param header The header to write at the top of the file.
      */
-    fun writeFile(destinationPath: String) {
-        var fileObj = if (File(destinationPath).isDirectory) { File("$destinationPath/tokens.noct") }
+    fun writeFile(destinationPath: String, header: String = "TOKENS.OCLS") {
+        val fileObj = if (File(destinationPath).isDirectory) { File("$destinationPath/tokens.noct") }
             else { File(destinationPath) }
-
-        var writer = fileObj.writer()
-
+        val writer = fileObj.writer()
+        writer.write("${header.toUpperCase()}\n@BEGIN TOKEN CONSTRUCT\n")
         for (token in this.tokens) {
             if (token != null) {
                 writer.write("${token.first} ${token.second}\n")
             }
         }
+        writer.write("@END TOKEN CONSTRUCT")
         writer.close()
     }
 }

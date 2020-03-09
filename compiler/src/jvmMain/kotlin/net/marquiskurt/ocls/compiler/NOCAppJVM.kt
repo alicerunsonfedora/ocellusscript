@@ -13,7 +13,7 @@ import java.io.File
 import com.xenomachina.argparser.ArgParser
 import java.io.FileNotFoundException
 
-import OSTokenizer
+import NOCTokenizer
 import TokenType
 import NOCAppArgs
 import NOCAppTokenWriter
@@ -36,7 +36,7 @@ class NOCAppJVM(private var files: Array<File>?) {
      *
      * This field is usually instantiated by methods such as `tokenizeFile`.
      */
-    private lateinit var tokenizer: OSTokenizer
+    private lateinit var tokenizer: NOCTokenizer
 
     /**
      * Tokenize the contents of a single file in the directory.
@@ -51,7 +51,7 @@ class NOCAppJVM(private var files: Array<File>?) {
         } else {
             this.script = this.files?.get(index)?.readText() ?: ""
         }
-        this.tokenizer = OSTokenizer(this.script)
+        this.tokenizer = NOCTokenizer(this.script)
         return this.tokenizer.tokenizeAll()
     }
 
@@ -65,7 +65,7 @@ class NOCAppJVM(private var files: Array<File>?) {
     fun tokenizeFile(file: File?): List<Pair<TokenType?, String>?> {
         if (file == null) { throw FileNotFoundException("Cannot tokenize an empty file.") }
         this.script = file.readText()
-        this.tokenizer = OSTokenizer(this.script)
+        this.tokenizer = NOCTokenizer(this.script)
         return this.tokenizer.tokenizeAll()
     }
 
@@ -109,13 +109,13 @@ fun main(args: Array<String>) {
                 val tokenFiles = files.map { file -> file.name.replace(".ocls", ".noct") }
                 for (pair in tokenFiles.zip(tokens)) {
                     val fileWriter = NOCAppTokenWriter(pair.second)
-                    fileWriter.writeFile("$destination/${pair.first}")
+                    fileWriter.writeFile("$destination/${pair.first}", pair.first)
                 }
             }
             else {
                 for (token in tokens) {
                     val fileWriter = NOCAppTokenWriter(token)
-                    fileWriter.writeFile("$destination")
+                    fileWriter.writeFile("$destination", destination)
                 }
             }
         }

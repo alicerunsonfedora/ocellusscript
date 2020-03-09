@@ -7,15 +7,27 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+/**
+ * Determine whether a character is a letter.
+ */
 fun Char.isLetter(): Boolean {
     return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".contains(this)
 }
 
+/**
+ * Determine whether a character is a numerical digit.
+ */
 fun Char.isDigit(): Boolean {
     return "0123456789".contains(this)
 }
 
-public class OSTokenizer(var script: String) {
+/**
+ * The NOC OcellusScript tokenizer.
+ *
+ * The tokenizer is responsible for reading a string and generating a list of
+ * tokens that can later be used for parsing.
+ */
+class NOCTokenizer(private var script: String) {
 
     @ExperimentalStdlibApi
     private var chars: CharArray = this.script.toCharArray()
@@ -163,7 +175,7 @@ public class OSTokenizer(var script: String) {
 
         while (state != TokenizerState.FINISH && state != TokenizerState.ERROR) {
 
-            if (!this.hasMoreChars()) { return }
+            if (!this.hasMoreChars()) { break }
             curr = this.getNextChar()
 
             when (state) {
