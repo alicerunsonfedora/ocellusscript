@@ -36,14 +36,15 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
      * @return The current token at the front of the queue.
      */
     private fun advanceToken(skipComments: Boolean = true): Pair<TokenType?, String> {
-        this.token = this.tokens!!.first()!!
-        this.tokens = this.tokens!!.drop(1)
-
-        while (this.token.first == TokenType.COMMENT && skipComments) {
+        if (this.tokens?.count() ?: -1 > 0) {
             this.token = this.tokens!!.first()!!
             this.tokens = this.tokens!!.drop(1)
-        }
 
+            while (this.token.first == TokenType.COMMENT && skipComments) {
+                this.token = this.tokens!!.first()!!
+                this.tokens = this.tokens!!.drop(1)
+            }
+        }
         return this.token
     }
 
@@ -148,6 +149,10 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                     this.token.second)}
             name = this.token.second
             this.advanceToken()
+
+            if (this.token != Pair(TokenType.KEYWORD, "where")) { throw Exception("Expected where keyword here: " +
+                    this.token.second)}
+            this.advanceToken();
 
             if (this.token != Pair(TokenType.SYMBOL, ";")) { throw Exception("Expected end of module statement.") }
             this.advanceToken()

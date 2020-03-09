@@ -1,0 +1,8 @@
+#
+# Blank Module Test
+# (C) 2020 Marquis Kurt
+#
+
+import Hive.*;
+
+module Empty where;

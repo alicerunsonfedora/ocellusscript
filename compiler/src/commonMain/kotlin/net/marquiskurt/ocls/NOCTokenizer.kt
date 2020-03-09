@@ -108,7 +108,8 @@ class NOCTokenizer(private var script: String) {
                               "Anything", "Nothing", "Callable", "Boolean",
                               "shadowtype", "type", "import", "private",
                               "module", "and", "or", "not", "match", "var",
-                              "let", "true", "false", "self", "super", "return")
+                              "let", "true", "false", "self", "super", "return",
+                              "where")
         return keywords.contains(identifier)
     }
 
@@ -157,6 +158,7 @@ class NOCTokenizer(private var script: String) {
             "false" -> { key = TokenKeyword.FALSE }
             "self" -> { key = TokenKeyword.SELF }
             "super" -> { key = TokenKeyword.SUPER }
+            "where" -> { key = TokenKeyword.WHERE }
         }
 
         return key

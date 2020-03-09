@@ -37,5 +37,6 @@ public enum class TokenKeyword {
     TRUE,
     FALSE,
     SELF,
-    SUPER
+    SUPER,
+    WHERE
 }
