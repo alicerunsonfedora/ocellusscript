@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <title>Homepage - OcellusScript</title>
+    <link rel="stylesheet" href="/assets/camino.css"/>
+    <link rel="stylesheet" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)" href="/assets/camino-light.css"/>
+    <link rel="stylesheet" media="(prefers-color-scheme: dark)" href="/assets/camino-dark.css"/>
+    <link rel="stylesheet" href="/assets/camino-ghpages.css"/>
+    <link rel="stylesheet" href="/assets/dracula.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Crimson+Text&family=Zilla+Slab:wght@300;400;500;600;700"
+      rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/icons/favicon-16x16.png">
+    <link rel="manifest" href="/images/icons/site.webmanifest">
+    <link rel="shortcut icon" href="/images/icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#4a7c59">
+    <meta name="msapplication-config" content="/images/icons/browserconfig.xml">
+    <meta name="theme-color" content="#4a7c59">
+</head>
+    <meta property="og:title" content="Homepage - OcellusScript"/>
+    <meta property="og:site_name" content="OcellusScript"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="/"/>
+    <meta property="og:description" content=""/>
+    <meta property="article:author" content="Marquis Kurt"/>
+    <nav class="nav-header">
+    <img class="nav-profile no-shadow" src="/logo.svg"/>
+    <h1>OcellusScript</h1>
+    <p>A simple, multi-paradigm programming language</p>
+    <div class="nav-mobile-menu-button" onclick="mobileMenu()">
+        <i data-feather="menu">menu</i>
+    </div>
+    <div id="nav-mobile-menu" class="nav-mobile-closed">
+        <ul class="nav-links">
+    
+    <li><a class="nav-link" href="/index.html">Home</a></li>
+    
+    <li><a class="nav-link" href="https://github.com/alicerunsonfedora/ocellusscript">GitHub</a></li>
+    
+    <li><a class="nav-link" href="/compiler/">Compiler</a></li>
+    
+    <li><a class="nav-link" href="https://youtrack.marquiskurt.net/youtrack/issues/OCLS">YouTrack</a></li>
+    
+</ul>
+    </div>
+    <div class="spacer"></div>
+</nav>
+    <body>
+        <div class="main">
+            <p class="banner banner-warning">
+    This website is currently under construction.
+</p>
+
+<p>OcellusScript is a simple, statically typed, multi-paradigm programming language that takes most inspiration from Java and Haskell, but also takes in other cues from languages like Swift, Python, Kotlin, and JavaScript/ES5. It is designed to be an easy language to use for aspiring developers and easy to implement for developers looking to implement a compiler/interpreter.</p>
+
+<p><img src="/images/screenshot.png" alt="Screenshot of OcellusScript in VS Code" /></p>
+
+        </div>
+    </body>
+    <footer class="footer">
+    <p>&copy; 2020 Marquis Kurt. Licensed under Mozilla Public License v2.0.</p>
+    <p>Running into a problem with the site? <a href="mailto:webmaster@marquiskurt.net">Email me &rsaquo;</a></p>
+    <div class="spacer"></div>
+    <p>
+        <dark-mode-toggle
+            id="dark-mode-toggle-1"
+            appearance="toggle"
+            light="Use dark theme"
+            dark="Use light theme"
+            remember="Remember this preference"
+        ></dark-mode-toggle>
+        <small>By default, this site will respect your system's theme. Use the toggle above to change the theme.</small>
+    </p>
+</footer>
+    <script src="/assets/js/utils.js"></script>
+<script type="module" src="https://unpkg.com/dark-mode-toggle"></script>
+<script src="/assets/js/feather.min.js"></script>
+<script type="text/javascript">
+    // Replace the i tags with data-feather to the Feather icon
+    feather.replace()
+</script>
+</html>

@@ -1,0 +1,30 @@
+/*
+    Camino.css
+    A KISS CSS framework inspired by Apple
+    (C) 2019 Marquis Kurt.
+
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    These styles are used for the light theme or when there is
+    no preference.
+ */
+ :root {
+    --accent:  #8fc0a9;
+    --accent-highlight: #c8d5b9;
+    --body-background: #faf3dd;
+    --body-color: #212121;
+    --navbar-color: #4a7c59;
+    --metadata-header-color: #666;
+    --metadata-header-alt-color: #888;
+    --blockquote-background: #f4f4f4;
+    --blockquote-border: #333;
+    --card-background: white;
+    --card-shadow: 0 2px 8px #666;
+    --card-color: #000000;
+    --card-subtitle-color: #444444;
+    --card-snackbar-border: #666666;
+    --card-snackbar-color: #444444;
+    --footer-color: #666;
+}

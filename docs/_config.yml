@@ -1,0 +1,87 @@
+# Standard Jekyll Information. These fields are also used in the navbar on the
+# top of the website, as well as OpenGraph information.
+title: OcellusScript
+author: Marquis Kurt
+description: A simple, multi-paradigm programming language
+
+# This tells Jekyll to load Camino.
+remote_theme: alicerunsonfedora/camino
+
+# These are the plugins necessary to get the theme working.
+plugins:
+  - jekyll-octicons
+  - jekyll-sitemap
+  - jekyll-feed
+  - kramdown
+
+# This is the email address to use when clicking "Email me" in the footer of the
+# website.
+webmaster_email: webmaster@marquiskurt.net
+
+# The custom copyright text.
+copyright: "&copy; 2020 Marquis Kurt. Licensed under Mozilla Public License v2.0."
+
+# This list controls the links visible in the navbar.
+navigation:
+  - name: "Home"
+    link: "/index.html"
+  - name: "GitHub"
+    link: "https://github.com/alicerunsonfedora/ocellusscript"
+  - name: "Compiler"
+    link: "/compiler/"
+  - name: "YouTrack"
+    link: "https://youtrack.marquiskurt.net/youtrack/issues/OCLS"
+
+# This segment is the heart of the Camino configuration.
+camino:
+  # This path will point to images used for the article/document format. Camino will
+  # look in this path for images with the file name of the shortcode listed on a document
+  # page. For example, 'wrt181-assignment1.png'
+  doc_img_url: "/images/docs/"
+
+  # This path will point to images used for covers on posts. Camino will look in this path
+  # for image covers with the page's date. For example, '2020-02-17-cover.png'
+  cover_img_url: "/images/covers/"
+
+  # This setting controls what's displayed on the navbar profile picture.
+  nav_profile:
+    # The path to the profile picture.
+    img_url: "logo.svg"
+
+    # Whether the drop shadow should be removed from the profile picture.
+    flat: true
+
+  # This controls more aspects of Camino's theme.
+  theme:
+
+    # If you want to override the font, set a custom font here. This font will be used
+    # over the standard Inter font, but Inter will be provided when this font cannot
+    # be loaded.
+    font: 'Zilla Slab'
+
+    # The background color of the navbar.
+    navbar: '#4a7c59'
+
+    # The background color of the main page, both in light and dark mode.
+    body:
+      light: '#faf3dd'
+      dark: '#32312c'
+
+    # The accent color on the website. The accent color affects buttons, links, and other places of the
+    # theme. The 'light' and 'dark' entries control what color is displayed in light mode and dark mode,
+    # respectively. The standard and highlight entries control the idle and hover states.
+    accent:
+      light:
+        standard: "#8fc0a9"
+        highlight: "#c8d5b9"
+      dark:
+        standard: "#8fc0a9"
+        highlight: "#c8d5b9"
+
+# These Markdown settings are used to register the syntax highlighter.
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'

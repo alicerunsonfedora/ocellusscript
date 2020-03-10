@@ -1,0 +1,550 @@
+/*
+    Camino.css
+    A KISS CSS framework inspired by Apple
+    (C) 2019 Marquis Kurt.
+
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+@import url('https://rsms.me/inter/inter.css');
+
+:root {
+    --accent:  rgb(255, 149, 0);
+    --accent-highlight: #ffb23b;
+    --body-background: white;
+    --body-color: #212121;
+    --navbar-color: #191919;
+    --metadata-header-color: #666;
+    --metadata-header-alt-color: #888;
+    --blockquote-background: #f4f4f4;
+    --blockquote-border: #333;
+    --card-background: white;
+    --card-shadow: 0 2px 8px #666;
+    --card-color: #000000;
+    --card-subtitle-color: #444444;
+    --card-snackbar-border: #666666;
+    --card-snackbar-color: #444444;
+    --footer-color: #666;
+}
+
+html, body {
+    font-family: 'Zilla Slab', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding: 0;
+    margin: 0;
+    background-color: var(--body-background);
+    color: var(--body-color);
+}
+
+pre, code {
+    font-family: Menlo, Monaco, "Courier New", Courier, monospace;
+}
+
+.spacer {
+    padding: 8px;
+}
+
+/**
+    Navbar Styles
+ */
+
+.nav-header {
+    margin: 0;
+    text-align: center;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    color: #f4f4f4;
+    background-color: var(--navbar-color);
+    /* border-bottom-color: #0000008c;
+    border-bottom-width: 2px;
+    border-bottom-style: solid; */
+}
+
+.nav-header h1 {
+    font-size: 2.0em;
+    line-height: 0em;
+}
+
+.nav-mobile-closed {
+    display: block;
+}
+
+.nav-mobile-open {
+    display: block;
+}
+
+.nav-mobile-menu-button {
+    padding: 2px 4px;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: none;
+    user-select: none;
+}
+
+.nav-mobile-menu-button i {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    font-size: 24px;
+    user-select: none;
+}
+
+.nav-profile-flex-area {
+    display: flex;
+}
+
+.nav-profile-flex-avatar {
+    text-align: right;
+}
+
+.nav-profile-flex-descriptor {
+    text-align: left;
+}
+
+.nav-header .nav-profile {
+    width: 10%;
+    box-shadow: 0 2px 4px #111;
+    border-radius: 50%;
+}
+
+.nav-header .nav-profile.no-shadow {
+    box-shadow: none;
+}
+
+.nav-links {
+    display: inline-flex;
+    list-style: none;
+    text-indent: none;
+    padding-left: 0;
+    padding-right: 0;
+    color: inherit;
+}
+
+.nav-links .nav-link {
+    padding-left: 10px;
+    padding-right: 10px;
+    color: inherit;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.nav-links .nav-link:hover {
+    color: var(--accent);
+    /* text-decoration: underline; */
+    transition: color 0.25s;
+}
+
+/**
+    Banner styles
+*/
+.banner {
+    padding: 10px 16px;
+    border-color: #333333;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    color: #333333;
+}
+
+.banner-info {
+    border-color: rgb(0, 122, 255) !important;
+    background-color: #99caff;
+    color: #003166;
+}
+
+.banner-info a {
+    color: #1a87ff !important;
+}
+
+.banner-error {
+    border-color: #FF3B30 !important;
+    background-color: #ffc4c1;
+    color: #801e18;
+}
+
+.banner-error a {
+    color: #b32922 !important;
+}
+
+.banner-warning {
+    border-color: #cca300;
+    background-color: #fff0b3;
+    color: #997a00;
+}
+
+.banner-warning a {
+    color: #e6b800 !important;
+}
+
+
+/**
+    Main content styles
+ */
+.main {
+    padding: 32px 15%;
+}
+
+.main .metadata {
+    padding-bottom: 16px;
+}
+
+.main .metadata h1 {
+    padding: 0;
+}
+
+.main .metadata h3 {
+    color: var(--metadata-header-color);
+    font-size: 1.5em;
+    line-height: .75em;
+}
+
+.main .metadata h4 {
+    color: var(--metadata-header-alt-color);
+    font-size: 1.15em;
+    line-height: 0.5em;
+}
+
+.main p {
+    font-size: 1.15em;
+    line-height: 1.50em;
+}
+
+.main a:not(.card-btn):not(.jekyll-tag) {
+    text-decoration: none;
+    color: var(--accent);
+}
+
+.main a:hover:not(.card-btn) {
+    color: var(--accent-highlight);
+    text-decoration: underline;
+}
+
+.main img:not(.card-image) {
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    display: block;
+    border-radius: 4px;
+}
+
+.main blockquote {
+    background-color: var(--blockquote-background);
+    margin: 0;
+    width: 100%;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    padding-left: 20px;
+    padding-right: 16px;
+    margin-left: -16px;
+    margin-right: 16px;
+    border-left-color: var(--blockquote-border);
+    border-left-width: 2px;
+    border-left-style: solid;
+}
+
+/**
+    Academic
+ */
+
+ .academic p {
+     font-family: 'Crimson Text', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+     font-size: 1.2em;
+     line-height: 2em;
+     text-indent: 0.5in;
+ }
+
+ .academic .doc-sources {
+    font-family: 'Crimson Text', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 1.2em;
+    list-style: none;
+    padding-left: 0.5in;
+    text-indent: -0.5in;
+ }
+
+ .academic ol {
+    font-family: 'Crimson Text', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 1.2em;
+ }
+
+ .academic .doc-sources li {
+    padding-top: 8px;
+    padding-bottom: 8px;
+ }
+
+ .print-only {
+     display: none;
+ }
+
+ .display-only {
+     display: block;
+ }
+
+
+ @media print {
+    .print-only {
+        display: block;
+    }
+
+    .display-only {
+        display: none;
+    }
+
+     .nav-header, .footer {
+         display: none;
+     }
+
+     .main {
+         padding: 0.5in;
+     }
+
+     .main .metadata {
+         font-size: 12pt;
+         font-family: 'Crimson Text', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+     }
+
+     .main .metadata p {
+        font-size: 12pt;
+    }
+
+     .main .metadata h1 {
+         font-weight: normal;
+         font-size: 12pt;
+         text-align: center;
+         padding: 0;
+         margin: 0;
+     }
+
+     .main .metadata h3 {
+         display: none;
+     }
+
+     .academic {
+         font-size: 12pt;
+     }
+
+     .academic p {
+         font-size: 12pt;
+     }
+
+     .academic h1, h2, h3, h4, h5, h6 {
+        font-family: 'Crimson Text', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        font-weight: normal;
+        font-size: 12pt;
+        padding: 0;
+        margin: 0;
+     }
+
+     .academic h1 {
+         text-align: center;
+     }
+
+     .academic .doc-sources li {
+        font-weight: normal;
+        font-size: 12pt;
+        padding-top: 8px;
+        padding-bottom: 8px;
+     }
+ }
+
+/**
+    Card styles
+ */
+.card-grid-container {
+    display: inline-grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding-bottom: 16px;
+    grid-column-gap: 24px;
+    grid-row-gap: 16px;
+    grid-auto-rows: 1fr;
+}
+
+.card-grid-container.posts {
+    display: inline-grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding-bottom: 16px;
+    grid-column-gap: 24px;
+    grid-row-gap: 16px;
+    grid-auto-rows: 1fr;
+}
+
+.card-grid-item {
+    width: 100%;
+    height: 100%;
+}
+
+.card {
+    background-color: var(--card-background);
+    position: relative;
+    width: 100%;
+    border-radius: 6px;
+    box-shadow: var(--card-shadow);
+    height: 100%;
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.card-image-bay {
+    background-color: var(--accent);
+    padding-bottom: 0;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    max-height: 350px;
+}
+
+.card-image {
+    width: 100%;
+    max-height: 350px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.card-content {
+    padding-top: 24px;
+    padding-left: 18px;
+    padding-right: 18px;
+    flex-grow: 1;
+}
+
+.card-content .card-title {
+    font-size: 1.75em;
+    line-height: 1em;
+    margin: 0;
+    padding: 0;
+}
+
+.card-content .card-subtitle {
+    font-size: 1.05em;
+    line-height: 1.05em;
+    color: var(--card-subtitle-color);
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+    padding-top: 4px;
+}
+
+.card-content .card-snackbar {
+    margin: 4px 0px;
+    display: inline-flex;
+}
+
+.card-content .card-snackbar .card-snack {
+    margin-right: 4px;
+    color: var(--card-snackbar-color);
+    border-color: var(--card-snackbar-border);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    width: intrinsic;
+    padding: 2px 8px;
+    display: block;
+}
+
+.card-content p {
+    font-size: 0.95em;
+    line-height: 1.25em;
+    color: var(--card-color);
+}
+
+.card-actions {
+    padding-top: 16px;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-bottom: 24px;
+    text-align: center;
+    display: flex;
+}
+
+.card-actions .card-btn {
+    color: white;
+    text-decoration: none;
+    background-color: var(--accent);
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-weight: 500;
+    border-radius: 5px;
+    vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.card-actions .card-btn:hover {
+    background-color: var(--accent-highlight);
+}
+
+/**
+    Footer styles
+ */
+.footer {
+    text-align: center;
+    padding-bottom: 16px;
+}
+
+.footer p {
+    font-size: 0.95em;
+    color: var(--footer-color);
+}
+
+.footer a {
+    color: var(--footer-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.footer a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+/* Responsive Styles */
+@media(max-width: 950px) {
+    .card-grid-container {
+        grid-template-columns: 50% 50%;
+    }
+}
+
+@media(max-width: 768px) {
+    .nav-header .nav-profile {
+        width: 25%;
+    }
+
+    .nav-mobile-menu-button {
+        display: block;
+    }
+
+    .nav-mobile-closed {
+        display: none;
+    }
+
+    .nav-links {
+        display: inline-grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .nav-links li {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    .main {
+        padding-left: 7.5%;
+        padding-right: 7.5%;
+    }
+
+    .main p {
+        font-size: 1.05em;
+        line-height: 1.40em;
+    }
+
+    .main img:not(.card-image) {
+        width: 100%;
+    }
+
+    .card-grid-container, .card-grid-container.posts {
+        grid-template-columns: 100%;
+    }
+}

@@ -1,0 +1,77 @@
+/*
+    camino-ghpages.css
+    Additional classes for GitHub Pages's sake
+    (C) 2019 Marquis Kurt.
+
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+ .card-snack .feather {
+     width: 16px;
+     vertical-align: middle;
+     margin-right: 4px;
+ }
+
+.main .footnotes {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top-color: #999;
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+
+.highlighter-rouge .highlight {
+    padding: 10px;
+    word-break: break-word;
+}
+
+.twitter-tweet {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.jekyll-tag-section {
+    padding-bottom: 24px;
+}
+
+.jekyll-tags {
+    display: flex;
+}
+
+.jekyll-tag {
+    border-color: #999999;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 2px 8px;
+    font-size: 0.9em;
+    color: #666666;
+    vertical-align: middle;
+    transition: color 0.25s;
+    text-decoration: none;
+    margin: 0 4px;
+}
+
+.jekyll-tag:hover {
+    color: var(--accent-light-highlight);
+    border-color: var(--accent-light-highlight);
+    transition: color 0.25s;
+    text-decoration: none;
+}
+
+.jekyll-tag .feather {
+    width: 12px;
+    padding-right: 6px;
+    vertical-align: middle;
+}
+
+@media(prefers-color-scheme: dark) {
+    .main .footnotes {
+        border-top-color: #333;
+    }
+
+    .jekyll-tag {
+        border-color: #666666;
+    }
+}
