@@ -23,11 +23,20 @@ This is the current roadmap for NOC:
 
 - [X] Tokenizer
 - [ ] Parser
-- [ ] Symbol table generator
+    - [X] Imports
+    - [X] Module names
+    - [X] Custom types
+    - [X] Shadow types
+    - [ ] Variable declarations
+    - [ ] Class declarations
+    - [ ] Function declarations
+        - [ ] Function signature
+        - [ ] Function definition
+    - [ ] Symbol table generator
 - [ ] JVM command line
     - [X] Arguments
     - [X] Creating token files
-    - [ ] Creating parse files
+    - [X] Creating parse files
     - [ ] Creating compiled bytecode files
     - [ ] Creating an executable JAR in Gradle
 - [ ] Java libraries
