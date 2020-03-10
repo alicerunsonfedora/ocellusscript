@@ -55,6 +55,17 @@ class NOCAppParseTreeWriter(private val tree: NOCModule, var destinationPath: St
                     }
                 }
             }
+
+            if (this.tree.types != null) {
+                this.writeChild("shadowtypes") {
+                    for (shadowtype: NOCShadowType in this.tree.types) {
+                        this.writeChild("shadowtype") {
+                            this.writeChild("name", shadowtype.name)
+                            this.writeChild("shadows", shadowtype.shadows)
+                        }
+                    }
+                }
+            }
         }
         this.fileWriter.close()
     }

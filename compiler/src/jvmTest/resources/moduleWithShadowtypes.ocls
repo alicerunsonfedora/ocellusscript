@@ -1,0 +1,8 @@
+#
+# Example File with Shadowtypes
+#
+
+module Shadowtypes where;
+
+shadowtype Name = String;
+shadowtype Age = Int;

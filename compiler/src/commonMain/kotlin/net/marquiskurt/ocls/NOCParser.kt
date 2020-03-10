@@ -98,11 +98,11 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         // a temporary one first.
         var name = this.createModuleName()
         var imports: MutableList<String>? = null
-        var datatypes: List<NOCType>? = null
-        var shadowtypes: List<NOCShadowType>? = null
-        var variables: List<NOCVariableDeclaration>? = null
-        var classes: List<NOCClass>? = null
-        var funcs: List<NOCFunction>? = null
+        var datatypes: MutableList<NOCType>? = null
+        var shadowtypes: MutableList<NOCShadowType>? = null
+        var variables: MutableList<NOCVariableDeclaration>? = null
+        var classes: MutableList<NOCClass>? = null
+        var funcs: MutableList<NOCFunction>? = null
 
         // Look for any import statements and construct those imports.
         while (this.token == Pair(TokenType.KEYWORD, "import")) {
@@ -159,9 +159,66 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         }
 
         // TODO: Add stuff for parsing variables, classes, functions, etc., here.
+        while (listOf(TokenType.KEYWORD, TokenType.IDENTIFIER).contains(this.token.first)) {
+            when (this.token.first) {
+                TokenType.KEYWORD -> {
+                    when (this.token.second) {
+                        "shadowtype" -> {
+                            if (shadowtypes != null) {
+                                shadowtypes.add(this.parseShadowtype())
+                            } else {
+                                shadowtypes = mutableListOf(this.parseShadowtype())
+                            }
+                        }
+                        else -> {}
+                    }
+                }
+                else -> {}
+            }
+            this.advanceToken()
+        }
+
 
         // Finally, put the state together and return the module.
         return NOCModule(name, imports, datatypes, shadowtypes, variables, classes, funcs)
+    }
+
+    /**
+     * Create an OcellusScript shadow type node.
+     *
+     * @return NOCShadowType data object containing the name and type.
+     */
+    @ExperimentalStdlibApi
+    private fun parseShadowtype(): NOCShadowType {
+        var name: String
+        var shadow: String
+
+        if (this.token != Pair(TokenType.KEYWORD, "shadowtype")) {
+            throw Exception("Expected shadowtype keyword here: ${this.token.second}")
+        }
+        this.advanceToken()
+
+        if (this.token.first != TokenType.IDENTIFIER) {
+            throw Exception("Expected shadowtype name identifier here: ${this.token.second}")
+        }
+        name = this.token.second
+        this.advanceToken()
+
+        if (this.token != Pair(TokenType.SYMBOL, "=")) {
+            throw Exception("Expected shadowtype assignment operator here: ${this.token.second}")
+        }
+        this.advanceToken()
+
+        if (this.token.first != TokenType.IDENTIFIER && this.token.first != TokenType.KEYWORD) {
+            throw Exception("Expected shadowtype assignment here: ${this.token.second}")
+        }
+        shadow = this.token.second
+        this.advanceToken()
+
+        if (this.token != Pair(TokenType.SYMBOL, ";")) {
+            throw Exception("Expected end of shadowtype statement: ${this.token.second}")
+        }
+        return NOCShadowType(name, shadow)
     }
 
 }
