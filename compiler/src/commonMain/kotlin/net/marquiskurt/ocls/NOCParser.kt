@@ -170,6 +170,13 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                                 shadowtypes = mutableListOf(this.parseShadowtype())
                             }
                         }
+                        "type" -> {
+                            if (datatypes != null) {
+                                datatypes.add(this.parseDatatype())
+                            } else {
+                                datatypes = mutableListOf(this.parseDatatype())
+                            }
+                        }
                         else -> {}
                     }
                 }
@@ -219,6 +226,101 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
             throw Exception("Expected end of shadowtype statement: ${this.token.second}")
         }
         return NOCShadowType(name, shadow)
+    }
+
+    @ExperimentalStdlibApi
+    private fun parseDatatype(): NOCType {
+        var name: String
+        var options: MutableList<String>
+
+        if (this.token != Pair(TokenType.KEYWORD, "type")) {
+            throw Exception("Expected type keyword here: ${this.token.second}")
+        }
+        this.advanceToken()
+
+        if (this.token.first != TokenType.IDENTIFIER) {
+            throw Exception("Expected type name identifier here: ${this.token.second}")
+        }
+        name = this.token.second
+        this.advanceToken()
+
+        if (this.token != Pair(TokenType.SYMBOL, "=")) {
+            throw Exception("Expected type assignment operator here: ${this.token.second}")
+        }
+        this.advanceToken()
+
+        if (this.token != Pair(TokenType.SYMBOL, "{")) {
+            throw Exception("Expected type assignment here: ${this.token.second}")
+        }
+        this.advanceToken()
+
+        if (this.token.first != TokenType.IDENTIFIER) {
+            throw Exception("Expected type option key here: ${this.token.second}")
+        }
+
+        var option = this.token.second + ": "
+        this.advanceToken()
+        if (this.token != Pair(TokenType.SYMBOL, ":")) {
+            throw Exception("Expected key separator here: ${this.token.second}")
+        }
+        this.advanceToken()
+
+        if (this.token != Pair(TokenType.SYMBOL, "(")) {
+            throw Exception("Expected value opening parentheses here: ${this.token.second}")
+        }
+        this.advanceToken()
+
+        while (this.token != Pair(TokenType.SYMBOL, ")")) {
+            option += this.token.second + " "
+            this.advanceToken()
+        }
+
+        if (this.token != Pair(TokenType.SYMBOL, ")")) {
+            throw Exception("Expected value closing parentheses here: ${this.token.second}")
+        }
+        options = mutableListOf(option)
+        this.advanceToken()
+
+        while (this.token == Pair(TokenType.SYMBOL, ",")) {
+            this.advanceToken()
+            if (this.token.first != TokenType.IDENTIFIER) {
+                throw Exception("Expected type option key here: ${this.token.second}")
+            }
+
+            option = this.token.second + ": "
+            this.advanceToken()
+            if (this.token != Pair(TokenType.SYMBOL, ":")) {
+                throw Exception("Expected key separator here: ${this.token.second}")
+            }
+            this.advanceToken()
+
+            if (this.token != Pair(TokenType.SYMBOL, "(")) {
+                throw Exception("Expected value opening parentheses here: ${this.token.second}")
+            }
+            this.advanceToken()
+
+            while (this.token != Pair(TokenType.SYMBOL, ")")) {
+                option += this.token.second + " "
+                this.advanceToken()
+            }
+
+            if (this.token != Pair(TokenType.SYMBOL, ")")) {
+                throw Exception("Expected value closing parentheses here: ${this.token.second}")
+            }
+            options = mutableListOf(option)
+            this.advanceToken()
+        }
+
+        if (this.token != Pair(TokenType.SYMBOL, "}")) {
+            throw Exception("Expected end of type assignment here: ${this.token.second}")
+        }
+        this.advanceToken()
+
+        if (this.token != Pair(TokenType.SYMBOL, ";")) {
+            throw Exception("Expected end of type statement: ${this.token.second}")
+        }
+
+        return NOCType(name, options)
     }
 
 }

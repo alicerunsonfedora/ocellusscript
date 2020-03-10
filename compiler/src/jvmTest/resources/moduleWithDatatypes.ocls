@@ -1,0 +1,13 @@
+#
+# Example Datatype Module
+# (C) 2020 Marquis Kurt.
+#
+
+module Datatypes where;
+
+type Human = { Person: (Name, Age) };
+
+type Tree = {
+    Leaf: (Integer),
+    Node: (Integer, Tree, Tree)
+};
