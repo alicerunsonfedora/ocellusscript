@@ -163,18 +163,16 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                 TokenType.KEYWORD -> {
                     when (this.token.second) {
                         "shadowtype" -> {
-                            if (shadowtypes != null) {
-                                shadowtypes.add(this.parseShadowtype())
-                            } else {
-                                shadowtypes = mutableListOf(this.parseShadowtype())
-                            }
+                            if (shadowtypes != null) { shadowtypes.add(this.parseShadowtype()) }
+                            else { shadowtypes = mutableListOf(this.parseShadowtype()) }
                         }
                         "type" -> {
-                            if (datatypes != null) {
-                                datatypes.add(this.parseDatatype())
-                            } else {
-                                datatypes = mutableListOf(this.parseDatatype())
-                            }
+                            if (datatypes != null) { datatypes.add(this.parseDatatype()) }
+                            else { datatypes = mutableListOf(this.parseDatatype()) }
+                        }
+                        "var" -> {
+                            if (variables != null) { variables.add(this.parseVarDeclaration().declare) }
+                            else {variables = mutableListOf(this.parseVarDeclaration().declare)}
                         }
                         else -> {}
                     }
@@ -254,13 +252,13 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         }
         this.advanceToken()
 
-        var option = parseDatatypePair()
+        var option = this.parseDatatypePair()
         options = mutableListOf(option)
         this.advanceToken()
 
         while (this.token == Pair(TokenType.SYMBOL, ",")) {
             this.advanceToken()
-            option = parseDatatypePair()
+            option = this.parseDatatypePair()
             options = mutableListOf(option)
             this.advanceToken()
         }
@@ -282,6 +280,7 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
      *
      * @return A string containing the key-value pair in a datatype option
      */
+    @ExperimentalStdlibApi
     private fun parseDatatypePair(): String {
         if (this.token.first != TokenType.IDENTIFIER) {
             throw Exception("Expected type option key here: ${this.token.second}")
@@ -308,6 +307,24 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
             throw Exception("Expected value closing parentheses here: ${this.token.second}")
         }
         return option
+    }
+
+    @ExperimentalStdlibApi
+    private fun parseVarDeclaration(): NOCVarStatement {
+        if (this.token != Pair(TokenType.KEYWORD, "var")) {
+            throw Exception("Expected var keyword in variable declaration: ${this.token.second}")
+        }
+        this.advanceToken()
+        if (this.token.first != TokenType.IDENTIFIER) {
+            throw Exception("Expected var name identifier here: ${this.token.second}")
+        }
+        val name = this.token.second
+        this.advanceToken()
+        if (this.token != Pair(TokenType.SYMBOL, "=")) {
+            throw Exception("Expected var declaration assignment operator: ${this.token.second}")
+        }
+        this.advanceToken()
+        return NOCVarStatement(NOCVariableDeclaration(name, "Anything", NOCExpression("Nothing", null, null)))
     }
 
 }

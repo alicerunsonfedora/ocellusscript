@@ -58,6 +58,8 @@ data class NOCLetStatement(val declare: NOCVariableDeclaration)
 
 /**
  * A data representation of an OcellusScript `var` statement.
+ *
+ * For storage of a variable, use `NOCVariableDeclaration` instead.
  */
 data class NOCVarStatement(val declare: NOCVariableDeclaration)
 
