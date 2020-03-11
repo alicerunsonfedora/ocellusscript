@@ -13,6 +13,15 @@ OcellusScript is a simple multi-paradigm programming language modeled after Java
 - [Compiler](./compiler/)
 - [Visual Studio Code Extension](./vslang/)
 
+## Repository Contents
+
+This project repository contains the following subprojects:
+
+- The NOC compiler for OcellusScript, implemented in Kotlin
+- The Visual Studio Code extension with language syntax support
+- The TextMate language bundle with language syntax support
+- The brand logos and color palette
+
 ## Example Code
 
 ```ocls
