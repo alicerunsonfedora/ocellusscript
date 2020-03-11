@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>contactEmailRot13</key>
+	<string>pbagnpg@znedhvfxheg.arg</string>
+	<key>contactName</key>
+	<string>Marquis Kurt</string>
+	<key>description</key>
+	<string>Language support for OcellusScript.</string>
+	<key>name</key>
+	<string>OcellusScript</string>
+	<key>uuid</key>
+	<string>FE4B72CC-6984-46E2-BB36-C9E265BB16BA</string>
+</dict>
+</plist>
