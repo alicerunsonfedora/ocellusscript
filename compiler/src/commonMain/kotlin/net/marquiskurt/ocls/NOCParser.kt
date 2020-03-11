@@ -158,7 +158,6 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
             this.advanceToken()
         }
 
-        // TODO: Add stuff for parsing variables, classes, functions, etc., here.
         while (listOf(TokenType.KEYWORD, TokenType.IDENTIFIER).contains(this.token.first)) {
             when (this.token.first) {
                 TokenType.KEYWORD -> {
@@ -185,7 +184,6 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
             this.advanceToken()
         }
 
-
         // Finally, put the state together and return the module.
         return NOCModule(name, imports, datatypes, shadowtypes, variables, classes, funcs)
     }
@@ -197,8 +195,6 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
      */
     @ExperimentalStdlibApi
     private fun parseShadowtype(): NOCShadowType {
-        var name: String
-        var shadow: String
 
         if (this.token != Pair(TokenType.KEYWORD, "shadowtype")) {
             throw Exception("Expected shadowtype keyword here: ${this.token.second}")
@@ -208,7 +204,7 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         if (this.token.first != TokenType.IDENTIFIER) {
             throw Exception("Expected shadowtype name identifier here: ${this.token.second}")
         }
-        name = this.token.second
+        val name: String = this.token.second
         this.advanceToken()
 
         if (this.token != Pair(TokenType.SYMBOL, "=")) {
@@ -219,7 +215,7 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         if (this.token.first != TokenType.IDENTIFIER && this.token.first != TokenType.KEYWORD) {
             throw Exception("Expected shadowtype assignment here: ${this.token.second}")
         }
-        shadow = this.token.second
+        val shadow: String = this.token.second
         this.advanceToken()
 
         if (this.token != Pair(TokenType.SYMBOL, ";")) {
@@ -228,9 +224,13 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         return NOCShadowType(name, shadow)
     }
 
+    /**
+     * Create an OcellusScript datatype node.
+     *
+     * @return NOCType object containing the name and all possible options
+     */
     @ExperimentalStdlibApi
     private fun parseDatatype(): NOCType {
-        var name: String
         var options: MutableList<String>
 
         if (this.token != Pair(TokenType.KEYWORD, "type")) {
@@ -241,7 +241,7 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         if (this.token.first != TokenType.IDENTIFIER) {
             throw Exception("Expected type name identifier here: ${this.token.second}")
         }
-        name = this.token.second
+        val name: String = this.token.second
         this.advanceToken()
 
         if (this.token != Pair(TokenType.SYMBOL, "=")) {
@@ -254,6 +254,35 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         }
         this.advanceToken()
 
+        var option = parseDatatypePair()
+        options = mutableListOf(option)
+        this.advanceToken()
+
+        while (this.token == Pair(TokenType.SYMBOL, ",")) {
+            this.advanceToken()
+            option = parseDatatypePair()
+            options = mutableListOf(option)
+            this.advanceToken()
+        }
+
+        if (this.token != Pair(TokenType.SYMBOL, "}")) {
+            throw Exception("Expected end of type assignment here: ${this.token.second}")
+        }
+        this.advanceToken()
+
+        if (this.token != Pair(TokenType.SYMBOL, ";")) {
+            throw Exception("Expected end of type statement: ${this.token.second}")
+        }
+
+        return NOCType(name, options)
+    }
+
+    /**
+     * Create a datatype option string.
+     *
+     * @return A string containing the key-value pair in a datatype option
+     */
+    private fun parseDatatypePair(): String {
         if (this.token.first != TokenType.IDENTIFIER) {
             throw Exception("Expected type option key here: ${this.token.second}")
         }
@@ -278,49 +307,7 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         if (this.token != Pair(TokenType.SYMBOL, ")")) {
             throw Exception("Expected value closing parentheses here: ${this.token.second}")
         }
-        options = mutableListOf(option)
-        this.advanceToken()
-
-        while (this.token == Pair(TokenType.SYMBOL, ",")) {
-            this.advanceToken()
-            if (this.token.first != TokenType.IDENTIFIER) {
-                throw Exception("Expected type option key here: ${this.token.second}")
-            }
-
-            option = this.token.second + ": "
-            this.advanceToken()
-            if (this.token != Pair(TokenType.SYMBOL, ":")) {
-                throw Exception("Expected key separator here: ${this.token.second}")
-            }
-            this.advanceToken()
-
-            if (this.token != Pair(TokenType.SYMBOL, "(")) {
-                throw Exception("Expected value opening parentheses here: ${this.token.second}")
-            }
-            this.advanceToken()
-
-            while (this.token != Pair(TokenType.SYMBOL, ")")) {
-                option += this.token.second + " "
-                this.advanceToken()
-            }
-
-            if (this.token != Pair(TokenType.SYMBOL, ")")) {
-                throw Exception("Expected value closing parentheses here: ${this.token.second}")
-            }
-            options = mutableListOf(option)
-            this.advanceToken()
-        }
-
-        if (this.token != Pair(TokenType.SYMBOL, "}")) {
-            throw Exception("Expected end of type assignment here: ${this.token.second}")
-        }
-        this.advanceToken()
-
-        if (this.token != Pair(TokenType.SYMBOL, ";")) {
-            throw Exception("Expected end of type statement: ${this.token.second}")
-        }
-
-        return NOCType(name, options)
+        return option
     }
 
 }
