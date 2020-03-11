@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <title>Variables - OcellusScript</title>
+    <link rel="stylesheet" href="/assets/camino.css"/>
+    <link rel="stylesheet" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)" href="/assets/camino-light.css"/>
+    <link rel="stylesheet" media="(prefers-color-scheme: dark)" href="/assets/camino-dark.css"/>
+    <link rel="stylesheet" href="/assets/camino-ghpages.css"/>
+    <link rel="stylesheet" href="/assets/dracula.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Crimson+Text&family=Zilla+Slab:wght@300;400;500;600;700"
+      rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/icons/favicon-16x16.png">
+    <link rel="manifest" href="/images/icons/site.webmanifest">
+    <link rel="shortcut icon" href="/images/icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#4a7c59">
+    <meta name="msapplication-config" content="/images/icons/browserconfig.xml">
+    <meta name="theme-color" content="#4a7c59">
+</head>
+    <meta property="og:title" content="Variables - OcellusScript"/>
+    <meta property="og:site_name" content="OcellusScript"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="/docs/variables.html"/>
+    <meta property="og:description" content=""/>
+    <meta property="article:author" content="Marquis Kurt"/>
+    <style>
+        li {
+            font-size: 1.05rem;
+            line-height: 2.25rem;
+        }
+
+        code.language-plaintext {
+            font-size: 0.9rem;
+            border-color: var(--navbar-color);
+            border-width: 0.25px;
+            border-style: solid;
+            border-radius: 4px;
+            padding: 2px 5px;
+            margin: 0 4px;
+            color: #faf3dd;
+            background-color: #32312c;
+        }
+    </style>
+    <nav class="nav-header">
+    <img class="nav-profile no-shadow" src="/logo.svg"/>
+    <h1>OcellusScript</h1>
+    <p>A simple, multi-paradigm programming language</p>
+    <div class="nav-mobile-menu-button" onclick="mobileMenu()">
+        <i data-feather="menu">menu</i>
+    </div>
+    <div id="nav-mobile-menu" class="nav-mobile-closed">
+        <ul class="nav-links">
+    
+    <li><a class="nav-link" href="/index.html">Home</a></li>
+    
+    <li><a class="nav-link" href="https://github.com/alicerunsonfedora/ocellusscript">GitHub</a></li>
+    
+    <li><a class="nav-link" href="/docs/">Language Reference</a></li>
+    
+    <li><a class="nav-link" href="/compiler/">Compiler</a></li>
+    
+    <li><a class="nav-link" href="https://youtrack.marquiskurt.net/youtrack/issues/OCLS">YouTrack</a></li>
+    
+</ul>
+    </div>
+    <div class="spacer"></div>
+</nav>
+    <body>
+        <div class="main">
+            <p><a href="/docs/">Language Reference</a> &rsaquo; Variables</p>
+            <h1>Variables</h1>
+            <p>Variables are containers that contain information of a single type. Variables are often used to store information for later use.</p>
+
+<h2 id="variable-types">Variable Types</h2>
+
+<p>OcellusScript has a few basic types that are recognized by any compiler/interpreter:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Char</code>: A single Unicode character (includes letters and characters such as newline) surrounded by a pair of single quotes (<code class="language-plaintext highlighter-rouge">'e'</code>)</li>
+  <li><code class="language-plaintext highlighter-rouge">String</code>: A list of characters surrounded by a pair of quotation marks (<code class="language-plaintext highlighter-rouge">"cat"</code>)</li>
+  <li><code class="language-plaintext highlighter-rouge">Integer</code>: A whole number (<code class="language-plaintext highlighter-rouge">5129</code>)</li>
+  <li><code class="language-plaintext highlighter-rouge">Float</code>: A number as a decimal (<code class="language-plaintext highlighter-rouge">18.6</code>)</li>
+  <li><code class="language-plaintext highlighter-rouge">Boolean</code>: A toggle-able type that either contains <code class="language-plaintext highlighter-rouge">true</code> or <code class="language-plaintext highlighter-rouge">false</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Callable</code>: A type dedicated to functions that can be called</li>
+  <li><code class="language-plaintext highlighter-rouge">Anything</code>: A bare type used to indicate a variable containing any of the aforementioned types</li>
+  <li><code class="language-plaintext highlighter-rouge">Nothing</code>: A void type, usually represented as <code class="language-plaintext highlighter-rouge">null</code> in other languages</li>
+</ul>
+
+<p>Variables can also accept types defined by the <code class="language-plaintext highlighter-rouge">type</code> and <code class="language-plaintext highlighter-rouge">shadowtype</code> statements.</p>
+
+<h2 id="creating-variables">Creating variables</h2>
+
+<p>Creating a variable is achieved with the <code class="language-plaintext highlighter-rouge">var</code> or <code class="language-plaintext highlighter-rouge">let</code> statement:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var x = 1;
+</code></pre></div></div>
+
+<p>In this instance, we’ve created a variable <code class="language-plaintext highlighter-rouge">x</code> that holds the integer <code class="language-plaintext highlighter-rouge">1</code>. OcellusScript has already determine the type via type inference, but we can always explicitly state the type:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var x: Integer = 1;
+</code></pre></div></div>
+
+        </div>
+    </body>
+    <footer class="footer">
+    <p>&copy; 2020 Marquis Kurt. Licensed under Mozilla Public License v2.0.</p>
+    <p>Running into a problem with the site? <a href="mailto:webmaster@marquiskurt.net">Email me &rsaquo;</a></p>
+    <div class="spacer"></div>
+    <p>
+        <dark-mode-toggle
+            id="dark-mode-toggle-1"
+            appearance="toggle"
+            light="Use dark theme"
+            dark="Use light theme"
+            remember="Remember this preference"
+        ></dark-mode-toggle>
+        <small>By default, this site will respect your system's theme. Use the toggle above to change the theme.</small>
+    </p>
+</footer>
+    <script src="/assets/js/utils.js"></script>
+<script type="module" src="https://unpkg.com/dark-mode-toggle"></script>
+<script src="/assets/js/feather.min.js"></script>
+<script type="text/javascript">
+    // Replace the i tags with data-feather to the Feather icon
+    feather.replace()
+</script>
+</html>

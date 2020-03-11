@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    {% include head.html %}
+    <meta property="og:title" content="{{ page.title }} - {{ site.title }}"/>
+    <meta property="og:site_name" content="{{ site.title }}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="{{ site.baseurl }}{{ page.url }}"/>
+    <meta property="og:description" content="{{ page.graph }}"/>
+    <meta property="article:author" content="{{ site.author }}"/>
+    <style>
+        li {
+            font-size: 1.05rem;
+            line-height: 2.25rem;
+        }
+
+        code.language-plaintext {
+            font-size: 0.9rem;
+            border-color: var(--navbar-color);
+            border-width: 0.25px;
+            border-style: solid;
+            border-radius: 4px;
+            padding: 2px 5px;
+            margin: 0 4px;
+            color: {{ site.camino.theme.body.light }};
+            background-color: {{ site.camino.theme.body.dark }};
+        }
+    </style>
+    {% include navbar.html %}
+    <body>
+        <div class="main">
+            <p><a href="{{ site.baseurl }}/docs/">Language Reference</a> &rsaquo; {{ page.title }}</p>
+            <h1>{{ page.title }}</h1>
+            {{ content }}
+        </div>
+    </body>
+    {% include footer.html %}
+    {% include scripts.html %}
+</html>

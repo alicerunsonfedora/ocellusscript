@@ -27,6 +27,8 @@ navigation:
     link: "/index.html"
   - name: "GitHub"
     link: "https://github.com/alicerunsonfedora/ocellusscript"
+  - name: "Language Reference"
+    link: "/docs/"
   - name: "Compiler"
     link: "/compiler/"
   - name: "YouTrack"
@@ -85,3 +87,7 @@ kramdown:
   syntax_highlighter: rouge
   syntax_highlighter_opts:
     css_class: 'highlight'
+
+collections:
+  docs:
+    output: true
