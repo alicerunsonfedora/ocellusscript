@@ -1,5 +1,5 @@
 <div align="center">
-    <img width="128" src="./logo.svg" alt="OcellusScript logo">
+    <img width="128" src="./brand/logo.png" alt="OcellusScript logo">
     <h1>OcellusScript</h1>
 </div>
 
