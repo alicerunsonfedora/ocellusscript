@@ -309,6 +309,11 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         return option
     }
 
+    /**
+     * Create an OcellusScript variable declaration statement using `var`.
+     *
+     * @return NOCVarStatement object containing the the declared variable.
+     */
     @ExperimentalStdlibApi
     private fun parseVarDeclaration(): NOCVarStatement {
         if (this.token != Pair(TokenType.KEYWORD, "var")) {
@@ -324,7 +329,48 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
             throw Exception("Expected var declaration assignment operator: ${this.token.second}")
         }
         this.advanceToken()
-        return NOCVarStatement(NOCVariableDeclaration(name, "Anything", NOCExpression("Nothing", null, null)))
+        val store = this.parseRootExpression()
+        this.advanceToken()
+
+        if (this.token != Pair(TokenType.SYMBOL, ";")) {
+            throw Exception("Expected end of var statement: ${this.token.second}")
+        }
+
+        return NOCVarStatement(NOCVariableDeclaration(name, "Anything", store))
+    }
+
+    /**
+     * Create an OcellusScript constant declaration using the `let` statement.
+     *
+     * @return NOCLetStatement object containing the declared constant value
+     */
+    @ExperimentalStdlibApi
+    private fun parseLetDeclaration(): NOCLetStatement {
+        if (this.token != Pair(TokenType.KEYWORD, "let")) {
+            throw Exception("Expected var keyword in constant declaration: ${this.token.second}")
+        }
+        this.advanceToken()
+        if (this.token.first != TokenType.IDENTIFIER) {
+            throw Exception("Expected const name identifier here: ${this.token.second}")
+        }
+        val name = this.token.second
+        this.advanceToken()
+        if (this.token != Pair(TokenType.SYMBOL, "=")) {
+            throw Exception("Expected var declaration assignment operator: ${this.token.second}")
+        }
+        this.advanceToken()
+        val store = this.parseRootExpression()
+        this.advanceToken()
+
+        if (this.token != Pair(TokenType.SYMBOL, ";")) {
+            throw Exception("Expected end of let statement: ${this.token.second}")
+        }
+
+        return NOCLetStatement(NOCVariableDeclaration(name, "Anything", store, const = true))
+    }
+
+    private fun parseRootExpression(): NOCExpression {
+        return NOCExpression("", null, null)
     }
 
 }
