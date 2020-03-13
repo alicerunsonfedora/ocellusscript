@@ -118,7 +118,6 @@ class NOCAppJVM(private var files: Array<File>?) {
      */
     @ExperimentalStdlibApi
     fun parseFile(file: File): NOCModule {
-        if (file == null) { throw FileNotFoundException("Cannot tokenize an empty file.") }
         this.script = file.readText()
         this.parser = NOCParser(null, fromScript = this.script)
         return this.parser.parse()
@@ -184,7 +183,7 @@ fun main(args: Array<String>) {
                     if (verbose) {
                         println("Writing token file to $destination...")
                     }
-                    fileWriter.writeFile("$destination", destination)
+                    fileWriter.writeFile(destination, destination)
                 }
             }
         }
@@ -198,7 +197,7 @@ fun main(args: Array<String>) {
                 for (pair in treeFiles.zip(trees)) {
                     val fileWriter = NOCAppParseTreeWriter(pair.second, pair.first)
                     if (verbose) {
-                        println("Writing pared XML file ${pair.first} " +
+                        println("Writing parsed tree XML file ${pair.first} " +
                                 "from ${pair.first.replace(".xml", ".ocls")}...")
                     }
                     fileWriter.writeFile()
@@ -210,7 +209,7 @@ fun main(args: Array<String>) {
                 for (tree in trees) {
                     val fileWriter = NOCAppParseTreeWriter(tree, destination)
                     if (verbose) {
-                        println("Writing parsed XML file to $destination...")
+                        println("Writing parsed XML tree file to $destination...")
                     }
                     fileWriter.writeFile()
                 }

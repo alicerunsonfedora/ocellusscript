@@ -15,7 +15,7 @@ import java.io.File
  * The parser tree writer will generate a regular XML file with the parsed tokens of the
  * the given tree, stored in its destination path.
  */
-class NOCAppParseTreeWriter(private val tree: NOCModule, var destinationPath: String) {
+class NOCAppParseTreeWriter(private val tree: NOCModule, private var destinationPath: String) {
 
     private var fileWriter = File(this.destinationPath).writer(charset("UTF-8"))
 
@@ -39,6 +39,23 @@ class NOCAppParseTreeWriter(private val tree: NOCModule, var destinationPath: St
         this.fileWriter.write("<${tagName}>\n")
         children()
         this.fileWriter.write("</${tagName}>\n")
+    }
+
+    /**
+     * Write an expression tree node recursively.
+     *
+     * @param expression The expression tree to parse through
+     */
+    private fun writeExpressionTree(expression: NOCExpression) {
+        this.writeChild("exprTree") {
+            this.writeChild("root", expression.operation)
+            if (expression.left != null) {
+                this.writeChild("left") { this.writeExpressionTree(expression.left) }
+            }
+            if (expression.right != null) {
+                this.writeChild("right") { this.writeExpressionTree(expression.right) }
+            }
+        }
     }
 
     /**
@@ -78,6 +95,20 @@ class NOCAppParseTreeWriter(private val tree: NOCModule, var destinationPath: St
                                 }
                             }
                         }
+                    }
+                }
+            }
+
+            if (this.tree.vars != null) {
+                this.writeChild("variables") {
+                    for (variable: NOCVariableDeclaration in this.tree.vars) {
+                        var type = "variable"
+                        if (variable.const) { type = "constant" }
+                        this.writeChild(type) {
+                            this.writeChild("name", variable.name)
+                            this.writeExpressionTree(variable.value)
+                        }
+
                     }
                 }
             }

@@ -9,6 +9,8 @@
 
 import kotlin.random.Random
 
+import net.marquiskurt.ocls.longest
+
 /**
  * The NOC OcellusScript parser.
  *
@@ -120,7 +122,7 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                     throw Exception("Unexpected symbol in import statement: ${this.token.second}")
                 }
                 importName += this.token.second
-                this.advanceToken();
+                this.advanceToken()
                 if (this.token.first != TokenType.SYMBOL && this.token.first != TokenType.IDENTIFIER) {
                     throw Exception("Unexpected ${this.token.first.toString()} " +
                             "found in import name: ${this.token.second}")
@@ -152,7 +154,7 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
 
             if (this.token != Pair(TokenType.KEYWORD, "where")) { throw Exception("Expected where keyword here: " +
                     this.token.second)}
-            this.advanceToken();
+            this.advanceToken()
 
             if (this.token != Pair(TokenType.SYMBOL, ";")) { throw Exception("Expected end of module statement.") }
             this.advanceToken()
@@ -173,6 +175,10 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                         "var" -> {
                             if (variables != null) { variables.add(this.parseVarDeclaration().declare) }
                             else {variables = mutableListOf(this.parseVarDeclaration().declare)}
+                        }
+                        "let" -> {
+                            if (variables != null) { variables.add(this.parseLetDeclaration().declare) }
+                            else {variables = mutableListOf(this.parseLetDeclaration().declare)}
                         }
                         else -> {}
                     }
@@ -369,8 +375,199 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         return NOCLetStatement(NOCVariableDeclaration(name, "Anything", store, const = true))
     }
 
+    /**
+     * Parse an expression based on a set of rules.
+     *
+     * If operators in the list have more than one character, the operator will be checked by reading more tokens.
+     * This is usually done by checking the longest value in the string list (`List<String>.longest`).
+     *
+     * @param validOperators The list containing the valid operations in this expression tree.
+     * @param notBasic Whether the expression is not a 'basic' expression
+     * @param elements The function to return the children NOCExpression objects.
+     * @return NOCExpression containing the operation and root children.
+     */
+    @ExperimentalStdlibApi
+    private fun parseExpression(validOperators: List<String>, notBasic: Boolean = false,
+                                elements: () -> NOCExpression): NOCExpression {
+        var right: NOCExpression? = null
+        var operation = "value"
+        val chars = validOperators
+                .map { op -> op.toCharArray().toMutableList() }
+                .reduce { x, y -> (x + y).toMutableList() }
+                .distinct()
+
+        val left = elements()
+        if (notBasic) { this.advanceToken() }
+
+        if (listOf(TokenType.SYMBOL, TokenType.KEYWORD).contains(this.token.first)
+                && chars.contains(this.token.second[0])) {
+
+            operation = this.token.second
+
+            if (this.token.first == TokenType.SYMBOL) {
+                if (validOperators.longest().length > 1) {
+                    for (x in (2 .. validOperators.longest().length)) {
+                        this.advanceToken()
+                        if (this.token.first != TokenType.SYMBOL) {
+                            throw Exception("Unexpected ${this.token.first} in operation: ${this.token.second}")
+                        }
+                        operation += this.token.second
+                        if (validOperators.contains(operation)) { break }
+                    }
+                }
+            }
+
+            if (validOperators.contains(operation)) {
+                this.advanceToken()
+                right = elements()
+            }
+
+        }
+        return NOCExpression(operation, left, right)
+    }
+
+    /**
+     * Create a 'basic expression' node.
+     *
+     * @return NOCExpression either containing a parenthetical expression or a single
+     * node with no children.
+     */
+    @ExperimentalStdlibApi
+    private fun parseBasicExpression(): NOCExpression {
+        var expr = NOCExpression("null", null, null)
+        when (this.token.first) {
+            null -> { throw Exception("Null token not acceptable here in this context.") }
+            TokenType.SYMBOL -> {
+                when (this.token.second) {
+                    "(" -> {
+                        this.advanceToken()
+                        expr = this.parseRootExpression()
+                        this.advanceToken()
+                    }
+                    "[" -> {
+                        // TODO: Write logic for list expression parsing here.
+                    }
+                    else -> {throw Exception("Unexpected symbol in basic expression: ${this.token.second}")}
+                }
+            }
+            TokenType.KEYWORD -> {
+                val keywordConstants = listOf("true", "false", "self", "super", "Nothing")
+                if (!keywordConstants.contains(this.token.second)) {
+                    throw Exception("Unexpected keyword in expression ${this.token.second}")
+                }
+                expr = NOCExpression(this.token.second, null, null)
+            }
+            else -> expr = NOCExpression(this.token.second, null, null)
+        }
+        return expr
+    }
+
+    /**
+     * Parse a multiplicative expression.
+     *
+     * This a convenience method of `NOCParser.parseExpression` that checks for multiplicative operators
+     * before proceeding to create a basic expression.
+     *
+     * @return NOCExpression with a multiplicative operator.
+     *
+     * @see NOCParser.parseExpression
+     */
+    @ExperimentalStdlibApi
+    private fun parseMultiplicativeExpression(): NOCExpression {
+        return this.parseExpression(listOf("*", "/", "%"), true) { this.parseBasicExpression() }
+    }
+
+    /**
+     * Parse a additive expression.
+     *
+     * This a convenience method of `NOCParser.parseExpression` that checks for additive operators
+     * before proceeding to create a multipicative expression.
+     *
+     * @return NOCExpression with a additive operator.
+     *
+     * @see NOCParser.parseExpression
+     */
+    @ExperimentalStdlibApi
+    private fun parseAdditiveExpression(): NOCExpression {
+        return this.parseExpression(listOf("+", "-")) { this.parseMultiplicativeExpression() }
+    }
+
+    /**
+     * Parse a "high inequal" expression.
+     *
+     * This a convenience method of `NOCParser.parseExpression` that checks for "high inequal" operators
+     * before proceeding to create an additive expression.
+     *
+     * "High inequal" operators refer to raw comparison operators (>, <), excluding equality, since these
+     * operators take higher precedence than lower inequal operators.
+     *
+     * @return NOCExpression with a "high inequal" operator.
+     *
+     * @see NOCParser.parseExpression
+     */
+    @ExperimentalStdlibApi
+    private fun parseHighInequalExpression(): NOCExpression {
+        return this.parseExpression(listOf(">", "<")) { this.parseAdditiveExpression() }
+    }
+
+    /**
+     * Parse a "low inequal" expression.
+     *
+     * This a convenience method of `NOCParser.parseExpression` that checks for "low inequal" operators
+     * before proceeding to create a "high inequal" expression.
+     *
+     * "Low inequal" operators refer to raw comparison operators, equality inclusive (>=, <=).
+     *
+     * @return NOCExpression with a "low inequal" operator.
+     *
+     * @see NOCParser.parseExpression
+     */
+    @ExperimentalStdlibApi
+    private fun parseLowInqeualExpression(): NOCExpression {
+        return this.parseExpression(listOf(">=", "<=")) { this.parseHighInequalExpression() }
+    }
+
+    /**
+     * Parse an equality expression.
+     *
+     * This a convenience method of `NOCParser.parseExpression` that checks for equality operators
+     * before proceeding to create a "low inequal" expression.
+     *
+     * @return NOCExpression with an equality operator.
+     *
+     * @see NOCParser.parseExpression
+     */
+    @ExperimentalStdlibApi
+    private fun parseEqualityExpression(): NOCExpression {
+        return this.parseExpression(listOf("!=", "==")) { this.parseLowInqeualExpression() }
+    }
+
+    /**
+     * Parse a boolean expression.
+     *
+     * This a convenience method of `NOCParser.parseExpression` that checks for boolean operators
+     * before proceeding to create an equality expression, excluding `not`.
+     *
+     * @return NOCExpression with a boolean operator.
+     *
+     * @see NOCParser.parseExpression
+     */
+    @ExperimentalStdlibApi
+    private fun parseBooleanExpression(): NOCExpression {
+        return this.parseExpression(listOf("and", "or")) { this.parseEqualityExpression() }
+    }
+
+    /**
+     * Create an OcellusScript expression node.
+     *
+     * This function invokes `NOCParser.parseBooleanExpression` and runs down the chain to create
+     * the entire expression tree.
+     *
+     * @return NOCExpression object containing the expression tree.
+     */
+    @ExperimentalStdlibApi
     private fun parseRootExpression(): NOCExpression {
-        return NOCExpression("", null, null)
+        return this.parseBooleanExpression()
     }
 
 }

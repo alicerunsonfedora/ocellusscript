@@ -7,19 +7,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/**
- * Determine whether a character is a letter.
- */
-fun Char.isLetter(): Boolean {
-    return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".contains(this)
-}
-
-/**
- * Determine whether a character is a numerical digit.
- */
-fun Char.isDigit(): Boolean {
-    return "0123456789".contains(this)
-}
+import net.marquiskurt.ocls.isLetter
+import net.marquiskurt.ocls.isDigit
 
 /**
  * The NOC OcellusScript tokenizer.
@@ -92,7 +81,7 @@ class NOCTokenizer(private var script: String) {
      * @return Boolean indicating if the character is a valid symbol
      */
     fun isSymbol(char: Char): Boolean {
-        val symbols: String = "+-/%*?:,.;<>=`_()[]{}#"
+        val symbols = "+-/%*?:,.;<>=`_()[]{}#"
         return symbols.contains(char)
     }
 
@@ -257,7 +246,7 @@ class NOCTokenizer(private var script: String) {
                         // If a string and we find the end quote, exit.
                         TokenType.STR_CONST -> {
                             if (curr == '"') {
-                                state = TokenizerState.FINISH;
+                                state = TokenizerState.FINISH
                                 this.unread()
                             }
                             else { token += curr }
