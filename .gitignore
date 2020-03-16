@@ -19,3 +19,7 @@ compiler/build/**
 
 # Ignore IntelliJ folders
 **/.idea/**
+
+# Ignore token files and parsed xml tree files
+compiler/src/jvmTest/resources/**.noct
+compiler/src/jvmTest/resources/**.xml
