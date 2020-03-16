@@ -455,7 +455,7 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         }
 
         // Finally, return the entire expression node.
-        return NOCExpression(operation, left, right)
+        return NOCExpression(operation, left = left, right = right)
     }
 
     /**
@@ -466,7 +466,7 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
      */
     @ExperimentalStdlibApi
     private fun parseBasicExpression(): NOCExpression {
-        var expr = NOCExpression("null", null, null)
+        var expr = NOCExpression("null")
         when (this.token.first) {
             null -> { throw Exception("Null token not acceptable here in this context.") }
 
@@ -492,7 +492,7 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                 if (!keywordConstants.contains(this.token.second)) {
                     throw Exception("Unexpected keyword in expression ${this.token.second}")
                 }
-                expr = NOCExpression(this.token.second, null, null)
+                expr = NOCExpression(this.token.second)
             }
 
             // TODO: Make special cases for identifiers.
@@ -501,18 +501,20 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                 if (next != null) {
                     if (next.first == TokenType.SYMBOL) {
                         when (this.token.second) {
-//                            "(" -> { expr = this.parseFunctionCall() }
+                            "(" -> {
+                                expr = NOCExpression("return", fnReturn = this.parseFunctionCall())
+                            }
                             "[" -> {}
                             "{" -> {}
                             else -> {}
                         }
                     } else {
-                        expr = NOCExpression(this.token.second, null, null)
+                        expr = NOCExpression(this.token.second)
                     }
                 }
             }
             // Otherwise, for any other type, create a leaf node.
-            else -> expr = NOCExpression(this.token.second, null, null)
+            else -> expr = NOCExpression(this.token.second)
         }
         return expr
     }

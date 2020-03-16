@@ -44,7 +44,10 @@ data class NOCFunctionSignature(val name: String, val inputs: List<String>, val 
 /**
  * A data representation of an OcellusScript expression tree node.
  */
-data class NOCExpression(val operation: String, val left: NOCExpression?, val right: NOCExpression?)
+data class NOCExpression(val operation: String,
+                         val fnReturn: NOCFunctionReturn? = null,
+                         val left: NOCExpression? = null,
+                         val right: NOCExpression? = null)
 
 /**
  * A data representation of an OcellusScript function return call.
