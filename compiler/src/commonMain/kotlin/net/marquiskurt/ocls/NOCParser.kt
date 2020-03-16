@@ -29,12 +29,15 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
      */
     private lateinit var token: Pair<TokenType?, String>
 
+    /**
+     * The entire abstract syntax tree for a given list of tokens or script.
+     */
     private lateinit var tree: NOCModule
 
     /**
      * Advance to the next token in the queue.
      *
-     * @param skipComments Whether to skip over comment tokens. Defaults to true.
+     * @param skipComments Whether to skip over comment tokens. Defaults to `true`.
      * @return The current token at the front of the queue.
      */
     private fun advanceToken(skipComments: Boolean = true): Pair<TokenType?, String> {
@@ -61,17 +64,25 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
 
     /**
      * Generate an abstract syntax tree.
+     *
+     * @return The parsed abstract syntax tree as an `NOCModule`
      */
     @ExperimentalStdlibApi
     fun parse(): NOCModule {
+
+        // Generate the list of tokens if we have a script but no tokens to work with.
         if (tokens == null) {
             this.tokenizer = NOCTokenizer(this.fromScript ?: "")
             this.tokens = this.tokenizer.tokenizeAll()
         }
 
+        // Pre-load the first token.
         this.advanceToken()
+
+        // Parse the module.
         this.tree = this.parseModule()
 
+        // Return the tree.
         return this.tree
     }
 
@@ -160,8 +171,13 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
             this.advanceToken()
         }
 
+        // Check for all identifiers and keywords and create separate statements and declarations for
+        // each.
         while (listOf(TokenType.KEYWORD, TokenType.IDENTIFIER).contains(this.token.first)) {
             when (this.token.first) {
+
+                // If we're looking at a keyword, filter through all possible keywords and create
+                // the respective statements.
                 TokenType.KEYWORD -> {
                     when (this.token.second) {
                         "shadowtype" -> {
@@ -375,6 +391,10 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         return NOCLetStatement(NOCVariableDeclaration(name, "Anything", store, const = true))
     }
 
+    private fun parseFunctionCall(): NOCFunctionReturn {
+        return NOCFunctionReturn("", listOf())
+    }
+
     /**
      * Parse an expression based on a set of rules.
      *
@@ -384,21 +404,30 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
      * @param validOperators The list containing the valid operations in this expression tree.
      * @param notBasic Whether the expression is not a 'basic' expression
      * @param elements The function to return the children NOCExpression objects.
-     * @return NOCExpression containing the operation and root children.
+     * @return NOCExpression containing the operation and root children. The operation is set to `value` if no other
+     * operator is found.
      */
     @ExperimentalStdlibApi
     private fun parseExpression(validOperators: List<String>, notBasic: Boolean = false,
                                 elements: () -> NOCExpression): NOCExpression {
+
+        // Set the default values. Left is excluded because the left child will always be created
+        // first.
         var right: NOCExpression? = null
         var operation = "value"
+
+        // Convert the valid operators to a list of characters with unique characters.
         val chars = validOperators
                 .map { op -> op.toCharArray().toMutableList() }
                 .reduce { x, y -> (x + y).toMutableList() }
                 .distinct()
 
+        // Create the left side of the tree and advance to the next token if we're not parsing
+        // a basic expression.
         val left = elements()
         if (notBasic) { this.advanceToken() }
 
+        // Create the operator and evaluate the right side of the expression afterwards.
         if (listOf(TokenType.SYMBOL, TokenType.KEYWORD).contains(this.token.first)
                 && chars.contains(this.token.second[0])) {
 
@@ -417,12 +446,15 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                 }
             }
 
+            // If we have a valid operator, advance and evaluate the right side of the tree.
             if (validOperators.contains(operation)) {
                 this.advanceToken()
                 right = elements()
             }
 
         }
+
+        // Finally, return the entire expression node.
         return NOCExpression(operation, left, right)
     }
 
@@ -437,6 +469,9 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
         var expr = NOCExpression("null", null, null)
         when (this.token.first) {
             null -> { throw Exception("Null token not acceptable here in this context.") }
+
+            // Check for any tokens with a symbol and evaluate them as either nested expressions
+            // or as list literals.
             TokenType.SYMBOL -> {
                 when (this.token.second) {
                     "(" -> {
@@ -450,6 +485,8 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                     else -> {throw Exception("Unexpected symbol in basic expression: ${this.token.second}")}
                 }
             }
+
+            // If a keyword, verify whether the keyword is a valid keyword in the context and use that.
             TokenType.KEYWORD -> {
                 val keywordConstants = listOf("true", "false", "self", "super", "Nothing")
                 if (!keywordConstants.contains(this.token.second)) {
@@ -457,6 +494,24 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                 }
                 expr = NOCExpression(this.token.second, null, null)
             }
+
+            // TODO: Make special cases for identifiers.
+            TokenType.IDENTIFIER -> {
+                val next = this.lookahead()
+                if (next != null) {
+                    if (next.first == TokenType.SYMBOL) {
+                        when (this.token.second) {
+//                            "(" -> { expr = this.parseFunctionCall() }
+                            "[" -> {}
+                            "{" -> {}
+                            else -> {}
+                        }
+                    } else {
+                        expr = NOCExpression(this.token.second, null, null)
+                    }
+                }
+            }
+            // Otherwise, for any other type, create a leaf node.
             else -> expr = NOCExpression(this.token.second, null, null)
         }
         return expr

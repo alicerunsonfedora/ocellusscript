@@ -27,7 +27,14 @@ This is the current roadmap for NOC:
     - [X] Module names
     - [X] Custom types
     - [X] Shadow types
-    - [ ] Variable declarations
+    - [X] Variable declarations
+    - [ ] Expression parsing
+        - [X] Primitive types
+        - [ ] Lists
+            - [ ] List literals (`[1, 2, 3, 4]`)
+            - [ ] Element with list literal (`list[2]``)
+        - [ ] Function calls
+        - [X] Nested expressions
     - [ ] Class declarations
     - [ ] Function declarations
         - [ ] Function signature
@@ -40,7 +47,13 @@ This is the current roadmap for NOC:
     - [ ] Creating compiled bytecode files
     - [ ] Creating an executable JAR in Gradle
 - [ ] Java libraries
+    - [ ] Executable JAR
 - [ ] Web assembly libraries
+    - [ ] Compiled WASM file
+- [ ] Class modules
+    - [ ] Lists
+    - [ ] Strings
+    - [ ] Utilities/higher-order functions
 
 ## Found an issue?
 
