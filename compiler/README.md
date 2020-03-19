@@ -30,9 +30,9 @@ This is the current roadmap for NOC:
     - [X] Variable declarations
     - [ ] Expression parsing
         - [X] Primitive types
-        - [ ] Lists
-            - [ ] List literals (`[1, 2, 3, 4]`)
-            - [ ] Element with list literal (`list[2]``)
+        - [X] Lists
+            - [X] List literals (`[1, 2, 3, 4]`)
+            - [X] Element with list literal (`list[2]`)
         - [ ] Function calls
         - [X] Nested expressions
     - [ ] Class declarations
