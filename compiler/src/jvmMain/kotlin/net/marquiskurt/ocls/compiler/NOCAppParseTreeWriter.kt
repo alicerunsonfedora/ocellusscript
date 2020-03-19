@@ -49,11 +49,28 @@ class NOCAppParseTreeWriter(private val tree: NOCModule, private var destination
     private fun writeExpressionTree(expression: NOCExpression) {
         this.writeChild("exprTree") {
             this.writeChild("root", expression.operation)
+
+            if (expression.list != null) { this.writeListTree(expression.list) }
+
             if (expression.left != null) {
                 this.writeChild("left") { this.writeExpressionTree(expression.left) }
             }
             if (expression.right != null) {
                 this.writeChild("right") { this.writeExpressionTree(expression.right) }
+            }
+        }
+    }
+
+    /**
+     * Write a list tree node recursively.
+     *
+     * @param list The list pair to parse through.
+     */
+    private fun writeListTree(list: NOCListPair) {
+        this.writeChild("listPair") {
+            this.writeChild("head") { this.writeExpressionTree(list.head) }
+            if (list.tail != null) {
+                this.writeChild("tail") { this.writeListTree(list.tail) }
             }
         }
     }

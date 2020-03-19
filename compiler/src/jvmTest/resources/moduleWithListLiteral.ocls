@@ -1,0 +1,8 @@
+#
+# Module with List literal
+# (C) 2020 Marquis Kurt.
+#
+
+module HaveAList where;
+
+let sampleList = [1, 2, 3, 4, 5];

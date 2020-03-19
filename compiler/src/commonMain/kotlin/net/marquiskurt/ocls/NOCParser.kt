@@ -480,7 +480,7 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                         this.advanceToken()
                     }
                     "[" -> {
-                        // TODO: Write logic for list expression parsing here.
+                        expr = NOCExpression("value", list = this.parseListExpression())
                     }
                     else -> {throw Exception("Unexpected symbol in basic expression: ${this.token.second}")}
                 }
@@ -506,7 +506,9 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                             }
                             "[" -> {}
                             "{" -> {}
-                            else -> {}
+                            else -> {
+                                throw Exception("Unexpected symbol in basic expression: ${this.token.second}")
+                            }
                         }
                     } else {
                         expr = NOCExpression(this.token.second)
@@ -517,6 +519,48 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
             else -> expr = NOCExpression(this.token.second)
         }
         return expr
+    }
+
+    /**
+     * Create an OcellusScript list definition.
+     *
+     * This method will iterate over every expression in the list and create a list
+     * that later will be converted to a pair containing a head and tail, similar to
+     * Haskell's structure.
+     *
+     * @return NOCListPair containing all of the elements in the list.
+     */
+    @ExperimentalStdlibApi
+    private fun parseListExpression(): NOCListPair {
+        if (this.token != Pair(TokenType.SYMBOL, "[")) {
+            throw Exception("Expected list literal symbol here: ${this.token.second}")
+        }
+        this.advanceToken()
+
+        // Create the first element and generate a list.
+        val elements = mutableListOf(this.parseRootExpression())
+
+        // Gather any other elements and store them in the list.
+        while (this.token == Pair(TokenType.SYMBOL, ",")) {
+            this.advanceToken()
+            elements.add(this.parseRootExpression())
+        }
+
+        if (this.token != Pair(TokenType.SYMBOL, "]")) {
+            throw Exception("Expected end of list literal symbol here: ${this.token.second}")
+        }
+
+        // Reverse the order of the list to construct the pair.
+        elements.reverse()
+        var listTree = NOCListPair(elements.first(), tail = null)
+        elements.removeAt(0)
+
+        // Recursively add items to the pair until the list is empty.
+        while (elements.count() > 0) {
+            listTree = NOCListPair(elements.first(), listTree)
+            elements.removeAt(0)
+        }
+        return listTree
     }
 
     /**

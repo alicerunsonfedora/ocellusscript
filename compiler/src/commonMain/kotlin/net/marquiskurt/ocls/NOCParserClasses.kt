@@ -42,10 +42,18 @@ data class NOCVariableDeclaration(val name: String,
 data class NOCFunctionSignature(val name: String, val inputs: List<String>, val returns: List<String>)
 
 /**
+ * A data representation of an OcellusScript list pair.
+ *
+ * Lists typically use this structure.
+ */
+data class NOCListPair(val head: NOCExpression, val tail: NOCListPair?)
+
+/**
  * A data representation of an OcellusScript expression tree node.
  */
 data class NOCExpression(val operation: String,
                          val fnReturn: NOCFunctionReturn? = null,
+                         val list: NOCListPair? = null,
                          val left: NOCExpression? = null,
                          val right: NOCExpression? = null)
 
