@@ -495,17 +495,38 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                 expr = NOCExpression(this.token.second)
             }
 
-            // TODO: Make special cases for identifiers.
             TokenType.IDENTIFIER -> {
                 val next = this.lookahead()
                 if (next != null) {
                     if (next.first == TokenType.SYMBOL) {
                         when (this.token.second) {
                             "(" -> {
+                                // TODO: Write parseFunctionCall
                                 expr = NOCExpression("return", fnReturn = this.parseFunctionCall())
                             }
-                            "[" -> {}
-                            "{" -> {}
+
+                            // TODO: Write tests for list cases.
+                            "[" -> {
+                                val left = NOCExpression(this.token.second)
+
+                                // Catch up to where next would be.
+                                this.advanceToken()
+
+                                // Advance over left brace.
+                                this.advanceToken()
+
+                                // Get the inner expression.
+                                val right = this.parseRootExpression()
+
+                                if (this.token != Pair(TokenType.SYMBOL, "]")) {
+                                    throw Exception("Expected end of list index literal here: ${this.token.second}")
+                                }
+
+                                expr = NOCExpression("get", left=left, right=right)
+                            }
+                            "{" -> {
+                                // TODO: Determine how lambdas work here...
+                            }
                             else -> {
                                 throw Exception("Unexpected symbol in basic expression: ${this.token.second}")
                             }
