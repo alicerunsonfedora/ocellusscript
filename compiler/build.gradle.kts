@@ -49,6 +49,41 @@ kotlin {
     }
 }
 
+tasks.dokka {
+    outputFormat = "html"
+    multiplatform {
+        register("jvmMain") { // Different name, so source roots must be passed explicitly
+            targets = listOf("JVM")
+            platform = "jvm"
+            sourceRoot {
+                path = kotlin.sourceSets.getByName("jvmMain").kotlin.srcDirs.first().toString()
+            }
+        }
+        register("commonMain") {
+            targets = listOf("Common")
+            platform = "common"
+            sourceRoot {
+                path = kotlin.sourceSets.getByName("commonMain").kotlin.srcDirs.first().toString()
+            }
+        }
+    }
+}
+
+tasks.create<Jar>("nocJar") {
+    manifest {
+        attributes(mapOf("Main-Class" to "net.marquiskurt.ocls.compiler.NOCAppJVMKt"))
+    }
+    kotlin {
+        val sourceMain = targets["jvm"].compilations["main"]
+        dependsOn(sourceMain.compileAllTaskName)
+        from(sourceMain.output)
+//        sourceMain.compileDependencyFiles
+//                .filter { it.name.endsWith("jar") }
+//                .forEach { jar -> from(zipTree(jar)) }
+    }
+
+}
+
 val run by tasks.creating(JavaExec::class) {
     group = "application"
     main = "net.marquiskurt.ocls.compiler.NOCAppJVMKt"
