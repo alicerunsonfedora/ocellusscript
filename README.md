@@ -8,6 +8,8 @@
 
 OcellusScript is a simple multi-paradigm programming language modeled after Java and Haskell while combining features from other languages like Kotlin, Swift, Python, and JavaScript. Although designed specifically for the [Unscripted](https://unscripted.marquiskurt.net) visual novel, this language can be used separately with JVM and WebAssembly.
 
+> ⚠️ This project has been deprecated in favor of [Fira](https://github.com/alicerunsonfedora/fira), the minigame engine for Unscripted with API support.
+
 ## Quick Links
 
 - [Compiler](./compiler/)

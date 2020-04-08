@@ -488,9 +488,12 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
 
             // If a keyword, verify whether the keyword is a valid keyword in the context and use that.
             TokenType.KEYWORD -> {
-                val keywordConstants = listOf("true", "false", "self", "super", "Nothing")
+                val keywordConstants = listOf("true", "false", "self", "super", "Nothing", "lambda")
                 if (!keywordConstants.contains(this.token.second)) {
                     throw Exception("Unexpected keyword in expression ${this.token.second}")
+                }
+                if (this.token.second == "lambda") {
+                    // TODO: Write lambda logic here
                 }
                 expr = NOCExpression(this.token.second)
             }
@@ -523,9 +526,6 @@ class NOCParser(private var tokens: List<Pair<TokenType?, String>?>? = null,
                                 }
 
                                 expr = NOCExpression("get", left=left, right=right)
-                            }
-                            "{" -> {
-                                // TODO: Determine how lambdas work here...
                             }
                             else -> {
                                 throw Exception("Unexpected symbol in basic expression: ${this.token.second}")
